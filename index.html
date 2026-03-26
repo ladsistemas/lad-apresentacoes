@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentações — Lad Sistemas</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-blue-900: #190e88;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-dark: #1a1a2e;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--lad-white);
+      color: var(--lad-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+    }
+    .logo { height: 48px; margin-bottom: 32px; }
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      color: var(--lad-gray-600);
+      font-size: 0.95rem;
+      margin-bottom: 48px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .card {
+      background: var(--lad-white-pure);
+      border-radius: 14px;
+      padding: 28px 24px;
+      text-decoration: none;
+      color: var(--lad-dark);
+      border: 1px solid #e8e9e9;
+      transition: all 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(26,26,46,0.1);
+      border-color: var(--lad-orange-500);
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--lad-orange-500);
+      margin-bottom: 10px;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+    .card p {
+      font-size: 0.85rem;
+      color: var(--lad-gray-600);
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: auto;
+      padding-top: 48px;
+      font-size: 0.78rem;
+      color: var(--lad-gray-600);
+    }
+  </style>
+</head>
+<body>
+  <img src="assets/logo_transparente.png" alt="LadFood" class="logo">
+  <h1>Apresentações Comerciais</h1>
+  <p class="subtitle">Material de apoio para a equipe comercial Lad Sistemas</p>
+
+  <div class="grid">
+    <a href="tef-multipluscard/" class="card">
+      <span class="card-tag">TEF</span>
+      <h2>TEF Multipluscard</h2>
+      <p>Proposta comercial para ativação do TEF integrado ao LadFood Desktop via Multipluscard.</p>
+    </a>
+  </div>
+
+  <footer>Lad Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+</body>
+</html>
