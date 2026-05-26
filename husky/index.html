@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integração Husky — LADFood</title>
+
+  <!-- Reveal.js core -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section id="divider-1" class="section-divider" data-state="is-section-divider">
+        <p class="kicker">LADFood</p>
+        <h1><i class="fa-solid fa-truck-fast"></i>&nbsp; Integração de Entregas Husky</h1>
+        <p>Como funciona hoje, o que podemos evoluir e pontos para alinhar</p>
+      </section>
+
+      <section id="slide-2">
+        <p class="kicker">Contexto</p>
+        <h2>O cenário do cliente</h2>
+        <div class="content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+            <div class="card card-info">
+              <span class="card-icon icon-info"><i class="fa-solid fa-store"></i></span>
+              <h3>Múltiplos canais de pedido</h3>
+              <p>Lojas integradas via <strong>iFood</strong>, <strong>99Food</strong> e <strong>Anota.ai</strong>, além do PDV e app próprio.</p>
+              <p class="text-muted">Cada canal pode ter logística própria da plataforma ou entrega do estabelecimento.</p>
+            </div>
+            <div class="card card-info">
+              <span class="card-icon icon-info"><i class="fa-solid fa-display"></i></span>
+              <h3>Operação no KDS</h3>
+              <p>A cozinha acompanha e gerencia a produção pelo <strong>KDS</strong>.</p>
+              <p class="text-muted">Ponto natural para acionar o entregador no momento certo.</p>
+            </div>
+          </div>
+          <blockquote style="margin-top: 28px;">Objetivo: usar a <span class="hl-blue">Husky</span> como malha de entrega para as lojas que não têm logística própria — de forma confiável e com visibilidade do status.</blockquote>
+        </div>
+      </section>
+
+      <section id="slide-3">
+        <p class="kicker">Quem é a Husky</p>
+        <h2>Logística de entrega (last-mile)</h2>
+        <div class="content">
+          <p class="text-lg">A Husky é uma plataforma de <strong>roteirização e gestão de entregadores</strong>. O estabelecimento envia o pedido e a Husky cuida da coleta e entrega até o cliente.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 24px;">
+            <div class="card">
+              <span class="card-icon icon-info"><i class="fa-solid fa-paper-plane"></i></span>
+              <h3>1. Cria a entrega</h3>
+              <p>Enviamos endereço, valor e forma de pagamento via API.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon icon-info"><i class="fa-solid fa-motorcycle"></i></span>
+              <h3>2. Aciona entregador</h3>
+              <p>A Husky aloca o entregador e gerencia a rota.</p>
+            </div>
+            <div class="card">
+              <span class="card-icon icon-info"><i class="fa-solid fa-location-dot"></i></span>
+              <h3>3. Acompanha status</h3>
+              <p>Atualiza o andamento até a entrega finalizada.</p>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-top: 22px;">Comunicação por <strong>API REST</strong> com autenticação por token e suporte a ambiente de testes (sandbox).</p>
+        </div>
+      </section>
+
+      <section id="divider-2" class="section-divider" data-state="is-section-divider">
+        <p class="kicker">Situação atual</p>
+        <h1>O que já temos pronto</h1>
+        <p>A base da integração já existe e funciona</p>
+      </section>
+
+      <section id="slide-5">
+        <p class="kicker">Pronto hoje</p>
+        <h2>Envio automático da entrega</h2>
+        <div class="content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card card-ready">
+              <span class="card-icon icon-ready"><i class="fa-solid fa-check"></i></span>
+              <h3>Criação da entrega</h3>
+              <p>Ao gravar um pedido de <strong>delivery</strong>, o sistema cria a entrega na Husky automaticamente (endpoint <em>createOrderList</em>).</p>
+            </div>
+            <div class="card card-ready">
+              <span class="card-icon icon-ready"><i class="fa-solid fa-key"></i></span>
+              <h3>Habilitação por estabelecimento</h3>
+              <p>Cada empresa tem seu <strong>token Husky</strong>. Sem token, a integração fica desligada.</p>
+            </div>
+            <div class="card card-ready">
+              <span class="card-icon icon-ready"><i class="fa-solid fa-mobile-screen"></i></span>
+              <h3>Dois pontos de origem</h3>
+              <p>Funciona tanto para pedidos do <strong>app do cliente</strong> quanto para o <strong>delivery lançado no PDV</strong>.</p>
+            </div>
+            <div class="card card-ready">
+              <span class="card-icon icon-ready"><i class="fa-solid fa-map-location-dot"></i></span>
+              <h3>Dados enviados</h3>
+              <p>Cliente, telefone, endereço completo, bairro/cidade/UF, valor e forma de pagamento.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="slide-6">
+        <p class="kicker">Fluxo atual</p>
+        <h2>"Dispara e esquece"</h2>
+        <div class="content">
+          <div class="flow" style="margin: 10px 0 6px;">
+            <div class="flow-step">Pedido<br>delivery</div>
+            <span class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            <div class="flow-step">Grava a<br>venda</div>
+            <span class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            <div class="flow-step action">Cria entrega<br>na Husky</div>
+            <span class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            <div class="flow-step muted"><i class="fa-solid fa-ban"></i><br>Sem retorno</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 26px;">
+            <div class="card card-improve">
+              <h3><i class="fa-solid fa-eye-slash icon-improve"></i>&nbsp; Sem acompanhamento</h3>
+              <p>Depois de criar a entrega, <strong>não recebemos status</strong> de volta. Não sabemos se foi coletado, está a caminho ou entregue.</p>
+            </div>
+            <div class="card card-improve">
+              <h3><i class="fa-solid fa-hand-point-right icon-improve"></i>&nbsp; Sem "pedido pronto"</h3>
+              <p>Marcar o pedido como pronto no KDS <strong>não avisa</strong> a Husky. O entregador não é acionado no momento ideal.</p>
+            </div>
+          </div>
+          <p class="text-muted" style="margin-top: 20px;">São exatamente essas duas lacunas que as melhorias a seguir resolvem.</p>
+        </div>
+      </section>
+
+      <section id="divider-3" class="section-divider" data-state="is-section-divider">
+        <p class="kicker">Evolução</p>
+        <h1>O que podemos melhorar</h1>
+        <p>Recursos da API Husky que ainda não usamos</p>
+      </section>
+
+      <section id="slide-8">
+        <p class="kicker">Visão geral</p>
+        <h2>Recursos da API: usamos x disponível</h2>
+        <div class="content">
+          <table>
+            <thead>
+              <tr><th>Recurso da Husky</th><th>O que permite</th><th style="text-align:center;">Hoje</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Criar entrega</td><td>Enviar o pedido para entrega</td><td style="text-align:center;"><span class="tag tag-yes">Usamos</span></td></tr>
+              <tr><td>Webhook de status</td><td>Receber atualização da entrega em tempo real</td><td style="text-align:center;"><span class="tag tag-no">Não</span></td></tr>
+              <tr><td>Pedido pronto</td><td>Avisar a Husky que pode coletar</td><td style="text-align:center;"><span class="tag tag-no">Não</span></td></tr>
+              <tr><td>Alterar status</td><td>Cancelar / atualizar a entrega</td><td style="text-align:center;"><span class="tag tag-no">Não</span></td></tr>
+              <tr><td>Dados do entregador</td><td>Nome, foto e telefone do motoboy</td><td style="text-align:center;"><span class="tag tag-no">Não</span></td></tr>
+            </tbody>
+          </table>
+          <p class="text-muted text-center" style="margin-top: 18px;">Usamos <strong>1 de ~9</strong> recursos disponíveis. As próximas melhorias exploram o restante.</p>
+        </div>
+      </section>
+
+      <section id="slide-9">
+        <p class="kicker">Melhoria 1 · Prioridade</p>
+        <h2>Status da entrega em tempo real</h2>
+        <div class="content">
+          <p class="text-lg">A Husky pode <strong>notificar o LADFood a cada mudança de status</strong> da entrega (webhook). Assim o status aparece no <span class="hl-blue">KDS / PDV</span>.</p>
+          <div style="margin: 22px 0;">
+            <span class="pill pill-muted">Novo</span>
+            <span class="pill">Iniciado</span>
+            <span class="pill">Coletando</span>
+            <span class="pill">Entregando</span>
+            <span class="pill">No cliente</span>
+            <span class="pill pill-done">Finalizado</span>
+            <span class="pill pill-action">Cancelado</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px;">
+            <div class="card card-improve">
+              <h3><i class="fa-solid fa-bell icon-improve"></i>&nbsp; Valor para a operação</h3>
+              <p>"Entregador a caminho", "No cliente", "Entregue" — visível direto no KDS, sem precisar abrir o painel da Husky.</p>
+            </div>
+            <div class="card card-info">
+              <h3><i class="fa-solid fa-cloud icon-info"></i>&nbsp; Como recebemos</h3>
+              <p>A <strong>nuvem LAD</strong> recebe a notificação da Husky e repassa ao Desktop/KDS — o Desktop não precisa de IP público.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="slide-10">
+        <p class="kicker">Melhoria 2 · Alto valor para KDS</p>
+        <h2>"Pedido Pronto" disparado pelo KDS</h2>
+        <div class="content">
+          <div class="flow" style="margin: 6px 0 22px;">
+            <div class="flow-step">Cozinha finaliza<br>no KDS</div>
+            <span class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            <div class="flow-step action">Avisa Husky<br>"pedido pronto"</div>
+            <span class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+            <div class="flow-step">Entregador é<br>acionado na hora</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card card-improve">
+              <h3><i class="fa-solid fa-clock icon-improve"></i>&nbsp; Timing certo</h3>
+              <p>Evita que o entregador chegue cedo demais (esperando) ou tarde demais (comida esfriando).</p>
+            </div>
+            <div class="card card-improve">
+              <h3><i class="fa-solid fa-display icon-improve"></i>&nbsp; Encaixe natural no KDS</h3>
+              <p>O KDS já é onde a produção é marcada como concluída — o aviso à Husky sai do mesmo gesto.</p>
+            </div>
+          </div>
+          <blockquote style="margin-top: 20px;">Esse é o ganho mais direto para quem opera com KDS.</blockquote>
+        </div>
+      </section>
+
+      <section id="slide-11">
+        <p class="kicker">Melhoria 3</p>
+        <h2>Rastreio e dados do entregador</h2>
+        <div class="content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card card-improve">
+              <span class="card-icon icon-improve"><i class="fa-solid fa-barcode"></i></span>
+              <h3>Guardar o código da entrega</h3>
+              <p>Hoje não guardamos o <strong>código de rastreio</strong> que a Husky devolve. Ele é a base para status, "pedido pronto" e cancelamento.</p>
+            </div>
+            <div class="card card-improve">
+              <span class="card-icon icon-improve"><i class="fa-solid fa-user-tie"></i></span>
+              <h3>Entregador identificado</h3>
+              <p>Exibir <strong>nome, foto e telefone</strong> do entregador no acompanhamento do pedido.</p>
+            </div>
+            <div class="card card-improve">
+              <span class="card-icon icon-improve"><i class="fa-solid fa-ban"></i></span>
+              <h3>Cancelamento sincronizado</h3>
+              <p>Pedido cancelado no LADFood reflete na Husky, evitando deslocamento desnecessário do entregador.</p>
+            </div>
+            <div class="card card-improve">
+              <span class="card-icon icon-improve"><i class="fa-solid fa-stopwatch"></i></span>
+              <h3>Previsão de chegada</h3>
+              <p>O webhook traz o <strong>ETA</strong> (tempo estimado), exibível ao operador e ao cliente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="slide-12">
+        <p class="kicker">Saúde da integração</p>
+        <h2>Correções no fluxo atual</h2>
+        <div class="content">
+          <p class="text-muted">Ajustes técnicos para deixar o que já existe mais confiável (transparentes para o cliente).</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px;">
+            <div class="card card-info" style="padding: 16px 20px;">
+              <h3 style="font-size:17pt;"><i class="fa-solid fa-flask icon-info"></i>&nbsp; Ambiente de testes</h3>
+              <p>Apontar para a URL de <strong>sandbox</strong> correta em homologação (hoje testes vão para produção).</p>
+            </div>
+            <div class="card card-info" style="padding: 16px 20px;">
+              <h3 style="font-size:17pt;"><i class="fa-solid fa-bolt icon-info"></i>&nbsp; Envio assíncrono</h3>
+              <p>Hoje o envio é <strong>síncrono</strong> e pode travar a gravação do pedido se a Husky demorar. Tornar assíncrono + reenvio.</p>
+            </div>
+            <div class="card card-info" style="padding: 16px 20px;">
+              <h3 style="font-size:17pt;"><i class="fa-solid fa-credit-card icon-info"></i>&nbsp; Forma de pagamento</h3>
+              <p>Mapear as formas do LADFood para os valores aceitos pela Husky (<strong>ONLINE, CASH, TERMINAL</strong>).</p>
+            </div>
+            <div class="card card-info" style="padding: 16px 20px;">
+              <h3 style="font-size:17pt;"><i class="fa-solid fa-map-pin icon-info"></i>&nbsp; Endereço / geolocalização</h3>
+              <p>Garantir geocodificação ou lat/lng para a Husky localizar a entrega; preencher o número do endereço.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="slide-13">
+        <p class="kicker">Decisão importante</p>
+        <h2>Quando usar a Husky? (por canal)</h2>
+        <div class="content">
+          <p class="text-lg">Nem todo pedido deve ir para a Husky. Cada canal pode ter <strong>logística própria</strong> ou entrega do estabelecimento.</p>
+          <table style="margin-top: 16px;">
+            <thead>
+              <tr><th>Canal</th><th>Entrega da plataforma</th><th>Entrega do estabelecimento</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>iFood</strong></td><td>iFood entrega → <span class="tag tag-no">não envia</span></td><td>Loja entrega → <span class="tag tag-yes">via Husky</span></td></tr>
+              <tr><td><strong>99Food</strong></td><td>99Food entrega → <span class="tag tag-no">não envia</span></td><td>Loja entrega → <span class="tag tag-yes">via Husky</span></td></tr>
+              <tr><td><strong>Anota.ai</strong></td><td>—</td><td>Loja entrega → <span class="tag tag-yes">via Husky</span></td></tr>
+            </tbody>
+          </table>
+          <p class="text-muted" style="margin-top: 16px;">A própria plataforma já informa quem entrega. A proposta é <strong>configurar por loja/canal</strong> qual usa Husky, e respeitar automaticamente quando a entrega é da plataforma.</p>
+        </div>
+      </section>
+
+      <section id="slide-14">
+        <p class="kicker">Roadmap</p>
+        <h2>Proposta em fases</h2>
+        <div class="content">
+          <div class="phase p0">
+            <p class="phase-num">0</p>
+            <div><h3 style="margin:0;">Correções</h3><p class="text-muted">Sandbox, envio assíncrono, forma de pagamento, geolocalização — confiabilidade do que já existe.</p></div>
+          </div>
+          <div class="phase p1">
+            <p class="phase-num">1</p>
+            <div><h3 style="margin:0;">Rastreio de status</h3><p class="text-muted">Guardar código da entrega + webhook → status visível no Desktop/KDS.</p></div>
+          </div>
+          <div class="phase p2">
+            <p class="phase-num">2</p>
+            <div><h3 style="margin:0;">KDS ativo</h3><p class="text-muted">"Pedido pronto" e cancelamento disparados pelo KDS + roteamento por loja/canal.</p></div>
+          </div>
+          <div class="phase p3">
+            <p class="phase-num">3</p>
+            <div><h3 style="margin:0;">Experiência completa</h3><p class="text-muted">Dados do entregador, ETA e acompanhamento ao cliente.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="divider-4" class="section-divider" data-state="is-section-divider">
+        <p class="kicker">Alinhamento</p>
+        <h1>Dúvidas para discutir</h1>
+        <p>Definições que precisamos com o cliente e com a Husky</p>
+      </section>
+
+      <section id="slide-16">
+        <p class="kicker">Perguntas-chave</p>
+        <h2>O que precisamos definir</h2>
+        <div class="content">
+          <div class="question" style="border-left-color: var(--primary-color);">
+            <h3><i class="fa-solid fa-star hl-blue"></i>&nbsp; Como o cliente quer acionar a integração?</h3>
+            <p>Será <strong>parametrizado por loja</strong> (envia automático conforme o canal) ou o pedido é <strong>enviado manualmente</strong> pelo operador?</p>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="question">
+              <h3>Status no KDS</h3>
+              <p>Querem acompanhar o status da entrega dentro do KDS?</p>
+            </div>
+            <div class="question">
+              <h3>"Pedido pronto" pelo KDS</h3>
+              <p>O acionamento do entregador parte da conclusão no KDS?</p>
+            </div>
+            <div class="question">
+              <h3>Token Husky</h3>
+              <p>É token de operação ou de loja? Credenciais ainda válidas?</p>
+            </div>
+            <div class="question">
+              <h3>Formas de pagamento</h3>
+              <p>De-para das formas do LADFood para ONLINE / CASH / TERMINAL.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="divider-5" class="section-divider" data-state="is-section-divider">
+        <p class="kicker">Próximos passos</p>
+        <h1>Vamos alinhar?</h1>
+        <p>Definidas as dúvidas, seguimos com Fase 0 + Fase 1</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chart/plugin.js"></script>
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+      margin: 0,
+      controls: true,
+      progress: true,
+      slideNumber: false,
+      hash: true,
+      transition: 'slide',
+      center: false,
+      plugins: [ RevealChart ],
+      chart: {
+        defaults: Object.assign({
+          color: 'rgba(0, 0, 0, 0.8)',
+          borderColor: 'rgba(0, 0, 0, 0.8)',
+          devicePixelRatio: 2
+        }, window.location.search.includes('export') ? { animation: false } : {})
+      }
+    });
+  </script>
+</body>
+</html>
