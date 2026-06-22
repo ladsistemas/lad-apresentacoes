@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integração Husky — Como funciona hoje</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-blue-100: #e8e6ff;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+      --lad-yellow-bg: #fff7e0;
+      --lad-yellow-border: #e8a838;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--lad-white);
+      color: var(--lad-dark);
+      line-height: 1.55;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 56px 24px 96px;
+    }
+
+    /* Header */
+    .back-link {
+      display: inline-block;
+      color: var(--lad-gray-600);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 28px;
+    }
+    .back-link:hover { color: var(--lad-orange-500); }
+    .kicker {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--lad-orange-500);
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      margin-bottom: 12px;
+    }
+    .lead {
+      font-size: 1.05rem;
+      color: var(--lad-gray-600);
+      max-width: 640px;
+    }
+    .hr {
+      border: none;
+      border-top: 1px solid var(--lad-gray-300);
+      margin: 40px 0;
+    }
+
+    /* Sections */
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--lad-orange-100);
+      color: var(--lad-orange-500);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    p { margin-bottom: 12px; }
+    p, li { font-size: 0.96rem; }
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+    li { margin-bottom: 6px; }
+    strong { font-weight: 700; }
+    code {
+      background: var(--lad-gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.88em;
+      color: var(--lad-blue-900);
+    }
+
+    /* Visual flow */
+    .flow {
+      background: var(--lad-white-pure);
+      border: 1px solid var(--lad-gray-300);
+      border-radius: 12px;
+      padding: 22px;
+      margin: 14px 0;
+    }
+    .flow-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--lad-blue-900);
+      margin-bottom: 10px;
+    }
+    .flow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .step {
+      background: var(--lad-blue-100);
+      color: var(--lad-blue-900);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .step.highlight {
+      background: var(--lad-orange-500);
+      color: var(--lad-white-pure);
+    }
+    .arrow {
+      color: var(--lad-gray-600);
+      font-weight: 700;
+    }
+
+    /* Two-column comparison */
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 14px 0 20px;
+    }
+    @media (max-width: 620px) { .compare { grid-template-columns: 1fr; } }
+    .col {
+      background: var(--lad-white-pure);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--lad-gray-300);
+    }
+    .col h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .col.ok h4 { color: var(--lad-green); }
+    .col.gap h4 { color: var(--lad-orange-500); }
+    .col ul { margin-bottom: 0; }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .badge.ok { background: #d4f1e3; color: var(--lad-green); }
+    .badge.gap { background: var(--lad-orange-100); color: var(--lad-orange-500); }
+
+    /* Callouts */
+    .callout {
+      background: var(--lad-yellow-bg);
+      border-left: 4px solid var(--lad-yellow-border);
+      padding: 16px 18px;
+      border-radius: 6px;
+      margin: 16px 0;
+      font-size: 0.93rem;
+    }
+    .callout strong { color: #6b4900; }
+    .callout-info {
+      background: #e8f4fb;
+      border-left-color: #2196c9;
+    }
+    .callout-info strong { color: #0a3d5c; }
+
+    /* Trigger criteria box */
+    .criteria {
+      background: var(--lad-white-pure);
+      border: 1px solid var(--lad-gray-300);
+      border-radius: 12px;
+      padding: 22px;
+      margin: 14px 0;
+    }
+    .criteria-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 8px 0;
+    }
+    .criteria-item .check {
+      color: var(--lad-green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .criteria-item .label {
+      font-size: 0.93rem;
+    }
+    .criteria-item .label code { font-size: 0.85em; }
+
+    /* Footer */
+    footer {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid var(--lad-gray-300);
+      font-size: 0.82rem;
+      color: var(--lad-gray-600);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../" class="back-link">&larr; Voltar para apresentações</a>
+
+    <div class="kicker">Integração de entregas</div>
+    <h1>Como funciona a integração com a Husky</h1>
+    <p class="lead">Documento operacional para alinhamento entre cliente e equipe de suporte. Descreve o comportamento atual da integração no LadFood Desktop, sem alterações de escopo.</p>
+
+    <hr class="hr">
+
+    <!-- 1 -->
+    <h2><span class="num">1</span> Visão geral</h2>
+    <p>
+      O LadFood envia automaticamente os pedidos <strong>delivery</strong> para a plataforma Husky assim que o pedido é aceito no sistema. A Husky recebe o pedido com endereço, valor e forma de pagamento, e a partir daí cuida da logística (entregador, deslocamento, entrega).
+    </p>
+    <p>
+      <strong>Não existe botão "enviar para Husky"</strong> nem etapa manual. O envio é disparado pelo próprio fluxo do pedido, desde que a integração esteja habilitada na loja.
+    </p>
+
+    <hr class="hr">
+
+    <!-- 2 -->
+    <h2><span class="num">2</span> Quando o pedido é criado na Husky</h2>
+    <p>O envio acontece <strong>uma única vez por pedido</strong>, no momento em que o pedido entra como <code>Aberto</code> no LadFood. Há dois caminhos possíveis, ambos automáticos:</p>
+
+    <div class="flow">
+      <div class="flow-title">Caminho A &mdash; PDV (balcão / telefone)</div>
+      <div class="flow-steps">
+        <span class="step">Operador lança pedido delivery</span>
+        <span class="arrow">&rarr;</span>
+        <span class="step">Clica em "Pedir Delivery"</span>
+        <span class="arrow">&rarr;</span>
+        <span class="step">Pedido salvo</span>
+        <span class="arrow">&rarr;</span>
+        <span class="step highlight">Husky recebe o pedido</span>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-title">Caminho B &mdash; iFood / 99Food / App do cliente</div>
+      <div class="flow-steps">
+        <span class="step">Pedido chega via REST</span>
+        <span class="arrow">&rarr;</span>
+        <span class="step">LadFood persiste pedido</span>
+        <span class="arrow">&rarr;</span>
+        <span class="step highlight">Husky recebe o pedido</span>
+      </div>
+    </div>
+
+    <h3>Critérios para o envio ocorrer</h3>
+    <div class="criteria">
+      <div class="criteria-item">
+        <span class="check">&check;</span>
+        <span class="label">A loja tem o <strong>Customer token Husky</strong> cadastrado nos parâmetros de integração.</span>
+      </div>
+      <div class="criteria-item">
+        <span class="check">&check;</span>
+        <span class="label">O pedido é do tipo <strong>Delivery</strong> (<code>tipoPedido = D</code>).</span>
+      </div>
+      <div class="criteria-item">
+        <span class="check">&check;</span>
+        <span class="label">É um <strong>pedido novo</strong>, não uma edição (evita reenviar a Husky a cada alteração).</span>
+      </div>
+    </div>
+
+    <hr class="hr">
+
+    <!-- 3 -->
+    <h2><span class="num">3</span> O que enviamos para a Husky</h2>
+    <p>Cada pedido é enviado como uma "ordem de entrega" contendo:</p>
+    <ul>
+      <li><strong>Identificador do pedido</strong> (número da comanda + id interno).</li>
+      <li><strong>Origem</strong>: <code>PDV</code> (balcão) ou <code>APP</code> (iFood/99Food/app cliente).</li>
+      <li><strong>Endereço do cliente</strong>: endereço completo, complemento, bairro, cidade, estado, latitude/longitude (quando disponíveis).</li>
+      <li><strong>Cliente</strong>: nome e telefone.</li>
+      <li><strong>Valor total</strong> do pedido.</li>
+      <li><strong>Forma de pagamento</strong> (texto livre &mdash; ex.: "Pago Online", "Cartão na entrega", "Dinheiro").</li>
+      <li><strong>Tamanho do pacote</strong>: fixo em <code>5</code> (não diferenciamos por pedido hoje).</li>
+    </ul>
+
+    <hr class="hr">
+
+    <!-- 4 -->
+    <h2><span class="num">4</span> O que o fluxo atual cobre &mdash; e o que não cobre</h2>
+    <div class="compare">
+      <div class="col ok">
+        <h4><span class="badge ok">Hoje cobre</span></h4>
+        <ul>
+          <li>Criação automática do pedido na Husky.</li>
+          <li>Envio para pedidos do PDV e dos canais digitais (iFood, 99Food, app cliente).</li>
+          <li>Endereço, valor e forma de pagamento descritos.</li>
+          <li>Bloqueio de reenvio em edições do mesmo pedido.</li>
+        </ul>
+      </div>
+      <div class="col gap">
+        <h4><span class="badge gap">Hoje não cobre</span></h4>
+        <ul>
+          <li>Notificação automática de <strong>"pedido pronto para retirada"</strong> (saída do KDS &rarr; Husky).</li>
+          <li>Recebimento de <strong>status do entregador</strong> em tempo real (saiu para entrega, chegou no cliente, entregue).</li>
+          <li>Notificação automática ao LadFood quando a Husky <strong>conclui ou cancela</strong> a entrega.</li>
+          <li>Roteamento <strong>por loja/canal</strong> (qual loja usa Husky, qual usa entrega da plataforma).</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead" style="font-size:0.92rem;">Esses itens estão mapeados como evoluções futuras (ver tarefa <code>#124799</code>), mas <strong>não fazem parte</strong> do escopo de uso atual e não são necessários para ativar a integração como está.</p>
+
+    <hr class="hr">
+
+    <!-- 5 -->
+    <h2><span class="num">5</span> Pré-requisitos para ativar</h2>
+    <ol>
+      <li>Cliente fornece o <strong>Customer token Husky</strong> (também chamado de "Token Conta Administrativa" ou <code>TOKEN_OPERACAO</code>).</li>
+      <li>Suporte cadastra o token em: <strong>Parâmetros &rarr; iFood &rarr; Credenciais integração HUSKY &rarr; Customer token</strong>.</li>
+      <li>Salvar parâmetros. A integração passa a operar no próximo pedido delivery.</li>
+    </ol>
+
+    <hr class="hr">
+
+    <!-- 6 -->
+    <h2><span class="num">6</span> Pontos de atenção operacional</h2>
+
+    <div class="callout">
+      <strong>Endereço sem coordenadas.</strong> A Husky usa o endereço enviado pelo LadFood (sem geocoding automático). Pedidos com endereço incompleto ou impreciso podem ser rejeitados ou demorar a roteirizar. Para pedidos do PDV, o cadastro de endereço do cliente delivery deve estar completo.
+    </div>
+
+    <div class="callout">
+      <strong>Pedidos do 99Food podem chegar sem latitude/longitude.</strong> O parser do 99Food não traz coordenadas hoje (configuração de privacidade). Sem coordenadas, a Husky depende exclusivamente do endereço textual para localizar.
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Forma de pagamento.</strong> É enviada como texto descritivo (ex.: "Pago Online", "Cartão na entrega"). A Husky não recebe um código padronizado &mdash; o entregador interpreta o texto.
+    </div>
+
+    <div class="callout">
+      <strong>Sem retorno de status.</strong> Após o envio do pedido, o LadFood não acompanha o que acontece na Husky. O cliente acompanha as entregas <strong>direto no painel da Husky</strong> (<code>cliente.noatocourier.com.br</code>) e não pelo LadFood.
+    </div>
+
+    <hr class="hr">
+
+    <!-- 7 -->
+    <h2><span class="num">7</span> Resumo para o cliente</h2>
+    <ul>
+      <li><strong>É automático.</strong> Não há botão. Todo pedido delivery vai para a Husky.</li>
+      <li><strong>Funciona no mesmo instante</strong> em que o pedido é aceito no LadFood.</li>
+      <li><strong>Vale para todos os canais</strong> (PDV, iFood, 99Food, app).</li>
+      <li><strong>Não há retorno de status</strong> &mdash; o acompanhamento da entrega é pelo painel da Husky.</li>
+      <li><strong>Para ativar</strong>: cliente envia o Customer token, suporte cadastra na tela de parâmetros, e está pronto.</li>
+    </ul>
+
+    <footer>
+      Lad Sistemas &mdash; Documento operacional &mdash; Integração Husky (modo de uso atual)
+    </footer>
+  </div>
+</body>
+</html>
