@@ -261,7 +261,7 @@ ul.checks li b{ font-weight:600; }
 <div class="progress-bar" id="progressBar"></div>
 <nav class="nav-dots" id="navDots" aria-label="Navegação dos slides"></nav>
 <div class="keyboard-hint">← → ou role para navegar</div>
-<div class="snum"><span id="snum">1</span> / 13</div>
+<div class="snum"><span id="snum">1</span> / 15</div>
 
 <!-- ============ SLIDE 1 — TÍTULO ============ -->
 <section class="slide title-slide">
@@ -447,11 +447,64 @@ ul.checks li b{ font-weight:600; }
   <div class="slide-content">
     <span class="emoji reveal">👨‍🍳</span>
     <h2 class="big reveal" style="margin-top:.4rem;">E pra você, do balcão</h2>
-    <p class="reveal" style="color:#f3d9c4; font-size:var(--subtitle-size); margin-top:.5rem;">Criar, testar e medir uma campanha — sem chamar ninguém.</p>
+    <p class="reveal" style="color:#f3d9c4; font-size:var(--subtitle-size); margin-top:.5rem;">Capturar o cliente, criar campanhas e medir o retorno — sem chamar ninguém.</p>
   </div>
 </section>
 
-<!-- ============ SLIDE 9 — CRIAR CAMPANHA ============ -->
+<!-- ============ SLIDE 9 — CADASTRO PELO TELEFONE (PDV) ============ -->
+<section class="slide">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">No balcão, sem fricção</span>
+        <h2 class="reveal">Todo cliente vira cadastro — pelo telefone</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Ative o parâmetro <b>Cliente Fidelidade</b> no PDV.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Ao <b>fechar a comanda</b>, o caixa digita o <b>telefone</b> (nome e CPF são opcionais).</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Já é cliente? O sistema <b>reconhece pelo telefone</b>. É novo? Entra na base na hora.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Pronto: ele passa a <b>receber cupons</b> e a acumular no clube.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <!-- MOCKUP modal "Cliente Fidelidade" do PDV (dados fictícios) -->
+        <div class="win pop">
+          <div class="win-bar"><i></i><i></i><i></i><span>PDV · Cliente Fidelidade</span></div>
+          <div class="win-body">
+            <div class="field"><label>Telefone (obrigatório)</label><div class="inp sel">(62) 99999-9999 <span>✓</span></div></div>
+            <div class="field"><label>Nome</label><div class="inp">Ana Beatriz</div></div>
+            <div class="field"><label>CPF / Nascimento (opcional)</label><div class="inp">—</div></div>
+            <div class="btn">Salvar e fechar comanda</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10 — PORTAS DE ENTRADA ============ -->
+<section class="slide alt">
+  <div class="slide-content center">
+    <span class="eyebrow reveal">Uma base, várias portas</span>
+    <h2 class="reveal" style="font-size:var(--h2-size); max-width:20ch; margin:.3rem auto 0;">O cliente do salão também entra no clube</h2>
+    <div class="reveal" style="display:flex; gap:.55rem; flex-wrap:wrap; justify-content:center; margin-top:clamp(.8rem,2vw,1.5rem);">
+      <span class="chip">🍽️ Salão / comanda</span>
+      <span class="chip">⏳ Fila de espera</span>
+      <span class="chip">📅 Reserva</span>
+      <span class="chip">🛵 Delivery / apps</span>
+    </div>
+    <div class="reveal" style="font-size:clamp(1.2rem,2.4vw,1.8rem); color:var(--tomato); margin:clamp(.3rem,1vw,.6rem) 0;">↓</div>
+    <div class="pop" style="background:#fff; border:2px solid var(--tomato); border-radius:14px; padding:clamp(.7rem,1.6vw,1.1rem) clamp(1rem,2.4vw,1.8rem); box-shadow:0 14px 32px -20px rgba(42,22,14,.4);">
+      <div style="font-family:var(--font-display); font-weight:700; font-size:clamp(1rem,2vw,1.4rem); color:var(--ink);">📇 Cadastro único do cliente</div>
+      <div style="font-size:clamp(.62rem,1.1vw,.8rem); color:var(--ink-soft);">identificado pelo <b>telefone</b> — vale pra delivery e salão</div>
+    </div>
+    <div class="reveal" style="font-size:clamp(1.2rem,2.4vw,1.8rem); color:var(--tomato); margin:clamp(.3rem,1vw,.6rem) 0;">↓</div>
+    <div class="pop" style="background:linear-gradient(135deg,var(--tomato),var(--orange)); color:#fff; border-radius:14px; padding:clamp(.6rem,1.4vw,1rem) clamp(1.1rem,2.6vw,2rem); font-family:var(--font-display); font-weight:700; font-size:clamp(1rem,2vw,1.45rem); box-shadow:0 14px 30px -16px rgba(226,62,44,.6);">
+      🎟️ Entra no Clube de Vantagens
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11 — CRIAR CAMPANHA ============ -->
 <section class="slide">
   <div class="slide-content">
     <div class="two-col">
