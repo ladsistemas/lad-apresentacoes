@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAD BI Dashboard — Os números do restaurante no navegador | LAD Sistemas</title>
+  <meta name="description" content="Dashboard de indicadores do restaurante: faturamento, ticket médio, ranking de garçons, cancelamentos, produtos campeões e DRE — no celular ou desktop, com o login do LADFood.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-600: #c2370a;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+      /* mockup (dark surface) */
+      --mock-surface: #131046;
+      --mock-card: rgba(255,255,255,0.055);
+      --mock-border: rgba(255,255,255,0.13);
+      --mock-ink: #f3f4f4;
+      --mock-ink-soft: rgba(243,244,244,0.62);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--lad-white); color: var(--lad-dark); line-height: 1.55; }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background:
+        radial-gradient(900px 500px at 110% -10%, rgba(242,68,5,0.20), transparent 60%),
+        linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+      padding: 44px 0 72px;
+    }
+    .back-link { display: inline-flex; gap: 6px; color: rgba(243,244,244,0.65); text-decoration: none; font-size: 0.85rem; margin-bottom: 40px; }
+    .back-link:hover { color: #fff; }
+    .hero-badge {
+      display: inline-block; background: rgba(242,68,5,0.16); border: 1px solid rgba(242,68,5,0.5);
+      color: #ffb094; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.8px; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; max-width: 680px; margin-bottom: 16px; }
+    .hero h1 span { color: var(--lad-orange-500); }
+    .hero .lead { font-size: clamp(0.95rem, 1.6vw, 1.12rem); color: rgba(243,244,244,0.82); max-width: 620px; margin-bottom: 30px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+      font-weight: 700; font-size: 0.95rem; padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+    }
+    .btn-primary { background: var(--lad-orange-500); color: #fff; }
+    .btn-primary:hover { background: var(--lad-orange-600); transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+
+    /* ===== MOCKUP DASHBOARD ===== */
+    .mock-window {
+      background: var(--mock-surface);
+      border: 1px solid var(--mock-border);
+      border-radius: 16px;
+      box-shadow: 0 40px 90px -30px rgba(0,0,0,0.6);
+      overflow: hidden;
+      max-width: 880px; margin: 0 auto;
+    }
+    .mock-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; border-bottom: 1px solid var(--mock-border);
+      background: rgba(0,0,0,0.22);
+    }
+    .mock-bar .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+    .mock-bar .url {
+      flex: 1; text-align: center; font-size: 0.72rem; color: var(--mock-ink-soft);
+      background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 10px;
+      max-width: 320px; margin: 0 auto;
+    }
+    .mock-body { padding: 20px; display: grid; gap: 16px; }
+    .mock-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mock-chip {
+      font-size: 0.7rem; font-weight: 600; color: var(--mock-ink-soft);
+      border: 1px solid var(--mock-border); border-radius: 999px; padding: 5px 12px;
+    }
+    .mock-chip.active { background: var(--lad-orange-500); border-color: var(--lad-orange-500); color: #fff; }
+
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .kpi {
+      background: var(--mock-card); border: 1px solid var(--mock-border);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .kpi .k-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--mock-ink-soft); margin-bottom: 6px; }
+    .kpi .k-value { font-size: 1.35rem; font-weight: 800; color: var(--mock-ink); letter-spacing: -0.5px; }
+
+    .mock-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mock-chart {
+      background: var(--mock-card); border: 1px solid var(--mock-border);
+      border-radius: 12px; padding: 16px;
+    }
+    .mock-chart h4 { font-size: 0.78rem; font-weight: 700; color: var(--mock-ink); margin-bottom: 14px; }
+    .hbar-row { display: grid; grid-template-columns: 92px 1fr 56px; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .hbar-row:last-child { margin-bottom: 0; }
+    .hbar-row .lbl { font-size: 0.74rem; color: var(--mock-ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hbar-row .val { font-size: 0.74rem; font-weight: 700; color: var(--mock-ink); text-align: right; }
+    .hbar-track { height: 10px; border-radius: 0 4px 4px 0; background: rgba(255,255,255,0.07); overflow: hidden; }
+    .hbar-fill { height: 100%; background: var(--lad-orange-500); border-radius: 0 4px 4px 0; }
+    .mock-note { font-size: 0.68rem; color: var(--mock-ink-soft); text-align: right; }
+
+    @media (max-width: 720px) {
+      .mock-charts { grid-template-columns: 1fr; }
+      .hbar-row { grid-template-columns: 80px 1fr 52px; }
+    }
+
+    /* ===== SEÇÕES ===== */
+    section { padding: 64px 0; }
+    .kicker { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--lad-orange-500); margin-bottom: 10px; }
+    h2.section-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .section-sub { color: var(--lad-gray-600); max-width: 640px; margin-bottom: 36px; }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; }
+    .feature { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 14px; padding: 24px; }
+    .features-alt { background: var(--lad-white-pure); }
+    .features-alt .feature { background: var(--lad-white); }
+    .feature .f-icon { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+    .feature h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature p { font-size: 0.88rem; color: var(--lad-gray-600); }
+
+    /* FAQ */
+    .faq-section { background: var(--lad-white-pure); }
+    details { background: var(--lad-white); border: 1px solid var(--lad-gray-300); border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; }
+    details summary { font-weight: 700; font-size: 0.98rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; color: var(--lad-orange-500); font-size: 1.3rem; font-weight: 700; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 12px; font-size: 0.92rem; color: var(--lad-gray-600); }
+
+    .final-cta { text-align: center; padding: 72px 0 80px; }
+    .final-cta h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .final-cta p { color: var(--lad-gray-600); margin-bottom: 28px; }
+    footer { border-top: 1px solid var(--lad-gray-300); padding: 28px 24px; text-align: center; font-size: 0.78rem; color: var(--lad-gray-600); }
+    @media (max-width: 640px) { section { padding: 48px 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- HERO + MOCKUP -->
+  <header class="hero">
+    <div class="container">
+      <a href="../" class="back-link">← Voltar às apresentações</a>
+      <div class="hero-badge">Indicadores</div>
+      <h1>Os números do restaurante <span>na palma da mão</span></h1>
+      <p class="lead">Faturamento, ticket médio, ranking de garçons, cancelamentos e produtos campeões — no navegador do celular ou do computador, com o mesmo login do LADFood. Sem abrir o sistema de gestão.</p>
+      <div class="hero-ctas">
+        <a href="https://dashboard.ladfood.com.br/" target="_blank" rel="noopener" class="btn btn-primary">Acessar o dashboard</a>
+        <a href="#widgets" class="btn btn-ghost">O que ele mostra</a>
+      </div>
+
+      <!-- mockup ilustrativo -->
+      <div class="mock-window" role="img" aria-label="Ilustração do painel: indicadores de faturamento, comandas, ticket médio, formas de pagamento e ranking de garçons">
+        <div class="mock-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="url">dashboard.ladfood.com.br</span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-filters">
+            <span class="mock-chip active">Hoje</span>
+            <span class="mock-chip">Ontem</span>
+            <span class="mock-chip">7 dias</span>
+            <span class="mock-chip">30 dias</span>
+            <span class="mock-chip">Este mês</span>
+            <span class="mock-chip">⚙ Personalizar</span>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi"><div class="k-label">Faturamento</div><div class="k-value">R$ 12.480</div></div>
+            <div class="kpi"><div class="k-label">Comandas</div><div class="k-value">214</div></div>
+            <div class="kpi"><div class="k-label">Ticket médio</div><div class="k-value">R$ 58,32</div></div>
+            <div class="kpi"><div class="k-label">Cancelado</div><div class="k-value">R$ 312</div></div>
+          </div>
+          <div class="mock-charts">
+            <div class="mock-chart">
+              <h4>Formas de pagamento</h4>
+              <div class="hbar-row"><span class="lbl">PIX</span><div class="hbar-track"><div class="hbar-fill" style="width:88%"></div></div><span class="val">R$ 4,9 mil</span></div>
+              <div class="hbar-row"><span class="lbl">Crédito</span><div class="hbar-track"><div class="hbar-fill" style="width:70%"></div></div><span class="val">R$ 3,9 mil</span></div>
+              <div class="hbar-row"><span class="lbl">Débito</span><div class="hbar-track"><div class="hbar-fill" style="width:46%"></div></div><span class="val">R$ 2,6 mil</span></div>
+              <div class="hbar-row"><span class="lbl">Dinheiro</span><div class="hbar-track"><div class="hbar-fill" style="width:20%"></div></div><span class="val">R$ 1,1 mil</span></div>
+            </div>
+            <div class="mock-chart">
+              <h4>Vendas por garçom</h4>
+              <div class="hbar-row"><span class="lbl">Carlos</span><div class="hbar-track"><div class="hbar-fill" style="width:92%"></div></div><span class="val">R$ 3,1 mil</span></div>
+              <div class="hbar-row"><span class="lbl">Fernanda</span><div class="hbar-track"><div class="hbar-fill" style="width:74%"></div></div><span class="val">R$ 2,5 mil</span></div>
+              <div class="hbar-row"><span class="lbl">João</span><div class="hbar-track"><div class="hbar-fill" style="width:58%"></div></div><span class="val">R$ 2,0 mil</span></div>
+              <div class="hbar-row"><span class="lbl">Patrícia</span><div class="hbar-track"><div class="hbar-fill" style="width:41%"></div></div><span class="val">R$ 1,4 mil</span></div>
+            </div>
+          </div>
+          <div class="mock-note">Ilustração com dados fictícios — o painel real mostra os números da sua operação.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- WIDGETS / O QUE MOSTRA -->
+  <section id="widgets">
+    <div class="container">
+      <p class="kicker">O que ele mostra</p>
+      <h2 class="section-title">Indicadores que respondem às perguntas do dono</h2>
+      <p class="section-sub">Cada bloco abaixo é um widget do painel — você liga, desliga e reordena o que quiser ver.</p>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="f-icon">💰</span>
+          <h3>Vendas do período</h3>
+          <p>Faturamento líquido, quantidade de comandas, ticket médio e total cancelado — os quatro números de topo do dia, com gráfico de formas de pagamento.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🏆</span>
+          <h3>Ranking de garçons</h3>
+          <p>Quem mais vende (top 15), quem mais cancela, taxa de serviço por garçom e o produto campeão de cada um. Meritocracia com dado, não com impressão.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🍔</span>
+          <h3>Produtos e cancelamentos</h3>
+          <p>Mais vendidos, menos vendidos, produtos mais cancelados e os motivos — para ajustar cardápio e processo de cozinha.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📈</span>
+          <h3>Financeiro (opcional)</h3>
+          <p>DRE/resultado do período, contas a pagar em aberto e vendas por canal: salão, balcão e delivery.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">👤</span>
+          <h3>Clientes identificados</h3>
+          <p>Ticket médio por cliente de conta corrente/fiado — quem são seus melhores clientes e quanto consomem.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🗓️</span>
+          <h3>Períodos prontos</h3>
+          <p>Hoje, ontem, 7 dias, 30 dias, este mês e mês passado — um toque e o painel inteiro recalcula.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section class="features-alt">
+    <div class="container">
+      <p class="kicker">Feito para o dono</p>
+      <h2 class="section-title">Pensado para acompanhar de longe</h2>
+      <div class="feature-grid" style="margin-top: 36px;">
+        <div class="feature">
+          <span class="f-icon">📱</span>
+          <h3>No navegador, em qualquer lugar</h3>
+          <p>Celular ou desktop, tema claro ou escuro. Sem instalar nada: é abrir dashboard.ladfood.com.br e entrar com o login do LADFood.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🏢</span>
+          <h3>Multi-loja</h3>
+          <p>Quem tem mais de uma unidade troca de empresa no topo do painel — cada usuário vê apenas as empresas que sua conta permite.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🧩</span>
+          <h3>Painel do seu jeito</h3>
+          <p>No botão ⚙ você escolhe quais widgets aparecem e em que ordem, por empresa. A configuração vale para todos os dispositivos.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">⚡</span>
+          <h3>Sem pesar a operação</h3>
+          <p>O painel consulta uma réplica de leitura do banco — olhar os números o dia inteiro não interfere no PDV do restaurante.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <p class="kicker">Dúvidas frequentes</p>
+      <h2 class="section-title">Perguntas que o cliente sempre faz</h2>
+      <div style="margin-top: 32px;">
+        <details>
+          <summary>Preciso instalar alguma coisa?</summary>
+          <p>Não. O dashboard roda no navegador, no celular ou no computador. É acessar dashboard.ladfood.com.br e entrar.</p>
+        </details>
+        <details>
+          <summary>Que login eu uso?</summary>
+          <p>O mesmo usuário e senha do LADFood. As empresas que aparecem no painel são as que sua conta já tem permissão de ver.</p>
+        </details>
+        <details>
+          <summary>Tenho mais de uma loja. Funciona?</summary>
+          <p>Sim. Você troca de empresa no topo do painel, e cada empresa pode ter sua própria configuração de widgets.</p>
+        </details>
+        <details>
+          <summary>Consigo esconder indicadores que não uso?</summary>
+          <p>Sim. No botão ⚙ você liga/desliga e reordena os widgets. O que estiver oculto nem é consultado, deixando o painel mais rápido.</p>
+        </details>
+        <details>
+          <summary>Os dados são em tempo real?</summary>
+          <p>O painel consulta uma réplica de leitura do banco do LADFood — você acompanha o movimento do dia sem interferir na operação do PDV.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Veja os números da sua operação</h2>
+      <p>Acesse com o login do LADFood — ou peça ao comercial uma demonstração guiada.</p>
+      <a href="https://dashboard.ladfood.com.br/" target="_blank" rel="noopener" class="btn btn-primary">Acessar o dashboard</a>
+    </div>
+  </section>
+
+  <footer>LAD Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+</body>
+</html>
