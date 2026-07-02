@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoatendimento Self-Service + Catraca — LAD Sistemas</title>
+  <meta name="description" content="Circuito completo de autoatendimento para restaurante self-service: totem balança, totem de pagamento com TEF e catraca integrada. Ninguém sai sem pagar.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-600: #c2370a;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-blue-800: #221596;
+      --lad-blue-100: #e8e6ff;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+      --lad-green-100: #e6f6ef;
+      --lad-red: #c0392b;
+      --lad-red-100: #fdecea;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--lad-white);
+      color: var(--lad-dark);
+      line-height: 1.55;
+    }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background:
+        radial-gradient(900px 480px at 110% -10%, rgba(242,68,5,0.18), transparent 60%),
+        radial-gradient(700px 420px at -10% 110%, rgba(255,255,255,0.06), transparent 55%),
+        linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+      padding: 48px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: rgba(243,244,244,0.7); text-decoration: none;
+      font-size: 0.85rem; margin-bottom: 40px;
+    }
+    .back-link:hover { color: #fff; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(242,68,5,0.16);
+      border: 1px solid rgba(242,68,5,0.5);
+      color: #ffb094;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.8px;
+      padding: 6px 14px; border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.12;
+      max-width: 640px; margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--lad-orange-500); }
+    .hero .lead {
+      font-size: clamp(0.98rem, 1.6vw, 1.15rem);
+      color: rgba(243,244,244,0.82);
+      max-width: 600px; margin-bottom: 32px;
+    }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; font-weight: 700; font-size: 0.95rem;
+      padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+    }
+    .btn-primary { background: var(--lad-orange-500); color: #fff; }
+    .btn-primary:hover { background: var(--lad-orange-600); transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+
+    /* fluxo resumido no hero */
+    .hero-flow {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      margin-top: 44px;
+    }
+    .hero-flow .step {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px; padding: 10px 16px;
+      font-size: 0.85rem; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-flow .step em { font-style: normal; font-size: 1.1rem; }
+    .hero-flow .arrow { color: var(--lad-orange-500); font-weight: 800; }
+
+    /* ===== SEÇÕES ===== */
+    section { padding: 64px 0; }
+    .kicker {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.8px;
+      color: var(--lad-orange-500); margin-bottom: 10px;
+    }
+    h2.section-title {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800; letter-spacing: -0.6px;
+      margin-bottom: 10px;
+    }
+    .section-sub { color: var(--lad-gray-600); max-width: 620px; margin-bottom: 36px; }
+
+    /* ===== VÍDEO ===== */
+    .video-section { background: var(--lad-white-pure); border-bottom: 1px solid var(--lad-gray-100); }
+    .video-wrap {
+      display: flex; justify-content: center;
+      margin-top: 8px;
+    }
+    .video-wrap .instagram-media { margin: 0 auto !important; }
+    .video-fallback {
+      text-align: center; margin-top: 18px;
+      font-size: 0.88rem; color: var(--lad-gray-600);
+    }
+    .video-fallback a { color: var(--lad-orange-500); font-weight: 700; text-decoration: none; }
+    .video-fallback a:hover { text-decoration: underline; }
+
+    /* ===== JORNADA ===== */
+    .journey { counter-reset: jstep; display: grid; gap: 14px; }
+    .jstep {
+      background: var(--lad-white-pure);
+      border: 1px solid var(--lad-gray-300);
+      border-radius: 14px; padding: 22px 24px;
+      display: grid; grid-template-columns: 52px 1fr; gap: 18px;
+      align-items: start;
+    }
+    .jstep .num {
+      counter-increment: jstep;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--lad-orange-100); color: var(--lad-orange-500);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; font-weight: 800;
+    }
+    .jstep .num::before { content: counter(jstep); }
+    .jstep h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .jstep p { font-size: 0.92rem; color: var(--lad-gray-600); }
+    .jstep .tag {
+      display: inline-block; margin-left: 8px; vertical-align: 2px;
+      font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      padding: 3px 9px; border-radius: 999px;
+    }
+    .tag-balanca { background: var(--lad-blue-100); color: var(--lad-blue-900); }
+    .tag-pagamento { background: var(--lad-orange-100); color: var(--lad-orange-600); }
+    .tag-catraca { background: var(--lad-green-100); color: var(--lad-green); }
+
+    /* ===== COMPONENTES ===== */
+    .components { background: var(--lad-white-pure); }
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .comp-card {
+      border: 1px solid var(--lad-gray-300); border-radius: 16px;
+      padding: 28px 24px; background: var(--lad-white);
+      display: flex; flex-direction: column;
+    }
+    .comp-card .icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 16px;
+    }
+    .comp-card:nth-child(1) .icon { background: var(--lad-blue-100); }
+    .comp-card:nth-child(2) .icon { background: var(--lad-orange-100); }
+    .comp-card:nth-child(3) .icon { background: var(--lad-green-100); }
+    .comp-card h3 { font-size: 1.08rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.3px; }
+    .comp-card .role { font-size: 0.82rem; font-weight: 700; color: var(--lad-orange-500); margin-bottom: 14px; }
+    .comp-card ul { list-style: none; display: grid; gap: 9px; }
+    .comp-card li {
+      font-size: 0.88rem; color: var(--lad-gray-600);
+      padding-left: 22px; position: relative;
+    }
+    .comp-card li::before {
+      content: "✓"; position: absolute; left: 0; top: 0;
+      color: var(--lad-green); font-weight: 800;
+    }
+
+    /* ===== CATRACA DESTAQUE ===== */
+    .catraca-band {
+      background: linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 85%);
+      color: var(--lad-white);
+    }
+    .catraca-band .kicker { color: #ffb094; }
+    .catraca-band .section-sub { color: rgba(243,244,244,0.75); }
+    .display-demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 8px; }
+    .display-card {
+      border-radius: 14px; padding: 24px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+    }
+    .display-card .led {
+      font-family: 'Consolas', monospace; font-size: 1.02rem; font-weight: 700;
+      padding: 14px 16px; border-radius: 8px; margin-bottom: 14px;
+      text-align: center; letter-spacing: 0.5px;
+    }
+    .led-nega { background: #2b0f0d; color: #ff6b5b; border: 1px solid #7a2c24; }
+    .led-libera { background: #0d2b1a; color: #4ade80; border: 1px solid #1f7a44; }
+    .display-card p { font-size: 0.88rem; color: rgba(243,244,244,0.78); }
+
+    /* ===== BENEFÍCIOS ===== */
+    .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .benefit {
+      background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300);
+      border-radius: 14px; padding: 24px;
+    }
+    .benefit .b-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+    .benefit h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .benefit p { font-size: 0.88rem; color: var(--lad-gray-600); }
+
+    /* ===== FAQ ===== */
+    .faq-section { background: var(--lad-white-pure); }
+    details {
+      background: var(--lad-white); border: 1px solid var(--lad-gray-300);
+      border-radius: 12px; padding: 18px 22px; margin-bottom: 12px;
+    }
+    details summary {
+      font-weight: 700; font-size: 0.98rem; cursor: pointer;
+      list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; color: var(--lad-orange-500); font-size: 1.3rem; font-weight: 700; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 12px; font-size: 0.92rem; color: var(--lad-gray-600); }
+
+    /* ===== CTA FINAL ===== */
+    .final-cta { text-align: center; padding: 72px 0 80px; }
+    .final-cta h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .final-cta p { color: var(--lad-gray-600); margin-bottom: 28px; }
+    footer {
+      border-top: 1px solid var(--lad-gray-300);
+      padding: 28px 24px; text-align: center;
+      font-size: 0.78rem; color: var(--lad-gray-600);
+    }
+    @media (max-width: 640px) {
+      section { padding: 48px 0; }
+      .jstep { grid-template-columns: 40px 1fr; gap: 12px; padding: 18px; }
+      .jstep .num { width: 36px; height: 36px; font-size: 1rem; }
+      .hero-flow .step { font-size: 0.78rem; padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <a href="../" class="back-link">← Voltar às apresentações</a>
+      <div class="hero-badge">Autoatendimento Self-Service</div>
+      <h1>Do prato à saída: <span>autoatendimento completo</span> com catraca integrada</h1>
+      <p class="lead">O cliente pesa o próprio prato, paga sozinho no totem com cartão ou PIX, e a catraca só libera a saída com a comanda quitada. Menos fila, menos mão de obra e ninguém sai sem pagar.</p>
+      <div class="hero-ctas">
+        <a href="#video" class="btn btn-primary">▶ Ver funcionando</a>
+        <a href="#circuito" class="btn btn-ghost">Como funciona</a>
+      </div>
+      <div class="hero-flow">
+        <div class="step"><em>🍽️</em> Pesa o prato</div>
+        <span class="arrow">→</span>
+        <div class="step"><em>🏷️</em> Lança na comanda</div>
+        <span class="arrow">→</span>
+        <div class="step"><em>💳</em> Paga no totem</div>
+        <span class="arrow">→</span>
+        <div class="step"><em>🚪</em> Catraca libera</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- VÍDEO -->
+  <section class="video-section" id="video">
+    <div class="container">
+      <p class="kicker">Na prática</p>
+      <h2 class="section-title">Veja o circuito funcionando</h2>
+      <p class="section-sub">Vídeo real da operação: totem balança, totem de pagamento e catraca trabalhando juntos no restaurante.</p>
+      <div class="video-wrap">
+        <blockquote class="instagram-media"
+          data-instgrm-permalink="https://www.instagram.com/p/DXJWU8xgtgE/"
+          data-instgrm-version="14"
+          style="background:#FFF; border:1px solid #d1d3d4; border-radius:12px; box-shadow:0 4px 20px rgba(26,26,46,0.08); max-width:540px; min-width:280px; width:100%; padding:0;">
+          <a href="https://www.instagram.com/p/DXJWU8xgtgE/" target="_blank" rel="noopener" style="display:block; padding:24px; text-align:center; text-decoration:none; color:#1a1a2e; font-family:'DM Sans',sans-serif;">
+            ▶ Assistir ao vídeo no Instagram
+          </a>
+        </blockquote>
+      </div>
+      <p class="video-fallback">O vídeo não carregou? <a href="https://www.instagram.com/p/DXJWU8xgtgE/" target="_blank" rel="noopener">Assista direto no Instagram →</a></p>
+    </div>
+  </section>
+
+  <!-- CIRCUITO / JORNADA -->
+  <section id="circuito">
+    <div class="container">
+      <p class="kicker">O circuito completo</p>
+      <h2 class="section-title">A jornada do cliente, sem funcionário no meio</h2>
+      <p class="section-sub">Uma única comanda com código de barras amarra tudo: pesagem, consumo, pagamento e saída.</p>
+      <div class="journey">
+        <div class="jstep">
+          <div class="num"></div>
+          <div>
+            <h3>Entrada: cliente recebe a comanda</h3>
+            <p>Uma comanda com código de barras acumula todo o consumo no LadFood — prato, bebidas, sobremesas.</p>
+          </div>
+        </div>
+        <div class="jstep">
+          <div class="num"></div>
+          <div>
+            <h3>Pesagem no autoatendimento <span class="tag tag-balanca">Totem Balança</span></h3>
+            <p>O cliente coloca o prato na balança, o peso estabiliza em segundos e a tela mostra o valor a pagar. Ele aproxima a comanda do leitor e o pedido cai direto na comanda — sem operador digitando nada.</p>
+          </div>
+        </div>
+        <div class="jstep">
+          <div class="num"></div>
+          <div>
+            <h3>Consumo livre no salão</h3>
+            <p>Bebidas e adicionais entram na mesma comanda pelo PDV ou pelo garçom, como em qualquer operação LadFood.</p>
+          </div>
+        </div>
+        <div class="jstep">
+          <div class="num"></div>
+          <div>
+            <h3>Pagamento autônomo <span class="tag tag-pagamento">Totem Pagamento</span></h3>
+            <p>O cliente bipa a comanda no totem, confere os itens e o total, e paga com cartão (TEF integrado) ou PIX. A NFC-e é emitida na hora e o comprovante é impresso. Dá até para juntar várias comandas da família num pagamento só.</p>
+          </div>
+        </div>
+        <div class="jstep">
+          <div class="num"></div>
+          <div>
+            <h3>Saída controlada <span class="tag tag-catraca">Catraca</span></h3>
+            <p>Na saída, o cliente aproxima a comanda da catraca. O sistema consulta o LadFood em tempo real: comanda paga libera o giro; comanda em aberto trava e orienta "Valide no Caixa".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTES -->
+  <section class="components">
+    <div class="container">
+      <p class="kicker">A solução</p>
+      <h2 class="section-title">Três peças, um só sistema</h2>
+      <p class="section-sub">Tudo integrado nativamente ao LadFood: comanda, caixa, fiscal e relatórios seguem o fluxo normal do PDV.</p>
+      <div class="comp-grid">
+        <div class="comp-card">
+          <div class="icon">⚖️</div>
+          <h3>Totem Balança</h3>
+          <div class="role">Pesagem sem operador</div>
+          <ul>
+            <li>Peso e valor em tempo real na tela, em fonte grande</li>
+            <li>Cliente lê a própria comanda no leitor e pronto</li>
+            <li>Modo automático: gera comanda e imprime ticket sozinho</li>
+            <li>Orientação por voz, sons e semáforo físico opcional</li>
+            <li>Recupera sozinho de qualquer erro (prato removido, QR errado)</li>
+            <li>Funciona com balanças com saída serial (padrão Toledo Prix)</li>
+          </ul>
+        </div>
+        <div class="comp-card">
+          <div class="icon">💳</div>
+          <h3>Totem Pagamento</h3>
+          <div class="role">Caixa de autoatendimento com TEF</div>
+          <ul>
+            <li>Cliente bipa a comanda e vê a conta completa</li>
+            <li>Cartão crédito/débito no pinpad (Stone ou Multiplus) e PIX</li>
+            <li>NFC-e emitida automaticamente + comprovante impresso</li>
+            <li>CPF na nota direto na tela, com validação</li>
+            <li>Paga várias comandas numa transação só</li>
+            <li>Proteção contra cobrança duplicada no cartão</li>
+          </ul>
+        </div>
+        <div class="comp-card">
+          <div class="icon">🚪</div>
+          <h3>LAD Catraca</h3>
+          <div class="role">Controle de saída integrado</div>
+          <ul>
+            <li>Integração com catraca Henry via rede</li>
+            <li>Valida a comanda em tempo real no LadFood</li>
+            <li>Comanda paga = libera; em aberto = trava</li>
+            <li>Mensagem no display orienta o cliente</li>
+            <li>Fail-safe: sem conexão, não libera ninguém</li>
+            <li>Toda tentativa de saída fica registrada para auditoria</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATRACA EM DESTAQUE -->
+  <section class="catraca-band">
+    <div class="container">
+      <p class="kicker">Segurança de receita</p>
+      <h2 class="section-title">Ninguém sai sem pagar — e sem constrangimento</h2>
+      <p class="section-sub">A validação é automática e silenciosa: o próprio display da catraca orienta o cliente, sem precisar de fiscal na porta conferindo comanda.</p>
+      <div class="display-demo">
+        <div class="display-card">
+          <div class="led led-nega">ACESSO NEGADO — VALIDE NO CAIXA</div>
+          <p>Comanda com conta em aberto: o braço permanece travado e o cliente é orientado a acertar no caixa ou no totem.</p>
+        </div>
+        <div class="display-card">
+          <div class="led led-libera">ACESSO LIBERADO — VOLTE SEMPRE</div>
+          <p>Comanda quitada: pagou no caixa ou no totem, a catraca libera na leitura seguinte. Sem fila, sem conferência manual.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section>
+    <div class="container">
+      <p class="kicker">Por que ativar</p>
+      <h2 class="section-title">O que muda na operação</h2>
+      <div class="benefit-grid" style="margin-top: 36px;">
+        <div class="benefit">
+          <span class="b-icon">👥</span>
+          <h3>Menos mão de obra fixa</h3>
+          <p>Elimina o operador da balança e reduz a equipe do caixa — o cliente faz sozinho as duas etapas mais repetitivas da operação.</p>
+        </div>
+        <div class="benefit">
+          <span class="b-icon">⏱️</span>
+          <h3>Fim das filas no pico</h3>
+          <p>Pesagem em segundos e pagamento autônomo com cartão ou PIX: o gargalo do almoço deixa de existir.</p>
+        </div>
+        <div class="benefit">
+          <span class="b-icon">🔒</span>
+          <h3>Zero evasão</h3>
+          <p>A catraca só libera a saída com a comanda quitada. Validação automática em tempo real, com registro de cada tentativa.</p>
+        </div>
+        <div class="benefit">
+          <span class="b-icon">🎯</span>
+          <h3>Sem erro de digitação</h3>
+          <p>O peso vai da balança direto para a comanda e o valor vai do LadFood direto para o pinpad. Ninguém digita valor em lugar nenhum.</p>
+        </div>
+        <div class="benefit">
+          <span class="b-icon">🧾</span>
+          <h3>Fiscal automático</h3>
+          <p>Aprovou no cartão, a NFC-e sai na hora. Se a nota falhar, a transação é revertida sozinha — não existe "cobrou e não emitiu".</p>
+        </div>
+        <div class="benefit">
+          <span class="b-icon">📊</span>
+          <h3>Gestão integrada</h3>
+          <p>As vendas dos totens caem no caixa do LadFood com conciliação normal. Relatórios, estoque e financeiro seguem o fluxo que você já conhece.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <p class="kicker">Dúvidas frequentes</p>
+      <h2 class="section-title">Perguntas que o cliente sempre faz</h2>
+      <div style="margin-top: 32px;">
+        <details>
+          <summary>Preciso trocar minha balança?</summary>
+          <p>Na maioria dos casos, não. O totem funciona com balanças com saída serial RS-232 (protocolo padrão Toledo Prix e compatíveis). A porta e a velocidade de comunicação são configuráveis na instalação.</p>
+        </details>
+        <details>
+          <summary>Funciona com qual catraca?</summary>
+          <p>Com catracas Henry conectadas à rede local. O serviço de validação roda no mesmo servidor do LadFood e a catraca é apontada para ele pela própria interface de configuração do equipamento.</p>
+        </details>
+        <details>
+          <summary>E se a internet ou a rede cair?</summary>
+          <p>O circuito roda na rede local do restaurante (balança, totens, PDV e catraca conversam entre si internamente). Por segurança, se a catraca não conseguir validar uma comanda, ela não libera a passagem.</p>
+        </details>
+        <details>
+          <summary>Quais formas de pagamento o totem aceita?</summary>
+          <p>Cartão de crédito e débito via TEF integrado (Stone ou Multipluscard, com pinpad) e PIX. As formas exibidas no totem são as habilitadas no LadFood, e dá para ocultar formas específicas por terminal.</p>
+        </details>
+        <details>
+          <summary>O cliente pode pagar mais de uma comanda?</summary>
+          <p>Sim. No totem de pagamento é possível adicionar várias comandas (família ou grupo) e quitar tudo numa única transação. Todas ficam liberadas na catraca.</p>
+        </details>
+        <details>
+          <summary>Que estrutura preciso ter?</summary>
+          <p>PC Windows comum para cada totem, leitor de código de barras USB, pinpad TEF no totem de pagamento e o servidor LadFood na rede local. A instalação é feita por instalador automatizado, com inicialização automática junto com o Windows.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Quer ver rodando no seu restaurante?</h2>
+      <p>Fale com o comercial LAD e agende uma demonstração do circuito completo.</p>
+      <a href="https://www.instagram.com/p/DXJWU8xgtgE/" target="_blank" rel="noopener" class="btn btn-primary">▶ Rever o vídeo da operação</a>
+    </div>
+  </section>
+
+  <footer>Lad Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+
+  <script async src="https://www.instagram.com/embed.js"></script>
+</body>
+</html>
