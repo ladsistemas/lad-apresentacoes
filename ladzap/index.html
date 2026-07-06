@@ -217,6 +217,24 @@ ul.checks li b{ font-weight:600; }
 .type .badge-beta{ display:inline-block; margin-top:.35rem; background:#fff4ec; color:var(--tomato-deep); border:1px solid #ffd9bf; font-size:clamp(.52rem,.9vw,.62rem); font-weight:700; text-transform:uppercase; letter-spacing:.04em; border-radius:999px; padding:.15em .6em; }
 @media (max-width:760px){ .types{ grid-template-columns:1fr; } }
 
+/* ===========================================
+   MOCKUP: CONSTRUTOR DE FLUXO (canvas de atendimento)
+   =========================================== */
+.flow-legend{ display:flex; gap:.35rem; flex-wrap:wrap; margin-bottom:clamp(.5rem,1.2vw,.75rem); }
+.flow-legend span{ background:var(--blue); color:#fff; font-size:clamp(.5rem,.85vw,.62rem); font-weight:700; border-radius:6px; padding:.3em .55em; }
+.fnode{ border-radius:10px; padding:clamp(.45rem,1vw,.65rem) clamp(.55rem,1.1vw,.75rem); font-size:clamp(.6rem,1.1vw,.76rem); line-height:1.4;
+  border-left:4px solid; background:#fff; box-shadow:0 4px 12px rgba(0,0,0,.06); }
+.fnode .flabel{ font-size:clamp(.5rem,.85vw,.6rem); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:.25rem; display:block; }
+.fnode.q{ border-color:var(--green); } .fnode.q .flabel{ color:#1e7d43; }
+.fnode.m{ border-color:var(--blue); } .fnode.m .flabel{ color:var(--blue); }
+.fnode.c{ border-color:var(--tomato); } .fnode.c .flabel{ color:var(--tomato-deep); }
+.fnode ol{ margin:.3rem 0 0 1.1rem; }
+.fnode ol li{ font-size:clamp(.58rem,1vw,.72rem); }
+.fcond{ margin-top:.35rem; padding-top:.35rem; border-top:1px dashed var(--cream-2); }
+.fcond:first-of-type{ border-top:none; padding-top:0; margin-top:.3rem; }
+.farrow{ text-align:center; color:var(--ink-soft); font-size:.85rem; line-height:1; margin:.2rem 0; }
+.fvar{ font-family:ui-monospace,monospace; background:#f3f4f4; padding:.05em .35em; border-radius:4px; font-size:.92em; }
+
 .pains{ display:flex; flex-direction:column; gap:clamp(.55rem,1.6vw,1.1rem); width:100%; max-width:760px; margin:clamp(.6rem,2vw,1.4rem) auto 0; }
 .pain{ display:flex; gap:.9rem; align-items:center; background:#fff; border-radius:14px; padding:clamp(.7rem,1.6vw,1.1rem); border:1px solid var(--cream-2); box-shadow:0 12px 30px -22px rgba(42,22,14,.3); }
 .pain .x{ flex:none; width:1.9em; height:1.9em; border-radius:50%; background:#fdecea; color:var(--tomato); display:grid; place-items:center; font-weight:700; }
@@ -249,7 +267,7 @@ ul.checks li b{ font-weight:600; }
 <div class="progress-bar" id="progressBar"></div>
 <nav class="nav-dots" id="navDots" aria-label="Navegação dos slides"></nav>
 <div class="keyboard-hint">← → ou role para navegar</div>
-<div class="snum"><span id="snum">1</span> / 14</div>
+<div class="snum"><span id="snum">1</span> / 15</div>
 
 <!-- ============ SLIDE 1 — TÍTULO ============ -->
 <section class="slide title-slide" id="s1">
@@ -339,8 +357,46 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 6 — CONFIABILIDADE ============ -->
-<section class="slide alt" id="s6">
+<!-- ============ SLIDE 6 — FLUXO NO-CODE ============ -->
+<section class="slide" id="s6">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">Como funciona a configuração</span>
+        <h2 class="reveal">Você desenha a conversa, sem escrever código</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Blocos prontos — <b>mensagem, pergunta, múltipla escolha, condicional</b> — encaixados um no outro.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Variáveis como <b>{nome}</b> e <b>{url_delivery}</b> personalizam a resposta sem digitar de novo.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Regra condicional decide sozinha: <b>aberto ou fechado</b>, a mensagem muda.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <div class="win pop" style="width:min(96%,460px);">
+          <div class="win-bar"><i></i><i></i><i></i><span>LadZap · Fluxo de atendimento</span></div>
+          <div class="win-body">
+            <div class="flow-legend">
+              <span>💬 Mensagem</span><span>❓ Pergunta</span><span>🔀 Condicional</span><span>📋 Opções</span>
+            </div>
+            <div class="fnode q"><span class="flabel">Pergunta subjetiva</span>Qual seu nome? <span class="fvar">→ {nome}</span></div>
+            <div class="farrow">↓</div>
+            <div class="fnode m"><span class="flabel">Múltipla escolha</span>Olá {nome}! Como posso ajudar?
+              <ol><li>Fazer um pedido</li><li>Fazer uma reserva</li><li>Horário de funcionamento</li></ol>
+            </div>
+            <div class="farrow">↓ opção 1</div>
+            <div class="fnode c">
+              <span class="flabel">Condicional</span>
+              <div class="fcond"><b>Aberta:</b> Faça seu pedido em <span class="fvar">{url_delivery}</span></div>
+              <div class="fcond"><b>Fechada:</b> Ainda não abrimos, mas dá pra ver o cardápio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 — CONFIABILIDADE ============ -->
+<section class="slide alt" id="s7">
   <div class="slide-content">
     <div class="two-col">
       <div class="col-mock">
@@ -372,8 +428,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 7 — DIVISÓRIA: O QUE JÁ CONVERSA ============ -->
-<section class="slide dark divider" id="s7">
+<!-- ============ SLIDE 8 — DIVISÓRIA: O QUE JÁ CONVERSA ============ -->
+<section class="slide dark divider" id="s8">
   <div class="slide-content">
     <span class="emoji reveal">💬</span>
     <h2 class="big reveal" style="margin-top:.4rem;">O que já conversa pelo LadZap</h2>
@@ -381,8 +437,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 8 — FIDELIDADE ============ -->
-<section class="slide" id="s8">
+<!-- ============ SLIDE 9 — FIDELIDADE ============ -->
+<section class="slide" id="s9">
   <div class="slide-content">
     <div class="two-col">
       <div class="col-text">
@@ -416,8 +472,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 9 — DELIVERY ============ -->
-<section class="slide alt" id="s9">
+<!-- ============ SLIDE 10 — DELIVERY ============ -->
+<section class="slide alt" id="s10">
   <div class="slide-content">
     <div class="two-col">
       <div class="col-mock">
@@ -448,8 +504,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 10 — RESERVA ============ -->
-<section class="slide" id="s10">
+<!-- ============ SLIDE 11 — RESERVA ============ -->
+<section class="slide" id="s11">
   <div class="slide-content">
     <div class="two-col">
       <div class="col-text">
@@ -479,8 +535,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 11 — DIVISÓRIA: PRÓXIMO PASSO ============ -->
-<section class="slide dark divider" id="s11">
+<!-- ============ SLIDE 12 — DIVISÓRIA: PRÓXIMO PASSO ============ -->
+<section class="slide dark divider" id="s12">
   <div class="slide-content">
     <span class="eyebrow reveal">Proposta · Próximo passo</span>
     <h2 class="big reveal" style="max-width:18ch;">Até onde essa conversa pode ir?</h2>
@@ -488,24 +544,27 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 12 — PROPOSTA: NOVA ETAPA DE CONFIGURAÇÃO ============ -->
-<section class="slide" id="s12">
+<!-- ============ SLIDE 13 — PROPOSTA: NOVA ETAPA DE CONFIGURAÇÃO ============ -->
+<section class="slide" id="s13">
   <div class="slide-content">
     <div class="two-col">
       <div class="col-text">
         <span class="eyebrow reveal">Sugestão de evolução</span>
-        <h2 class="reveal">Uma nova etapa: "quem responde por você"</h2>
+        <h2 class="reveal">Um novo bloco no mesmo fluxo: "Chamar API / Agente"</h2>
         <ul class="checks">
-          <li class="reveal"><span class="tick">✓</span><span>Continua no <b>padrão de hoje</b> — respostas prontas de cupom e FAQ.</span></li>
-          <li class="reveal"><span class="tick">✓</span><span>Ou conecta a <b>própria API</b> (webhook) e assume o controle da resposta.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Encaixa ao lado dos blocos de hoje — <b>mensagem, pergunta, condicional</b> — sem mudar como você já monta o fluxo.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Aponta pra <b>própria API</b> (webhook) do cliente e deixa ela assumir a resposta.</span></li>
           <li class="reveal"><span class="tick">✓</span><span>Ou ativa um <b>agente de IA pré-configurado</b> — já entende cardápio e horário, sem programar nada.</span></li>
         </ul>
       </div>
       <div class="col-mock">
         <div class="win pop">
-          <div class="win-bar"><i></i><i></i><i></i><span>LadZap · Fonte das respostas</span></div>
+          <div class="win-bar"><i></i><i></i><i></i><span>LadZap · Novo bloco do fluxo</span></div>
           <div class="win-body">
-            <div class="field"><label>Quem responde as mensagens</label><div class="inp sel">Agente de IA (Beta) <span>▾</span></div></div>
+            <div class="flow-legend">
+              <span>💬 Mensagem</span><span>🔀 Condicional</span><span style="background:var(--tomato);">✨ Chamar API/Agente</span>
+            </div>
+            <div class="field"><label>Quem responde este bloco</label><div class="inp sel">Agente de IA (Beta) <span>▾</span></div></div>
             <div class="field"><label>Tom de voz</label><div class="inp">Simpático e direto, com emojis</div></div>
             <div class="field"><label>Contexto conectado</label><div class="inp ghost">Cardápio · Horário de funcionamento · Cupons ativos</div></div>
             <div class="btn">Enviar mensagem de teste</div>
@@ -516,8 +575,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 13 — TRÊS OPÇÕES ============ -->
-<section class="slide alt" id="s13">
+<!-- ============ SLIDE 14 — TRÊS OPÇÕES ============ -->
+<section class="slide alt" id="s14">
   <div class="slide-content center">
     <span class="eyebrow reveal">O cliente escolhe</span>
     <h2 class="reveal" style="font-size:var(--h2-size); margin:.3rem 0 0;">Três formas de responder, um só WhatsApp</h2>
@@ -530,8 +589,8 @@ ul.checks li b{ font-weight:600; }
   </div>
 </section>
 
-<!-- ============ SLIDE 14 — FECHAMENTO / CTA ============ -->
-<section class="slide dark divider" id="s14">
+<!-- ============ SLIDE 15 — FECHAMENTO / CTA ============ -->
+<section class="slide dark divider" id="s15">
   <div class="slide-content">
     <span class="eyebrow reveal">Pronto pra conectar?</span>
     <h2 class="big reveal" style="max-width:18ch;">Um WhatsApp. Todo o ecossistema LAD Food.</h2>
