@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LadZap — WhatsApp conectado a todo o LAD Food</title>
+
+<link rel="icon" type="image/png" href="assets/ladfood-simbolo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" />
+
+<style>
+/* ===========================================
+   TEMA — Design System LAD Food (mesmo padrão do LAD Fidelidade)
+   Laranja primário (CTA) · Azul institucional · Neutros · Inter
+   + Acento WhatsApp (verde) só nos mockups de conversa
+   =========================================== */
+:root{
+  --cream:#f3f4f4;
+  --cream-2:#e8e9e9;
+  --ink:#1a1a2e;
+  --ink-soft:#6b6b6b;
+  --tomato:#f24405;
+  --tomato-deep:#c2370a;
+  --orange:#f27405;
+  --blue:#190e88;
+  --blue-deep:#12096a;
+  --green:#2ecc71;
+  --red:#c0392b;
+  --yellow:#ffde59;
+
+  --wa-teal:#075e54;
+  --wa-green:#25d366;
+  --wa-chatbg:#e5ddd5;
+  --wa-bubble-out:#dcf8c6;
+
+  --font-display:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+
+  --title-size:clamp(2rem,6vw,4.6rem);
+  --h2-size:clamp(1.4rem,3.6vw,2.7rem);
+  --subtitle-size:clamp(0.95rem,2vw,1.35rem);
+  --body-size:clamp(0.82rem,1.35vw,1.1rem);
+
+  --slide-padding:clamp(1.25rem,4vw,4rem);
+  --content-gap:clamp(0.8rem,2vw,2rem);
+
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --dur:0.7s;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* === viewport-base.css (INTEGRAL, obrigatório) === */
+html, body { height:100%; overflow-x:hidden; }
+html { scroll-snap-type:y mandatory; scroll-behavior:smooth; }
+.slide{
+  width:100vw; height:100vh; height:100dvh; overflow:hidden;
+  scroll-snap-align:start; display:flex; flex-direction:column; position:relative;
+}
+.slide-content{
+  flex:1; display:flex; flex-direction:column; justify-content:center;
+  max-height:100%; overflow:hidden; padding:var(--slide-padding);
+}
+.card, .container, .content-box{ max-width:min(90vw,1000px); max-height:min(80vh,700px); }
+.feature-list, .bullet-list{ gap:clamp(0.4rem,1vh,1rem); }
+.feature-list li, .bullet-list li{ font-size:var(--body-size); line-height:1.4; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); gap:clamp(0.5rem,1.5vw,1rem); }
+img, .image-container{ max-width:100%; max-height:min(50vh,400px); object-fit:contain; }
+@media (max-height:700px){ :root{ --slide-padding:clamp(0.75rem,3vw,2rem); --content-gap:clamp(0.4rem,1.5vw,1rem); --title-size:clamp(1.25rem,4.5vw,2.5rem); --h2-size:clamp(1rem,3vw,1.75rem);} }
+@media (max-height:600px){ :root{ --slide-padding:clamp(0.5rem,2.5vw,1.5rem); --content-gap:clamp(0.3rem,1vw,0.75rem); --title-size:clamp(1.1rem,4vw,2rem); --body-size:clamp(0.7rem,1.2vw,0.95rem);} .nav-dots,.keyboard-hint,.decorative{display:none;} }
+@media (max-height:500px){ :root{ --slide-padding:clamp(0.4rem,2vw,1rem); --title-size:clamp(1rem,3.5vw,1.5rem); --h2-size:clamp(0.9rem,2.5vw,1.25rem); --body-size:clamp(0.65rem,1vw,0.85rem);} }
+@media (max-width:600px){ :root{ --title-size:clamp(1.4rem,8vw,2.5rem);} .grid{grid-template-columns:1fr;} .two-col{grid-template-columns:1fr !important;} .two-col .col-mock{order:-1;} }
+@media (prefers-reduced-motion:reduce){ *,*::before,*::after{animation-duration:0.01ms !important; transition-duration:0.2s !important;} html{scroll-behavior:auto;} }
+
+/* ===========================================
+   BASE
+   =========================================== */
+body{
+  font-family:var(--font-body); color:var(--ink); background:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{ font-family:var(--font-display); font-weight:800; line-height:1.04; letter-spacing:-0.02em; color:var(--ink); }
+h1{ font-weight:900; }
+.eyebrow{
+  font-family:var(--font-body); font-weight:700; letter-spacing:0.22em; text-transform:uppercase;
+  font-size:clamp(0.62rem,1vw,0.8rem); color:var(--tomato);
+}
+.brand-logo{ height:clamp(40px,7.5vh,74px); width:auto; max-width:82vw; object-fit:contain;
+  background:#fff; border-radius:14px; padding:.5rem .85rem;
+  box-shadow:0 16px 34px -16px rgba(25,14,136,.45); margin-bottom:clamp(.7rem,1.8vw,1.2rem); }
+
+.slide{ background:
+  radial-gradient(1200px 600px at 110% -10%, rgba(242,116,5,0.12), transparent 60%),
+  radial-gradient(900px 500px at -10% 110%, rgba(25,14,136,0.07), transparent 55%),
+  var(--cream);
+}
+.slide.alt{ background:
+  radial-gradient(1000px 600px at 0% 0%, rgba(242,68,5,0.08), transparent 55%),
+  #ffffff;
+}
+.slide.dark{ background:
+  radial-gradient(1100px 700px at 100% 0%, rgba(242,68,5,0.30), transparent 55%),
+  linear-gradient(150deg,#190e88 0%, #1a1a2e 72%), #190e88; color:#f3f4f4;
+}
+.slide.dark .eyebrow{ color:var(--yellow); }
+.slide.dark h1,.slide.dark h2{ color:#ffffff; }
+
+/* ===========================================
+   ANIMAÇÕES
+   =========================================== */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+.slide.visible .reveal{ opacity:1; transform:translateY(0); }
+.slide.visible .reveal:nth-child(1){transition-delay:.05s}
+.slide.visible .reveal:nth-child(2){transition-delay:.15s}
+.slide.visible .reveal:nth-child(3){transition-delay:.25s}
+.slide.visible .reveal:nth-child(4){transition-delay:.35s}
+.slide.visible .reveal:nth-child(5){transition-delay:.45s}
+.pop{ opacity:0; transform:scale(.94) translateY(20px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.slide.visible .pop{ opacity:1; transform:scale(1) translateY(0); transition-delay:.2s; }
+
+/* ===========================================
+   LAYOUT HELPERS
+   =========================================== */
+.center{ align-items:center; text-align:center; }
+.two-col{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(1rem,4vw,3.5rem); align-items:center; width:100%; max-width:1180px; margin:0 auto; }
+.col-text h2{ font-size:var(--h2-size); margin-bottom:clamp(.5rem,1.5vw,1rem); }
+.lead{ font-size:var(--subtitle-size); color:var(--ink-soft); max-width:46ch; }
+.col-mock{ display:flex; justify-content:center; align-items:center; }
+ul.checks{ list-style:none; display:flex; flex-direction:column; gap:clamp(.45rem,1.2vw,.9rem); margin-top:clamp(.6rem,1.5vw,1.1rem); }
+ul.checks li{ display:flex; gap:.6rem; align-items:flex-start; font-size:var(--body-size); color:var(--ink); }
+ul.checks li b{ font-weight:600; }
+.tick{ flex:none; width:1.4em; height:1.4em; border-radius:50%; background:var(--green); color:#fff; display:grid; place-items:center; font-size:.7em; margin-top:.1em; box-shadow:0 4px 10px rgba(46,158,91,.35); }
+
+.chip{ display:inline-flex; align-items:center; gap:.5em; background:#fff; border:1px solid var(--cream-2);
+  padding:.5em 1em; border-radius:999px; font-weight:600; font-size:var(--body-size); box-shadow:0 8px 24px rgba(42,22,14,.08); }
+
+/* ===========================================
+   MOCKUP: TELEFONE (chassi reutilizado da carteira)
+   =========================================== */
+.phone{
+  width:clamp(216px,25vw,290px); aspect-ratio:9/18.6; background:#1c100a;
+  border-radius:34px; padding:9px; box-shadow:0 30px 60px -20px rgba(42,22,14,.5), 0 0 0 2px rgba(0,0,0,.2);
+  position:relative;
+}
+.phone::before{ content:""; position:absolute; top:14px; left:50%; transform:translateX(-50%); width:34%; height:7px; background:#0c0704; border-radius:99px; z-index:3; }
+.screen{ background:#fff; border-radius:27px; height:100%; overflow:hidden; display:flex; flex-direction:column; }
+
+/* ===========================================
+   MOCKUP: TELA WHATSAPP (chat real)
+   =========================================== */
+.wa-head{ background:var(--wa-teal); color:#fff; padding:clamp(.6rem,1.3vw,.85rem) clamp(.65rem,1.3vw,.9rem);
+  display:flex; align-items:center; gap:.5rem; }
+.wa-avatar{ width:clamp(28px,3.4vw,38px); height:clamp(28px,3.4vw,38px); border-radius:50%;
+  background:linear-gradient(135deg,#ffd9a8,var(--tomato)); display:grid; place-items:center;
+  font-family:var(--font-display); font-weight:700; font-size:clamp(.66rem,1.2vw,.85rem); flex:none; }
+.wa-id{ line-height:1.25; }
+.wa-name{ font-weight:700; font-size:clamp(.72rem,1.3vw,.9rem); }
+.wa-status{ font-size:clamp(.56rem,.95vw,.68rem); opacity:.85; display:flex; align-items:center; gap:.35em; }
+.wa-status .dot{ width:.55em; height:.55em; border-radius:50%; background:var(--wa-green); box-shadow:0 0 0 3px rgba(37,211,102,.25); }
+.wa-chat{ flex:1; background:var(--wa-chatbg); padding:clamp(.6rem,1.3vw,.85rem); display:flex; flex-direction:column;
+  gap:clamp(.35rem,1vw,.55rem); overflow:hidden; }
+.bubble{ max-width:86%; border-radius:10px; padding:clamp(.4rem,1vw,.6rem) clamp(.55rem,1.2vw,.75rem);
+  font-size:clamp(.62rem,1.15vw,.8rem); line-height:1.35; box-shadow:0 2px 6px rgba(0,0,0,.08); position:relative; }
+.bubble.in{ background:#fff; align-self:flex-start; border-top-left-radius:2px; color:var(--ink); }
+.bubble.out{ background:var(--wa-bubble-out); align-self:flex-end; border-top-right-radius:2px; color:var(--ink); }
+.bubble .tm{ display:block; text-align:right; font-size:clamp(.5rem,.85vw,.6rem); color:var(--ink-soft); margin-top:.25em; }
+.bubble .tm .ck{ color:#4fc3f7; font-weight:700; }
+.bubble b{ font-weight:700; }
+.bubble .mini-coupon{ margin-top:.35em; border:1.5px dashed var(--tomato); border-radius:8px; padding:.4em .55em; }
+.bubble .mini-coupon .v{ font-family:var(--font-display); font-weight:800; color:var(--tomato); font-size:clamp(.72rem,1.3vw,.92rem); }
+.bubble .mini-coupon .c{ font-family:'Inter',ui-monospace,monospace; font-weight:700; letter-spacing:1.5px; font-size:clamp(.58rem,1vw,.72rem); }
+.wa-qrwrap{ flex:1; background:#075e5410; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.7rem; padding:1rem; }
+.wa-qrwrap .qrbig{ width:clamp(110px,14vw,150px); height:clamp(110px,14vw,150px); background:#fff; border-radius:12px; padding:8px; box-shadow:0 10px 26px rgba(0,0,0,.12); }
+.wa-qrwrap .msg{ font-size:clamp(.62rem,1.1vw,.78rem); color:var(--wa-teal); font-weight:700; text-align:center; }
+.wa-qrwrap .sub{ font-size:clamp(.56rem,.95vw,.68rem); color:var(--ink-soft); text-align:center; }
+
+/* ===========================================
+   MOCKUP: PAINEL (browser card)
+   =========================================== */
+.win{ width:min(94%,440px); background:#fff; border-radius:16px; overflow:hidden;
+  box-shadow:0 30px 60px -24px rgba(42,22,14,.45); border:1px solid var(--cream-2); }
+.win-bar{ background:var(--cream-2); padding:.55rem .8rem; display:flex; align-items:center; gap:.4rem; }
+.win-bar i{ width:10px; height:10px; border-radius:50%; background:#d9b48f; }
+.win-bar span{ margin-left:.5rem; font-size:clamp(.58rem,1vw,.72rem); color:var(--ink-soft); font-weight:600; }
+.win-body{ padding:clamp(.7rem,1.5vw,1.1rem); display:flex; flex-direction:column; gap:.55rem; }
+.field{ display:flex; flex-direction:column; gap:.2rem; }
+.field label{ font-size:clamp(.55rem,1vw,.68rem); font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }
+.field .inp{ border:1.5px solid var(--cream-2); border-radius:10px; padding:.5em .7em; font-size:clamp(.66rem,1.2vw,.85rem); font-weight:600; color:var(--ink); background:#fffdfa; }
+.field .inp.sel{ border-color:var(--tomato); background:#fff4f0; color:var(--tomato-deep); display:flex; justify-content:space-between; }
+.field .inp.ghost{ color:var(--ink-soft); font-weight:500; }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+.btn{ background:var(--tomato); color:#fff; text-align:center; border-radius:10px; padding:.55em; font-weight:700; font-size:clamp(.66rem,1.2vw,.85rem); box-shadow:0 8px 18px rgba(226,62,44,.3); }
+.status-ok{ display:flex; align-items:center; gap:.5rem; background:#eafaef; border:1px solid #bfe9cd; border-radius:12px; padding:.55rem .7rem; }
+.status-ok .dot2{ width:.8em; height:.8em; border-radius:50%; background:var(--green); flex:none; box-shadow:0 0 0 4px rgba(46,204,113,.18); }
+.status-ok .t{ font-weight:700; font-size:clamp(.66rem,1.2vw,.85rem); color:#1e7d43; }
+.status-ok .s{ font-size:clamp(.56rem,.95vw,.68rem); color:var(--ink-soft); }
+.mini-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+.mini-stats div{ background:#fff; border:1px solid var(--cream-2); border-radius:10px; padding:.5rem; text-align:center; }
+.mini-stats b{ display:block; font-family:var(--font-display); font-size:clamp(.85rem,1.6vw,1.15rem); color:var(--tomato); }
+.mini-stats small{ font-size:clamp(.48rem,.85vw,.6rem); color:var(--ink-soft); text-transform:uppercase; letter-spacing:.03em; }
+
+/* Cartões de solução / grid de opções */
+.solcards{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(.6rem,2vw,1.3rem); width:100%; max-width:1040px; margin:clamp(.8rem,2vw,1.6rem) auto 0; }
+.solcard{ background:#fff; border-radius:18px; padding:clamp(.9rem,2vw,1.5rem); border:1px solid var(--cream-2); box-shadow:0 18px 44px -24px rgba(42,22,14,.4); }
+.solcard .n{ font-family:var(--font-display); font-size:clamp(1.6rem,3vw,2.4rem); color:var(--tomato); line-height:1; }
+.solcard h3{ font-size:clamp(.95rem,1.7vw,1.25rem); margin:.35rem 0 .25rem; }
+.solcard p{ font-size:clamp(.62rem,1.1vw,.82rem); color:var(--ink-soft); line-height:1.4; }
+@media (max-width:760px){ .solcards{ grid-template-columns:1fr; } }
+
+.types{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(.55rem,1.6vw,1.1rem); width:100%; max-width:1080px; margin:clamp(.6rem,2vw,1.4rem) auto 0; }
+.type{ background:#fff; border-radius:16px; padding:clamp(.7rem,1.6vw,1.2rem); border:1px solid var(--cream-2); box-shadow:0 14px 32px -22px rgba(42,22,14,.3); }
+.type .ic{ font-size:clamp(1.1rem,2.2vw,1.7rem); }
+.type h3{ font-size:clamp(.85rem,1.5vw,1.15rem); margin:.3rem 0 .15rem; }
+.type p{ font-size:clamp(.6rem,1.05vw,.78rem); color:var(--ink-soft); line-height:1.35; }
+.type .badge-beta{ display:inline-block; margin-top:.35rem; background:#fff4ec; color:var(--tomato-deep); border:1px solid #ffd9bf; font-size:clamp(.52rem,.9vw,.62rem); font-weight:700; text-transform:uppercase; letter-spacing:.04em; border-radius:999px; padding:.15em .6em; }
+@media (max-width:760px){ .types{ grid-template-columns:1fr; } }
+
+.pains{ display:flex; flex-direction:column; gap:clamp(.55rem,1.6vw,1.1rem); width:100%; max-width:760px; margin:clamp(.6rem,2vw,1.4rem) auto 0; }
+.pain{ display:flex; gap:.9rem; align-items:center; background:#fff; border-radius:14px; padding:clamp(.7rem,1.6vw,1.1rem); border:1px solid var(--cream-2); box-shadow:0 12px 30px -22px rgba(42,22,14,.3); }
+.pain .x{ flex:none; width:1.9em; height:1.9em; border-radius:50%; background:#fdecea; color:var(--tomato); display:grid; place-items:center; font-weight:700; }
+.pain p{ font-size:var(--body-size); }
+
+.title-slide .slide-content{ align-items:flex-start; }
+.title-slide h1{ font-size:var(--title-size); max-width:16ch; }
+.title-slide .sub{ font-size:var(--subtitle-size); color:var(--ink-soft); max-width:42ch; margin-top:clamp(.6rem,1.5vw,1.1rem); }
+.title-tags{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:clamp(.9rem,2vw,1.5rem); }
+
+.divider .slide-content{ align-items:center; text-align:center; }
+.divider .big{ font-size:clamp(2rem,7vw,5rem); }
+.divider .emoji{ font-size:clamp(2.4rem,8vw,5rem); }
+
+/* ===========================================
+   CHROME: progress bar + nav dots + hint
+   =========================================== */
+.progress-bar{ position:fixed; top:0; left:0; height:4px; width:0%; z-index:100;
+  background:linear-gradient(90deg,var(--tomato),var(--orange)); transition:width .25s ease; }
+.nav-dots{ position:fixed; right:clamp(10px,1.6vw,22px); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; z-index:100; }
+.nav-dots button{ width:9px; height:9px; border-radius:50%; border:none; background:rgba(42,22,14,.22); cursor:pointer; padding:0; transition:.3s; }
+.nav-dots button.active{ background:var(--tomato); transform:scale(1.5); }
+.keyboard-hint{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); font-size:.7rem; color:var(--ink-soft);
+  background:rgba(255,255,255,.7); backdrop-filter:blur(6px); padding:.35em .9em; border-radius:99px; z-index:100; opacity:.8; }
+.snum{ position:fixed; bottom:14px; right:18px; font-size:.7rem; color:var(--ink-soft); z-index:100; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Navegação dos slides"></nav>
+<div class="keyboard-hint">← → ou role para navegar</div>
+<div class="snum"><span id="snum">1</span> / 14</div>
+
+<!-- ============ SLIDE 1 — TÍTULO ============ -->
+<section class="slide title-slide" id="s1">
+  <div class="slide-content">
+    <img class="brand-logo reveal" src="assets/ladfood-logo.png" alt="LAD Food" />
+    <span class="eyebrow reveal">LadZap · Integração com WhatsApp</span>
+    <h1 class="reveal">Um WhatsApp conectado. Todo o LAD Food conversando por ele.</h1>
+    <p class="sub reveal">Cupom, status do pedido e código de reserva chegam pelo número do próprio restaurante — sem app novo, sem SMS, sem o cliente copiar e colar link.</p>
+    <div class="title-tags reveal">
+      <span class="chip">📲 Conecta com QR Code</span>
+      <span class="chip">🔁 Reconecta sozinho</span>
+      <span class="chip">🔌 Já usado por Fidelidade, Delivery e Reserva</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2 — O PROBLEMA ============ -->
+<section class="slide alt" id="s2">
+  <div class="slide-content center">
+    <span class="eyebrow reveal">O problema</span>
+    <h2 class="reveal" style="font-size:var(--h2-size); max-width:22ch; margin:.4rem auto 0;">Cada aviso ao cliente, um jeito diferente de falhar</h2>
+    <div class="pains">
+      <div class="pain reveal"><span class="x">✕</span><p><b>SMS</b> quase ninguém lê — e ainda custa por mensagem enviada.</p></div>
+      <div class="pain reveal"><span class="x">✕</span><p>"Manda um WhatsApp" virava o cliente <b>copiando o texto na mão</b> e abrindo o link.</p></div>
+      <div class="pain reveal"><span class="x">✕</span><p>Fidelidade, Delivery, Reserva — <b>cada sistema ia resolver isso sozinho</b>, de novo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3 — A SOLUÇÃO ============ -->
+<section class="slide" id="s3">
+  <div class="slide-content center">
+    <span class="eyebrow reveal">A virada</span>
+    <h2 class="reveal" style="font-size:var(--h2-size); max-width:22ch; margin:.4rem auto 0;">Conecta uma vez. Todo o resto usa o mesmo canal.</h2>
+    <div class="solcards">
+      <div class="solcard pop"><div class="n">1</div><h3>Conecta com QR Code</h3><p>Escaneia uma vez com o celular do restaurante — igual ao WhatsApp Web.</p></div>
+      <div class="solcard pop"><div class="n">2</div><h3>Fica sempre online</h3><p>Perdeu a conexão? O LadZap percebe sozinho e tenta reconectar.</p></div>
+      <div class="solcard pop"><div class="n">3</div><h3>Todo produto LAD manda por aqui</h3><p>Cupom, pedido, reserva: um único fio — não três integrações separadas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4 — DIVISÓRIA: COMO CONECTA ============ -->
+<section class="slide dark divider" id="s4">
+  <div class="slide-content">
+    <span class="emoji reveal">🔗</span>
+    <h2 class="big reveal" style="margin-top:.4rem;">Como conecta</h2>
+    <p class="reveal" style="color:rgba(255,255,255,.85); font-size:var(--subtitle-size); margin-top:.5rem;">Nada de token complicado pra digitar. É apontar a câmera.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5 — QR CODE ============ -->
+<section class="slide" id="s5">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">Ativação em minutos</span>
+        <h2 class="reveal">Escaneia o QR Code e pronto</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>O QR Code é gerado na hora — o dono só aponta a <b>câmera do WhatsApp</b> do restaurante.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>A partir daí, quem manda e recebe é o <b>número do próprio restaurante</b> — não é um 0800 genérico.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Se o celular ficar sem internet, o LadZap <b>detecta e tenta reconectar sozinho</b>.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <div class="phone pop">
+          <div class="screen">
+            <div class="wa-qrwrap">
+              <svg class="qrbig" viewBox="0 0 100 100" aria-hidden="true">
+                <rect width="100" height="100" fill="#fff"/>
+                <rect x="6" y="6" width="26" height="26" fill="#075e54"/><rect x="12" y="12" width="14" height="14" fill="#fff"/>
+                <rect x="68" y="6" width="26" height="26" fill="#075e54"/><rect x="74" y="12" width="14" height="14" fill="#fff"/>
+                <rect x="6" y="68" width="26" height="26" fill="#075e54"/><rect x="12" y="74" width="14" height="14" fill="#fff"/>
+                <rect x="44" y="10" width="8" height="8" fill="#075e54"/><rect x="56" y="22" width="8" height="8" fill="#075e54"/>
+                <rect x="44" y="44" width="10" height="10" fill="#25d366"/><rect x="62" y="50" width="8" height="8" fill="#075e54"/>
+                <rect x="44" y="66" width="8" height="8" fill="#075e54"/><rect x="58" y="74" width="8" height="8" fill="#075e54"/>
+                <rect x="74" y="58" width="8" height="8" fill="#075e54"/><rect x="84" y="70" width="8" height="8" fill="#075e54"/>
+                <rect x="74" y="84" width="8" height="8" fill="#075e54"/>
+              </svg>
+              <div class="msg">Aguardando conexão...</div>
+              <div class="sub">Abra o WhatsApp do restaurante → Aparelhos conectados → Escanear</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6 — CONFIABILIDADE ============ -->
+<section class="slide alt" id="s6">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-mock">
+        <div class="win pop">
+          <div class="win-bar"><i></i><i></i><i></i><span>LadZap · Conexões</span></div>
+          <div class="win-body">
+            <div class="status-ok">
+              <div class="dot2"></div>
+              <div><div class="t">Instância conectada</div><div class="s">Cantina Bella · verificado agora</div></div>
+            </div>
+            <div class="mini-stats">
+              <div><b>0</b><small>Falhas hoje</small></div>
+              <div><b>3-8s</b><small>Intervalo/envio</small></div>
+              <div><b>4d</b><small>Fila de retry</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-text">
+        <span class="eyebrow reveal">Ninguém precisa ficar de olho</span>
+        <h2 class="reveal">Se a conexão cai, o sistema sabe antes do cliente sentir</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span><b>Monitoramento automático</b> da instância — sem alguém checando na mão.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Mensagem que falhou <b>não se perde</b>: entra numa fila e tenta de novo por alguns dias.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Envios são <b>espaçados automaticamente</b> pra não parecer spam ao WhatsApp.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7 — DIVISÓRIA: O QUE JÁ CONVERSA ============ -->
+<section class="slide dark divider" id="s7">
+  <div class="slide-content">
+    <span class="emoji reveal">💬</span>
+    <h2 class="big reveal" style="margin-top:.4rem;">O que já conversa pelo LadZap</h2>
+    <p class="reveal" style="color:rgba(255,255,255,.85); font-size:var(--subtitle-size); margin-top:.5rem;">Três produtos LAD, um único canal com o cliente.</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8 — FIDELIDADE ============ -->
+<section class="slide" id="s8">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">LAD Fidelidade</span>
+        <h2 class="reveal">O cupom chega direto na conversa</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Campanha de <b>aniversário, cliente fiel ou boas-vindas</b>: a mensagem sai sozinha pelo LadZap.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span><b>Lembrete antes do cupom vencer</b> — sem depender do cliente lembrar.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>O <b>código de acesso da carteira</b> de cupons também chega por lá, na hora.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <div class="phone pop">
+          <div class="screen">
+            <div class="wa-head">
+              <div class="wa-avatar">CB</div>
+              <div class="wa-id"><div class="wa-name">Cantina Bella</div><div class="wa-status"><span class="dot"></span>online</div></div>
+            </div>
+            <div class="wa-chat">
+              <div class="bubble in">Oi Ana! Só passando pra avisar 🎉<span class="tm">14:02</span></div>
+              <div class="bubble in">Você chegou aos 10 pedidos e ganhou uma recompensa!
+                <div class="mini-coupon"><div class="v">R$ 50 OFF</div><div class="c">BELLA50</div></div>
+                <span class="tm">14:02</span>
+              </div>
+              <div class="bubble out">Ameiii, obrigada!! 😍<span class="tm">14:05 <span class="ck">✓✓</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 9 — DELIVERY ============ -->
+<section class="slide alt" id="s9">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-mock">
+        <div class="phone pop">
+          <div class="screen">
+            <div class="wa-head">
+              <div class="wa-avatar">LD</div>
+              <div class="wa-id"><div class="wa-name">Lanchonete do Zé</div><div class="wa-status"><span class="dot"></span>online</div></div>
+            </div>
+            <div class="wa-chat">
+              <div class="bubble in">Pedido #482 confirmado ✅ Já estamos preparando!<span class="tm">19:41</span></div>
+              <div class="bubble in">Seu pedido saiu para entrega 🛵 Chega em ~25 min.<span class="tm">20:03</span></div>
+              <div class="bubble out">Show, valeu! 🙌<span class="tm">20:04 <span class="ck">✓✓</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-text">
+        <span class="eyebrow reveal">LAD Delivery</span>
+        <h2 class="reveal">"Seu pedido saiu para entrega" — sem alguém digitar isso</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Cada status importante do pedido pode virar <b>mensagem automática</b>.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Menos gente ligando pra saber <b>"cadê meu pedido"</b>.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Mesma conversa, mesmo número — o cliente <b>não salva mais um contato</b>.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 10 — RESERVA ============ -->
+<section class="slide" id="s10">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">LAD Reserva</span>
+        <h2 class="reveal">O código de confirmação chega no WhatsApp, não por SMS</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Verificação do telefone por <b>código enviado pelo LadZap</b>, na hora de reservar.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Sem custo de SMS e sem o clássico <b>"não chegou o código"</b>.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Sem o WhatsApp conectado, a <b>reserva online nem liga</b> — o LadZap é a base.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <div class="phone pop">
+          <div class="screen">
+            <div class="wa-head">
+              <div class="wa-avatar">CB</div>
+              <div class="wa-id"><div class="wa-name">Cantina Bella</div><div class="wa-status"><span class="dot"></span>online</div></div>
+            </div>
+            <div class="wa-chat">
+              <div class="bubble in">Seu código de verificação é <b>4821</b><span class="tm">12:10</span></div>
+              <div class="bubble in">Reserva confirmada para hoje às 20h, mesa para 4 pessoas 🎉<span class="tm">12:11</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11 — DIVISÓRIA: PRÓXIMO PASSO ============ -->
+<section class="slide dark divider" id="s11">
+  <div class="slide-content">
+    <span class="eyebrow reveal">Proposta · Próximo passo</span>
+    <h2 class="big reveal" style="max-width:18ch;">Até onde essa conversa pode ir?</h2>
+    <p class="reveal" style="color:rgba(255,255,255,.85); font-size:var(--subtitle-size); margin-top:.5rem; max-width:38ch;">Hoje quem decide a resposta automática é sempre a mesma lógica pronta. E se o cliente pudesse escolher quem responde?</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 12 — PROPOSTA: NOVA ETAPA DE CONFIGURAÇÃO ============ -->
+<section class="slide" id="s12">
+  <div class="slide-content">
+    <div class="two-col">
+      <div class="col-text">
+        <span class="eyebrow reveal">Sugestão de evolução</span>
+        <h2 class="reveal">Uma nova etapa: "quem responde por você"</h2>
+        <ul class="checks">
+          <li class="reveal"><span class="tick">✓</span><span>Continua no <b>padrão de hoje</b> — respostas prontas de cupom e FAQ.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Ou conecta a <b>própria API</b> (webhook) e assume o controle da resposta.</span></li>
+          <li class="reveal"><span class="tick">✓</span><span>Ou ativa um <b>agente de IA pré-configurado</b> — já entende cardápio e horário, sem programar nada.</span></li>
+        </ul>
+      </div>
+      <div class="col-mock">
+        <div class="win pop">
+          <div class="win-bar"><i></i><i></i><i></i><span>LadZap · Fonte das respostas</span></div>
+          <div class="win-body">
+            <div class="field"><label>Quem responde as mensagens</label><div class="inp sel">Agente de IA (Beta) <span>▾</span></div></div>
+            <div class="field"><label>Tom de voz</label><div class="inp">Simpático e direto, com emojis</div></div>
+            <div class="field"><label>Contexto conectado</label><div class="inp ghost">Cardápio · Horário de funcionamento · Cupons ativos</div></div>
+            <div class="btn">Enviar mensagem de teste</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 13 — TRÊS OPÇÕES ============ -->
+<section class="slide alt" id="s13">
+  <div class="slide-content center">
+    <span class="eyebrow reveal">O cliente escolhe</span>
+    <h2 class="reveal" style="font-size:var(--h2-size); margin:.3rem 0 0;">Três formas de responder, um só WhatsApp</h2>
+    <p class="reveal" style="color:var(--ink-soft); font-size:var(--subtitle-size); margin:.4rem auto clamp(.6rem,2vw,1.4rem); max-width:44ch;">A base de dados pronta pra IA (cardápio, caixa, comandas) já existe hoje no LAD Food — o passo novo é abrir essa porta também no WhatsApp.</p>
+    <div class="types">
+      <div class="type pop"><div class="ic">🤖</div><h3>Padrão LadZap</h3><p>Continua como hoje: respostas prontas de cupom, carteira e FAQ fixo.</p></div>
+      <div class="type pop"><div class="ic">🔗</div><h3>Webhook próprio</h3><p>O cliente conecta a API dele e decide toda a resposta, mensagem a mensagem.</p></div>
+      <div class="type pop"><div class="ic">✨</div><h3>Agente de IA<span class="badge-beta">Proposta</span></h3><p>Modelo pré-configurado, pronto pra usar — sem escrever uma linha de código.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 14 — FECHAMENTO / CTA ============ -->
+<section class="slide dark divider" id="s14">
+  <div class="slide-content">
+    <span class="eyebrow reveal">Pronto pra conectar?</span>
+    <h2 class="big reveal" style="max-width:18ch;">Um WhatsApp. Todo o ecossistema LAD Food.</h2>
+    <p class="reveal" style="color:rgba(255,255,255,.85); font-size:var(--subtitle-size); margin-top:.6rem; max-width:40ch;">Ative o LadZap e destrave cupom automático, status de pedido e confirmação de reserva — tudo na mesma conversa.</p>
+    <div class="reveal" style="margin-top:clamp(1rem,2.5vw,1.8rem); display:flex; align-items:center; gap:.7rem; flex-wrap:wrap;">
+      <img class="brand-logo" src="assets/ladfood-logo.png" alt="LAD Food" style="margin-bottom:0;" />
+      <span style="font-family:var(--font-display); font-weight:800; font-size:clamp(1rem,2.4vw,1.7rem); color:#fff;">LadZap</span>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ===========================================
+   CONTROLADOR DA APRESENTAÇÃO
+   - IntersectionObserver: adiciona .visible (dispara animações)
+   - Teclado, roda do mouse, toque
+   - Barra de progresso + nav dots + contador
+   =========================================== */
+class SlidePresentation{
+  constructor(){
+    this.slides=[...document.querySelectorAll('.slide')];
+    this.current=0;
+    this.bar=document.getElementById('progressBar');
+    this.dotsWrap=document.getElementById('navDots');
+    this.snum=document.getElementById('snum');
+    this.deepLinkTarget=this.consumeHash();
+    this.observe();
+    this.buildDots();
+    this.keys();
+    this.touch();
+    this.updateChrome(0);
+    this.deepLink();
+  }
+  /* Lê "#s5" e já limpa o hash da URL — impede que o navegador
+     fique re-rolando pra âncora conforme fontes/imagens carregam. */
+  consumeHash(){
+    const m = /^#s(\d+)$/.exec(location.hash);
+    if(!m) return null;
+    history.replaceState(null,'',location.pathname+location.search);
+    const i = Number(m[1]) - 1;
+    return (i>=0 && i<this.slides.length) ? i : null;
+  }
+  deepLink(){
+    if(this.deepLinkTarget==null) return;
+    this.slides[this.deepLinkTarget].scrollIntoView({behavior:'auto'});
+    this.slides[this.deepLinkTarget].classList.add('visible');
+  }
+  observe(){
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          const i=this.slides.indexOf(e.target);
+          if(i>=0) this.updateChrome(i);
+        }
+      });
+    },{threshold:0.55});
+    this.slides.forEach(s=>io.observe(s));
+  }
+  buildDots(){
+    this.slides.forEach((s,i)=>{
+      const b=document.createElement('button');
+      b.setAttribute('aria-label','Ir para o slide '+(i+1));
+      b.addEventListener('click',()=>this.go(i));
+      this.dotsWrap.appendChild(b);
+    });
+    this.dots=[...this.dotsWrap.children];
+  }
+  updateChrome(i){
+    this.current=i;
+    if(this.bar) this.bar.style.width=((i)/(this.slides.length-1)*100)+'%';
+    if(this.snum) this.snum.textContent=i+1;
+    if(this.dots) this.dots.forEach((d,j)=>d.classList.toggle('active',j===i));
+  }
+  go(i){
+    i=Math.max(0,Math.min(this.slides.length-1,i));
+    this.slides[i].scrollIntoView({behavior:'smooth'});
+  }
+  keys(){
+    document.addEventListener('keydown',(e)=>{
+      if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); this.go(this.current+1); }
+      else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); this.go(this.current-1); }
+      else if(e.key==='Home'){ this.go(0); }
+      else if(e.key==='End'){ this.go(this.slides.length-1); }
+    });
+  }
+  touch(){
+    let y0=null;
+    document.addEventListener('touchstart',(e)=>{ y0=e.touches[0].clientY; },{passive:true});
+    document.addEventListener('touchend',(e)=>{
+      if(y0===null) return;
+      const dy=y0-e.changedTouches[0].clientY;
+      if(Math.abs(dy)>60){ this.go(this.current+(dy>0?1:-1)); }
+      y0=null;
+    },{passive:true});
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>new SlidePresentation());
+</script>
+</body>
+</html>
