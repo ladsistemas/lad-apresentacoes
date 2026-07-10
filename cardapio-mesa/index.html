@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAD Cardápio Mesa — Tablet fixo na mesa com pedido por QR | LAD Sistemas</title>
+  <meta name="description" content="Tablet fixo na mesa: o cliente folheia fotos e preços do cadastro do LADFood e fecha o pedido escaneando o QR da própria comanda. Sem depender do celular do cliente.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-600: #c2370a;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--lad-white); color: var(--lad-dark); line-height: 1.55; }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== HERO (escuro, como o produto) ===== */
+    .hero {
+      background:
+        radial-gradient(820px 480px at 105% -5%, rgba(242,68,5,0.22), transparent 60%),
+        linear-gradient(160deg, #16161f 0%, #0d0d14 85%);
+      color: var(--lad-white);
+      padding: 44px 0 64px;
+    }
+    .back-link { display: inline-flex; gap: 6px; color: rgba(243,244,244,0.65); text-decoration: none; font-size: 0.85rem; margin-bottom: 36px; }
+    .back-link:hover { color: #fff; }
+    .hero-inner { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+    .hero-badge {
+      display: inline-block; background: rgba(242,68,5,0.15); border: 1px solid rgba(242,68,5,0.45);
+      color: #ffb094; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.8px; padding: 6px 14px; border-radius: 999px; margin-bottom: 18px;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.8rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; margin-bottom: 16px; }
+    .hero h1 span { color: var(--lad-orange-500); }
+    .hero .lead { font-size: clamp(0.95rem, 1.5vw, 1.1rem); color: rgba(243,244,244,0.8); margin-bottom: 28px; max-width: 480px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+      font-weight: 700; font-size: 0.95rem; padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+    }
+    .btn-primary { background: var(--lad-orange-500); color: #fff; }
+    .btn-primary:hover { background: var(--lad-orange-600); transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+
+    /* ===== FOTO REAL (hero) ===== */
+    .photo-col { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .hero-photo {
+      width: min(320px, 82vw); border-radius: 22px; overflow: hidden;
+      box-shadow: 0 34px 70px -24px rgba(0,0,0,0.7), 0 0 0 2px rgba(255,255,255,0.08);
+    }
+    .hero-photo img { width: 100%; display: block; aspect-ratio: 3 / 4; object-fit: cover; }
+    .photo-hint { font-size: 0.8rem; color: rgba(243,244,244,0.6); text-align: center; max-width: 280px; }
+
+    /* ===== SEÇÕES ===== */
+    section { padding: 64px 0; }
+    .kicker { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--lad-orange-500); margin-bottom: 10px; }
+    h2.section-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .section-sub { color: var(--lad-gray-600); max-width: 640px; margin-bottom: 36px; }
+
+    /* ===== VÍDEO ===== */
+    .video-section { background: var(--lad-white-pure); border-bottom: 1px solid var(--lad-gray-100); }
+    .video-wrap { display: flex; justify-content: center; margin-top: 8px; }
+    .video-card {
+      max-width: 360px; width: 100%; background: #000; border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--lad-gray-300); box-shadow: 0 24px 60px -24px rgba(26,26,46,0.4);
+    }
+    .video-card video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; display: block; background: #000; }
+    .video-caption { text-align: center; margin-top: 18px; font-size: 0.88rem; color: var(--lad-gray-600); max-width: 520px; margin-left: auto; margin-right: auto; }
+
+    /* passos */
+    .steps { counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px; }
+    .step-card { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 14px; padding: 24px; }
+    .step-card .num {
+      counter-increment: step; width: 40px; height: 40px; border-radius: 11px;
+      background: var(--lad-orange-100); color: var(--lad-orange-500);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem; font-weight: 800; margin-bottom: 14px;
+    }
+    .step-card .num::before { content: counter(step); }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .step-card p { font-size: 0.88rem; color: var(--lad-gray-600); }
+
+    /* features */
+    .features-section { background: var(--lad-white-pure); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; }
+    .feature { background: var(--lad-white); border: 1px solid var(--lad-gray-300); border-radius: 14px; padding: 24px; }
+    .feature .f-icon { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+    .feature h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature p { font-size: 0.88rem; color: var(--lad-gray-600); }
+
+    /* prova social */
+    .proof-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 40px; align-items: center; }
+    .proof-photo img {
+      width: 100%; display: block; border-radius: 18px; aspect-ratio: 3 / 4; object-fit: cover;
+      box-shadow: 0 24px 50px -20px rgba(26,26,46,0.3); border: 1px solid var(--lad-gray-300);
+    }
+    .proof-quote {
+      border-left: 4px solid var(--lad-orange-500); padding-left: 24px;
+      font-size: 1.05rem; color: var(--lad-dark);
+    }
+    .proof-quote cite { display: block; margin-top: 16px; font-style: normal; font-weight: 700; font-size: 0.85rem; color: var(--lad-gray-600); }
+
+    /* comparativo qual usar */
+    .which-table-wrap { overflow-x: auto; border: 1px solid var(--lad-gray-300); border-radius: 14px; }
+    table.which {
+      width: 100%; border-collapse: collapse; background: var(--lad-white-pure); min-width: 640px;
+    }
+    table.which th, table.which td { padding: 14px 16px; text-align: left; font-size: 0.88rem; border-bottom: 1px solid var(--lad-gray-100); }
+    table.which th { background: var(--lad-blue-900); color: #fff; font-weight: 700; font-size: 0.82rem; }
+    table.which td:first-child { font-weight: 700; }
+    table.which tr:last-child td { border-bottom: none; }
+    table.which .muted { color: var(--lad-gray-600); font-weight: 400; }
+
+    /* FAQ */
+    details { background: var(--lad-white); border: 1px solid var(--lad-gray-300); border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; }
+    .faq-section { background: var(--lad-white-pure); }
+    .faq-section details { background: var(--lad-white); }
+    details summary { font-weight: 700; font-size: 0.98rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; color: var(--lad-orange-500); font-size: 1.3rem; font-weight: 700; flex-shrink: 0; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 12px; font-size: 0.92rem; color: var(--lad-gray-600); }
+
+    /* CTA final */
+    .final-cta { text-align: center; padding: 72px 0 80px; }
+    .final-cta h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .final-cta p { color: var(--lad-gray-600); margin-bottom: 28px; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .final-cta .contact-hint { font-size: 0.85rem; color: var(--lad-gray-600); margin-top: 20px; margin-bottom: 0; }
+    .final-cta .contact-hint a { color: var(--lad-orange-500); font-weight: 700; text-decoration: none; }
+    .final-cta .contact-hint a:hover { text-decoration: underline; }
+    footer { border-top: 1px solid var(--lad-gray-300); padding: 28px 24px; text-align: center; font-size: 0.78rem; color: var(--lad-gray-600); }
+
+    @media (max-width: 820px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero .lead { margin-left: auto; margin-right: auto; }
+      .hero-ctas { justify-content: center; }
+      .proof-grid { grid-template-columns: 1fr; text-align: center; }
+      .proof-photo img { max-width: 320px; margin: 0 auto; }
+      .proof-quote { border-left: none; border-top: 4px solid var(--lad-orange-500); padding-left: 0; padding-top: 20px; }
+    }
+    @media (max-width: 640px) { section { padding: 48px 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <a href="../" class="back-link">← Voltar às apresentações</a>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-badge">Cardápio na Mesa</div>
+          <h1>O cardápio no <span>tablet da própria mesa</span>, sem depender do celular do cliente</h1>
+          <p class="lead">O cliente folheia fotos, descrição e preço que vêm direto do cadastro do LADFood, no tablet fixo da própria mesa. No fim, escaneia o QR Code da comanda física e o pedido cai direto no sistema — sem celular do cliente, sem chamar garçom para anotar.</p>
+          <div class="hero-ctas">
+            <a href="https://play.google.com/store/apps/details?id=br.com.lad.cadapio.mesa" target="_blank" rel="noopener" class="btn btn-primary">Baixar na Play Store</a>
+            <a href="#como-funciona" class="btn btn-ghost">Como funciona</a>
+          </div>
+        </div>
+        <div class="photo-col">
+          <div class="hero-photo">
+            <img src="assets/hero-mesa.jpg" alt="Tablet fixo na mesa exibindo o cardápio ao lado de um hambúrguer, implantação real num bar parceiro" loading="lazy">
+          </div>
+          <p class="photo-hint">📷 Foto real de implantação num bar parceiro</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- VÍDEO -->
+  <section class="video-section" id="video">
+    <div class="container">
+      <p class="kicker">Na prática</p>
+      <h2 class="section-title">Veja o cardápio rodando na mesa</h2>
+      <p class="section-sub">Vídeo real gravado durante o uso no salão — sem edição, sem encenação.</p>
+      <div class="video-wrap">
+        <div class="video-card">
+          <video src="assets/demo.mp4" poster="assets/hero-mesa.jpg" autoplay muted loop playsinline controls title="Demonstração real do Cardápio Mesa num bar parceiro"></video>
+        </div>
+      </div>
+      <p class="video-caption">Vídeo real de uma implantação num bar parceiro: cliente folheia o cardápio, escaneia o QR da própria comanda e o pedido cai na hora.</p>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="container">
+      <p class="kicker">Como funciona</p>
+      <h2 class="section-title">Da mesa ao pedido, em 3 passos</h2>
+      <p class="section-sub">O tablet é do estabelecimento, fica fixo na mesa e funciona do mesmo jeito para qualquer cliente — com ou sem celular, bateria ou internet própria.</p>
+      <div class="steps">
+        <div class="step-card">
+          <div class="num"></div>
+          <h3>Cliente folheia no tablet da mesa</h3>
+          <p>Categorias com fotos, descrição e preço aparecem no tablet fixo, vindas direto do cadastro do LADFood — o mesmo do PDV e do totem.</p>
+        </div>
+        <div class="step-card">
+          <div class="num"></div>
+          <h3>Monta o carrinho e escaneia a comanda</h3>
+          <p>No fim da escolha, aponta a câmera do próprio tablet para o QR Code impresso na comanda física da mesa, vinculando o pedido a ela.</p>
+        </div>
+        <div class="step-card">
+          <div class="num"></div>
+          <h3>Pedido cai direto no sistema</h3>
+          <p>Sem esperar o garçom anotar: o pedido entra na comanda dentro do LadFood na hora, pronto para produção e fechamento de conta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNCIONALIDADES -->
+  <section class="features-section">
+    <div class="container">
+      <p class="kicker">Funcionalidades</p>
+      <h2 class="section-title">O que já vem pronto</h2>
+      <div class="feature-grid" style="margin-top: 36px;">
+        <div class="feature">
+          <span class="f-icon">🔄</span>
+          <h3>Zero retrabalho</h3>
+          <p>Fotos, descrição e preço vêm do mesmo cadastro do LADFood usado no PDV, no totem e no cardápio QR — atualizou uma vez, atualizou em todos.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📷</span>
+          <h3>Vínculo por QR da comanda</h3>
+          <p>O tablet lê o QR Code impresso na comanda física da mesa e vincula o pedido a ela na hora, sem precisar digitar número de mesa.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">⭐</span>
+          <h3>Botão Avaliar</h3>
+          <p>Pesquisa de satisfação integrada ao app: o cliente avalia o atendimento direto na mesa, sem abordagem constrangedora do garçom.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🧾</span>
+          <h3>Botão Conta</h3>
+          <p>O cliente confere o valor da conta na hora, direto no tablet, sem esperar o garçom trazer a máquina até a mesa.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📑</span>
+          <h3>Categorias organizadas por seção</h3>
+          <p>Menu lateral separado por seção — bebidas, entradas, pratos, sobremesas — fácil de navegar mesmo com um cardápio grande.</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📲</span>
+          <h3>Tablet dedicado ao salão</h3>
+          <p>Aparelho fixo na mesa, pensado para uso contínuo durante o serviço — não depende de bateria nem de aparelho do cliente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <section>
+    <div class="container">
+      <p class="kicker">Caso real</p>
+      <h2 class="section-title">Já rodando ao vivo num cliente real</h2>
+      <div class="proof-grid" style="margin-top: 32px;">
+        <div class="proof-photo">
+          <img src="assets/prova-social-chope.jpg" alt="Tablet fixo na mesa exibindo o cardápio de bebidas ao lado de um chope, num bar parceiro" loading="lazy">
+        </div>
+        <blockquote class="proof-quote">
+          <p>Num bar parceiro, o tablet ficou na mesa ao lado do chope e do hambúrguer desde o primeiro dia de uso: o cliente folheou a carta de bebidas, escaneou o QR da própria comanda e o pedido caiu no sistema em segundos — sem trocar uma palavra com o garçom.</p>
+          <cite>Cliente real LAD Sistemas</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUAL CARDÁPIO USAR -->
+  <section class="features-section">
+    <div class="container">
+      <p class="kicker">LADFood Menu ou Cardápio Mesa?</p>
+      <h2 class="section-title">Qual produto para qual situação</h2>
+      <p class="section-sub">Os dois são integrados ao LADFood — o que muda é de quem é o aparelho e se ele depende do cliente ter celular, bateria e internet.</p>
+      <div class="which-table-wrap">
+        <table class="which">
+          <tr>
+            <th>Produto</th>
+            <th>Onde o cliente está</th>
+            <th>Aparelho</th>
+            <th>O pedido vai para</th>
+          </tr>
+          <tr>
+            <td>LADFood Menu</td>
+            <td>No salão, na mesa</td>
+            <td>Celular do próprio cliente (QR Code)</td>
+            <td>Comanda da mesa, com token validado</td>
+          </tr>
+          <tr>
+            <td>LAD Cardápio Mesa <span class="muted">(este)</span></td>
+            <td>No salão, na mesa</td>
+            <td>Tablet fixo do estabelecimento, sem depender do aparelho do cliente</td>
+            <td>Comanda física da mesa, lida por QR Code direto no tablet</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <p class="kicker">Dúvidas frequentes</p>
+      <h2 class="section-title">Perguntas que o cliente sempre faz</h2>
+      <div style="margin-top: 32px;">
+        <details>
+          <summary>Quantos tablets eu preciso comprar?</summary>
+          <p>Um por mesa (ou por conjunto de mesas, se preferir concentrar). O implantador da LAD ajuda a dimensionar o número certo conforme o tamanho do salão.</p>
+        </details>
+        <details>
+          <summary>Funciona sem depender do celular do cliente?</summary>
+          <p>Sim — essa é a diferença deste produto. O tablet é do estabelecimento, fica fixo na mesa e funciona do mesmo jeito para qualquer cliente, com ou sem celular, bateria ou internet própria.</p>
+        </details>
+        <details>
+          <summary>Qual a diferença para o cardápio por QR Code (LADFood Menu)?</summary>
+          <p>O LADFood Menu abre no celular do próprio cliente. O Cardápio Mesa roda num tablet fixo do estabelecimento, sempre disponível na mesa, sem depender do aparelho ou da internet de quem senta ali.</p>
+        </details>
+        <details>
+          <summary>Preciso de alguma estrutura especial, tipo wifi?</summary>
+          <p>Sim, wifi estável no salão para o tablet conversar com o LadFood. Fora isso é só fixar o suporte na mesa, ligar o app e o cardápio já carrega do seu cadastro.</p>
+        </details>
+        <details>
+          <summary>O pedido cai direto no PDV?</summary>
+          <p>Cai. Ao escanear o QR da comanda, o pedido é lançado na mesma comanda dentro do LadFood, pronto para a cozinha e para o fechamento da conta — sem reentrada manual em outro sistema.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Coloque um tablet em cada mesa</h2>
+      <p>Baixe o app na Play Store ou fale com o time comercial da LAD para dimensionar os tablets do seu salão.</p>
+      <a href="https://play.google.com/store/apps/details?id=br.com.lad.cadapio.mesa" target="_blank" rel="noopener" class="btn btn-primary">Baixar na Play Store</a>
+      <p class="contact-hint">Prefere conversar antes? <a href="https://wa.me/556231425000?text=Ol%C3%A1%2C%20tenho%20interesse%20no%20Card%C3%A1pio%20Mesa%20para%20as%20mesas%20do%20meu%20restaurante" target="_blank" rel="noopener">Fale com o comercial LAD →</a></p>
+    </div>
+  </section>
+
+  <footer>LAD Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+</body>
+</html>
