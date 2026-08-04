@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LadFood MCP — Seu restaurante conectado a uma IA | LAD Sistemas</title>
+  <meta name="description" content="O LadFood MCP conecta Claude, GPT e qualquer IA compatível direto ao seu sistema: consulte indicadores, cadastre o cardápio, concilie o delivery e pague a mensalidade — tudo em português, numa conversa.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-600: #c2370a;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+      /* mockup (dark surface) */
+      --mock-surface: #131046;
+      --mock-card: rgba(255,255,255,0.055);
+      --mock-border: rgba(255,255,255,0.13);
+      --mock-ink: #f3f4f4;
+      --mock-ink-soft: rgba(243,244,244,0.62);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--lad-white); color: var(--lad-dark); line-height: 1.55; }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background:
+        radial-gradient(900px 500px at 110% -10%, rgba(242,68,5,0.20), transparent 60%),
+        linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+      padding: 44px 0 72px;
+    }
+    .back-link { display: inline-flex; gap: 6px; color: rgba(243,244,244,0.65); text-decoration: none; font-size: 0.85rem; margin-bottom: 40px; }
+    .back-link:hover { color: #fff; }
+    .hero-badge {
+      display: inline-block; background: rgba(242,68,5,0.16); border: 1px solid rgba(242,68,5,0.5);
+      color: #ffb094; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.8px; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; max-width: 700px; margin-bottom: 16px; }
+    .hero h1 span { color: var(--lad-orange-500); }
+    .hero .lead { font-size: clamp(0.95rem, 1.6vw, 1.12rem); color: rgba(243,244,244,0.82); max-width: 620px; margin-bottom: 30px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+      font-weight: 700; font-size: 0.95rem; padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; transition: all 0.25s ease; cursor: pointer;
+    }
+    .btn-primary { background: var(--lad-orange-500); color: #fff; }
+    .btn-primary:hover { background: var(--lad-orange-600); transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+
+    /* ===== MOCKUP CONVERSA ===== */
+    .mock-window {
+      background: var(--mock-surface);
+      border: 1px solid var(--mock-border);
+      border-radius: 16px;
+      box-shadow: 0 40px 90px -30px rgba(0,0,0,0.6);
+      overflow: hidden;
+      max-width: 640px; margin: 0 auto;
+    }
+    .mock-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; border-bottom: 1px solid var(--mock-border);
+      background: rgba(0,0,0,0.22);
+    }
+    .mock-bar .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+    .mock-bar .url {
+      flex: 1; text-align: center; font-size: 0.72rem; color: var(--mock-ink-soft);
+      background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 10px;
+      max-width: 320px; margin: 0 auto;
+    }
+    .mock-chat-body { padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: 84%; padding: 12px 16px; border-radius: 16px; font-size: 0.85rem; line-height: 1.5; }
+    .msg.user { background: var(--lad-orange-500); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+    .msg.bot { background: var(--mock-card); border: 1px solid var(--mock-border); color: var(--mock-ink); margin-right: auto; border-bottom-left-radius: 4px; }
+    .mock-note { font-size: 0.68rem; color: var(--mock-ink-soft); text-align: right; padding: 0 22px 18px; }
+
+    /* ===== SEÇÕES ===== */
+    section { padding: 64px 0; }
+    .kicker { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--lad-orange-500); margin-bottom: 10px; }
+    h2.section-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .section-sub { color: var(--lad-gray-600); max-width: 640px; margin-bottom: 36px; }
+
+    /* Passos */
+    .steps { display: grid; gap: 16px; }
+    .step-card {
+      position: relative; background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300);
+      border-radius: 14px; padding: 22px 24px 22px 78px;
+    }
+    .step-card .num {
+      position: absolute; left: 20px; top: 22px; width: 38px; height: 38px; border-radius: 11px;
+      background: var(--lad-orange-100); color: var(--lad-orange-500);
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .step-card p { font-size: 0.88rem; color: var(--lad-gray-600); }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; }
+    .feature { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 14px; padding: 24px; }
+    .features-alt { background: var(--lad-white-pure); }
+    .features-alt .feature { background: var(--lad-white); }
+    .feature .f-icon { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+    .feature h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature p { font-size: 0.88rem; color: var(--lad-gray-600); }
+    .feature .quote { margin-top: 10px; font-size: 0.82rem; font-style: italic; color: var(--lad-orange-600); }
+
+    /* Segurança */
+    .security-band {
+      background: linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+    }
+    .security-band .kicker { color: #ffb094; }
+    .security-band .section-title { color: #fff; }
+    .security-band .section-sub { color: rgba(243,244,244,0.75); }
+    .security-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; }
+    .security-list { list-style: none; display: grid; gap: 14px; }
+    .security-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.92rem; color: rgba(243,244,244,0.88); }
+    .security-list .check {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(242,68,5,0.2);
+      border: 1px solid rgba(242,68,5,0.5); color: var(--lad-orange-500); font-weight: 800; font-size: 0.78rem;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+    @media (max-width: 760px) { .security-grid { grid-template-columns: 1fr; } }
+
+    /* FAQ */
+    .faq-section { background: var(--lad-white-pure); }
+    details { background: var(--lad-white); border: 1px solid var(--lad-gray-300); border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; }
+    details summary { font-weight: 700; font-size: 0.98rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; color: var(--lad-orange-500); font-size: 1.3rem; font-weight: 700; flex-shrink: 0; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 12px; font-size: 0.92rem; color: var(--lad-gray-600); }
+
+    .final-cta { text-align: center; padding: 72px 0 80px; }
+    .final-cta h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .final-cta p { color: var(--lad-gray-600); margin-bottom: 28px; }
+    footer { border-top: 1px solid var(--lad-gray-300); padding: 28px 24px; text-align: center; font-size: 0.78rem; color: var(--lad-gray-600); }
+    @media (max-width: 640px) { section { padding: 48px 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- HERO + MOCKUP -->
+  <header class="hero">
+    <div class="container">
+      <a href="../" class="back-link">← Voltar às apresentações</a>
+      <div class="hero-badge">Integração · Inteligência Artificial</div>
+      <h1>O LadFood <span>conversando</span> com Claude, GPT e qualquer IA</h1>
+      <p class="lead">O LadFood MCP conecta assistentes de IA direto ao seu sistema: consulte indicadores, cadastre o cardápio, concilie o delivery e pague a mensalidade — tudo em português, numa conversa, sem abrir tela nenhuma.</p>
+      <div class="hero-ctas">
+        <a href="https://mcp.ladfood.com.br/doc.html" target="_blank" rel="noopener" class="btn btn-primary">Ver guia de uso</a>
+        <a href="#como-funciona" class="btn btn-ghost">Como funciona</a>
+      </div>
+
+      <!-- mockup ilustrativo -->
+      <div class="mock-window" role="img" aria-label="Ilustração de uma conversa com o Claude consultando indicadores, cadastrando um produto e gerando o PIX da mensalidade">
+        <div class="mock-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="url">Claude ↔ LadFood MCP</span>
+        </div>
+        <div class="mock-chat-body">
+          <div class="msg user">Como foi meu dia?</div>
+          <div class="msg bot">Faturamento de hoje: <strong>R$ 4.128,90</strong> (+8% vs. ontem). Ticket médio R$ 42,80. 3 cancelamentos, nenhum crítico.</div>
+          <div class="msg user">Cadastra a categoria Bebidas e o produto Coca 350ml a R$ 6,00.</div>
+          <div class="msg bot">Categoria "Bebidas" criada. Produto "Coca 350ml" cadastrado a R$ 6,00 — já está vendável no salão.</div>
+          <div class="msg user">Me dá o pix pra pagar a mensalidade.</div>
+          <div class="msg bot">Aqui está o PIX copia-e-cola, válido até amanhã às 23h59. 📋</div>
+        </div>
+        <div class="mock-note">Ilustração da conversa — os dados variam conforme sua operação.</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="container">
+      <p class="kicker">Como funciona</p>
+      <h2 class="section-title">Uma conversa, não uma integração para configurar</h2>
+      <p class="section-sub">O LadFood MCP fica entre a sua IA e as APIs oficiais do LadFood, traduzindo cada pergunta ou comando em chamadas seguras — nunca acesso direto ao banco de dados.</p>
+      <div class="steps">
+        <div class="step-card">
+          <div class="num">1</div>
+          <h3>Você conecta</h3>
+          <p>No claude.ai: Configurações → Conectores → Adicionar conector personalizado, com o endereço <code>mcp.ladfood.com.br/mcp</code>. Em Claude Desktop, Claude Code ou Cursor, um token gerado em "Minha conta".</p>
+        </div>
+        <div class="step-card">
+          <div class="num">2</div>
+          <h3>Você escolhe o nível de acesso</h3>
+          <p>Consultar (só leitura), Consultar e cadastrar (cardápio e configurações) ou Gestão completa (também financeiro e estoque) — a escolha é sua, na tela de login do LadFood.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">3</div>
+          <h3>A IA passa a entender o LadFood</h3>
+          <p>Mais de 100 tools especializadas cobrem indicadores, cadastro, conciliação, financeiro e mensalidade — cada uma valida a regra de negócio antes de agir.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">4</div>
+          <h3>Cada ação, registrada</h3>
+          <p>Toda escrita fica auditada com usuário e horário. Você só alcança as lojas em que tem permissão — nunca a de outra pessoa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE DÁ PRA FAZER -->
+  <section class="features-alt">
+    <div class="container">
+      <p class="kicker">Numa conversa</p>
+      <h2 class="section-title">O que dá para fazer sem sair do chat</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="f-icon">📊</span>
+          <h3>Indicadores e BI</h3>
+          <p>Faturamento, ticket médio, DRE, cancelamentos e comparativo mês a mês, direto do LadFood BI.</p>
+          <p class="quote">"Deu lucro? Como está o resultado?"</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🍔</span>
+          <h3>Cardápio e cadastro</h3>
+          <p>Categorias, produtos, preços, opcionais, ficha técnica e publicação do cardápio digital.</p>
+          <p class="quote">"Cadastra a categoria Bebidas e o produto Coca 350ml a R$ 6,00."</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🔄</span>
+          <h3>Conciliação de integrações</h3>
+          <p>Cruze os pedidos do iFood/99Food com o extrato baixado da plataforma e investigue as diferenças.</p>
+          <p class="quote">"Concilia com o LadFood e me diz onde bateu diferente."</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">💳</span>
+          <h3>Financeiro e estoque</h3>
+          <p>Lance e baixe contas a pagar/receber, registre entrada de estoque — sempre com confirmação antes de mexer no saldo.</p>
+          <p class="quote">"Lança o aluguel de agosto, R$ 3.500, vence dia 5."</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🧾</span>
+          <h3>Mensalidade</h3>
+          <p>PIX copia-e-cola ou boleto na hora — funciona mesmo com a licença vencida, é o que o inadimplente mais precisa.</p>
+          <p class="quote">"Me dá o pix pra pagar."</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">✅</span>
+          <h3>Diagnóstico de implantação</h3>
+          <p>Um único diagnóstico aponta, na ordem certa, o que falta para a loja começar a vender.</p>
+          <p class="quote">"O que falta para eu começar a vender?"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGURANÇA -->
+  <section class="security-band">
+    <div class="container security-grid">
+      <div>
+        <p class="kicker">Segurança</p>
+        <h2 class="section-title">A IA opera com as suas permissões, nunca além delas</h2>
+        <p class="section-sub">O LadFood MCP nunca guarda sua senha e nunca decide sozinho o que você pode fazer — quem confere é sempre o LadFood, a cada chamada.</p>
+      </div>
+      <ul class="security-list">
+        <li><span class="check">✓</span> Token pessoal, por usuário e por loja — nunca acesso a dados de outra empresa.</li>
+        <li><span class="check">✓</span> Você escolhe o escopo: consultar, cadastrar ou gestão completa.</li>
+        <li><span class="check">✓</span> Rate limiting com backoff progressivo contra uso indevido.</li>
+        <li><span class="check">✓</span> Toda escrita fica auditada, com usuário e horário.</li>
+        <li><span class="check">✓</span> Confirmação obrigatória antes de qualquer baixa financeira.</li>
+        <li><span class="check">✓</span> Exclusões com uso (categoria com produto, forma em uso) são bloqueadas.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <p class="kicker">Dúvidas frequentes</p>
+      <h2 class="section-title">Perguntas que todo mundo faz</h2>
+      <div style="margin-top: 32px;">
+        <details>
+          <summary>Preciso saber programar?</summary>
+          <p>Não. É conversar em português — a mesma conversa que você já tem com o Claude ou o ChatGPT, só que agora ele conhece o seu LadFood.</p>
+        </details>
+        <details>
+          <summary>É seguro dar esse acesso a uma IA?</summary>
+          <p>Sim. Você escolhe o escopo na hora de conectar, cada ação é conferida pelo LadFood e fica registrada com seu usuário. A IA nunca guarda sua senha nem alcança lojas fora da sua permissão.</p>
+        </details>
+        <details>
+          <summary>Funciona com ChatGPT também?</summary>
+          <p>Sim, via Custom GPT Actions. O protocolo MCP em si já cobre Claude e qualquer outro cliente compatível (Cursor, por exemplo) sem trocar de integração.</p>
+        </details>
+        <details>
+          <summary>A IA pode apagar meu cardápio ou pagar algo sem eu perceber?</summary>
+          <p>Não. Exclusões com uso (categoria com produto, forma de pagamento em uso) são bloqueadas, e qualquer baixa financeira exige sua confirmação explícita antes de mexer no saldo.</p>
+        </details>
+        <details>
+          <summary>Isso substitui o LadFood?</summary>
+          <p>Não — é uma camada conversacional sobre o mesmo sistema. Os dados continuam no LadFood; a IA só lê e escreve através das mesmas APIs oficiais que o sistema já usa.</p>
+        </details>
+        <details>
+          <summary>Tenho mais de uma loja. Preciso conectar em cada uma?</summary>
+          <p>Não. A mesma conexão vale para todas as lojas em que você é cadastrado — basta dizer à IA em qual quer trabalhar, e ela respeita a permissão da sua conta em cada uma.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Conecte sua IA ao LadFood</h2>
+      <p>Veja o guia de uso completo — ou peça ao seu consultor LAD para habilitar na sua loja.</p>
+      <a href="https://mcp.ladfood.com.br/doc.html" target="_blank" rel="noopener" class="btn btn-primary">Ver guia de uso</a>
+    </div>
+  </section>
+
+  <footer>LAD Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+</body>
+</html>
