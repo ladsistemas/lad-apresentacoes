@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LAD Delivery API + MCP — Monte um agente de IA para o seu delivery | LAD Sistemas</title>
+  <meta name="description" content="A API do LAD Delivery fala com ferramentas e LLMs: consulta a loja, monta o cardápio certo, cota o frete e cria o pedido, com preço sempre calculado pelo servidor. Já existe um servidor MCP pronto — conecte e as ferramentas aparecem sozinhas.">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --lad-orange-500: #f24405;
+      --lad-orange-600: #c2370a;
+      --lad-orange-100: #fff1eb;
+      --lad-blue-900: #190e88;
+      --lad-white: #f3f4f4;
+      --lad-white-pure: #ffffff;
+      --lad-gray-600: #6b6b6b;
+      --lad-gray-300: #d1d3d4;
+      --lad-gray-100: #f0f1f2;
+      --lad-dark: #1a1a2e;
+      --lad-green: #0a8754;
+      /* mockup / code (dark surface) */
+      --mock-surface: #131046;
+      --mock-card: rgba(255,255,255,0.055);
+      --mock-border: rgba(255,255,255,0.13);
+      --mock-ink: #f3f4f4;
+      --mock-ink-soft: rgba(243,244,244,0.62);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--lad-white); color: var(--lad-dark); line-height: 1.55; }
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 24px; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+
+    /* ===== HERO ===== */
+    .hero {
+      background:
+        radial-gradient(900px 500px at 110% -10%, rgba(242,68,5,0.20), transparent 60%),
+        linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+      padding: 44px 0 72px;
+    }
+    .back-link { display: inline-flex; gap: 6px; color: rgba(243,244,244,0.65); text-decoration: none; font-size: 0.85rem; margin-bottom: 40px; }
+    .back-link:hover { color: #fff; }
+    .hero-badge {
+      display: inline-block; background: rgba(242,68,5,0.16); border: 1px solid rgba(242,68,5,0.5);
+      color: #ffb094; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.8px; padding: 6px 14px; border-radius: 999px; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 800; letter-spacing: -1px; line-height: 1.12; max-width: 700px; margin-bottom: 16px; }
+    .hero h1 span { color: var(--lad-orange-500); }
+    .hero .lead { font-size: clamp(0.95rem, 1.6vw, 1.12rem); color: rgba(243,244,244,0.82); max-width: 640px; margin-bottom: 30px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+      font-weight: 700; font-size: 0.95rem; padding: 13px 26px; border-radius: 10px;
+      text-decoration: none; transition: all 0.25s ease; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--lad-orange-500); color: #fff; }
+    .btn-primary:hover { background: var(--lad-orange-600); transform: translateY(-2px); }
+    .btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.16); }
+
+    /* ===== MOCKUP CONVERSA ===== */
+    .mock-window {
+      background: var(--mock-surface);
+      border: 1px solid var(--mock-border);
+      border-radius: 16px;
+      box-shadow: 0 40px 90px -30px rgba(0,0,0,0.6);
+      overflow: hidden;
+      max-width: 640px; margin: 0 auto;
+    }
+    .mock-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; border-bottom: 1px solid var(--mock-border);
+      background: rgba(0,0,0,0.22);
+    }
+    .mock-bar .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+    .mock-bar .url {
+      flex: 1; text-align: center; font-size: 0.72rem; color: var(--mock-ink-soft);
+      background: rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 10px;
+      max-width: 320px; margin: 0 auto;
+    }
+    .mock-chat-body { padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .msg { max-width: 84%; padding: 12px 16px; border-radius: 16px; font-size: 0.85rem; line-height: 1.5; }
+    .msg.user { background: var(--lad-orange-500); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+    .msg.bot { background: var(--mock-card); border: 1px solid var(--mock-border); color: var(--mock-ink); margin-right: auto; border-bottom-left-radius: 4px; }
+    .mock-note { font-size: 0.68rem; color: var(--mock-ink-soft); text-align: right; padding: 0 22px 18px; }
+
+    /* ===== SEÇÕES ===== */
+    section { padding: 64px 0; }
+    .kicker { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: var(--lad-orange-500); margin-bottom: 10px; }
+    h2.section-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .section-sub { color: var(--lad-gray-600); max-width: 640px; margin-bottom: 36px; }
+
+    /* Passos */
+    .steps { display: grid; gap: 16px; }
+    .step-card {
+      position: relative; background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300);
+      border-radius: 14px; padding: 22px 24px 22px 78px;
+    }
+    .step-card .num {
+      position: absolute; left: 20px; top: 22px; width: 38px; height: 38px; border-radius: 11px;
+      background: var(--lad-orange-100); color: var(--lad-orange-500);
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem;
+    }
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .step-card p { font-size: 0.88rem; color: var(--lad-gray-600); }
+    .step-card code { background: var(--lad-gray-100); padding: 1px 6px; border-radius: 5px; font-size: 0.82rem; }
+
+    /* Duas formas de integrar */
+    .integra-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 20px; align-items: start; }
+    .integra-card { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 16px; padding: 26px 26px 6px; }
+    .integra-card h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
+    .integra-card .integra-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--lad-gray-600); margin-bottom: 12px; display: block; }
+    .integra-card p.desc { font-size: 0.88rem; color: var(--lad-gray-600); margin-bottom: 16px; }
+    .integra-card.mcp .integra-tag { color: var(--lad-orange-500); }
+
+    .code-block {
+      background: var(--mock-surface); border: 1px solid var(--mock-border); border-radius: 12px;
+      padding: 16px 18px; margin: 0 0 20px; overflow-x: auto;
+    }
+    .code-block pre { color: var(--mock-ink); font-size: 0.78rem; line-height: 1.6; white-space: pre; }
+    .code-block .c-key { color: #8fd0ff; }
+    .code-block .c-str { color: #ffb094; }
+    .code-block .c-com { color: var(--mock-ink-soft); }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; }
+    .feature { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 14px; padding: 24px; }
+    .features-alt { background: var(--lad-white-pure); }
+    .features-alt .feature { background: var(--lad-white); }
+    .feature .f-icon { font-size: 1.5rem; display: block; margin-bottom: 10px; }
+    .feature h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .feature p { font-size: 0.88rem; color: var(--lad-gray-600); }
+    .feature .quote { margin-top: 10px; font-size: 0.82rem; font-style: italic; color: var(--lad-orange-600); }
+
+    /* Confiabilidade / guardrails */
+    .security-band {
+      background: linear-gradient(150deg, var(--lad-blue-900) 0%, #131046 80%);
+      color: var(--lad-white);
+    }
+    .security-band .kicker { color: #ffb094; }
+    .security-band .section-title { color: #fff; }
+    .security-band .section-sub { color: rgba(243,244,244,0.75); }
+    .security-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; }
+    .security-list { list-style: none; display: grid; gap: 14px; }
+    .security-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.92rem; color: rgba(243,244,244,0.88); }
+    .security-list .check {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(242,68,5,0.2);
+      border: 1px solid rgba(242,68,5,0.5); color: var(--lad-orange-500); font-weight: 800; font-size: 0.78rem;
+      display: flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+    @media (max-width: 760px) { .security-grid { grid-template-columns: 1fr; } }
+
+    /* Status do pedido */
+    .status-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .status-chip { background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300); border-radius: 999px; padding: 8px 16px; font-size: 0.82rem; display: flex; gap: 8px; align-items: center; }
+    .status-chip .code { font-weight: 800; color: var(--lad-orange-500); }
+
+    /* FAQ */
+    .faq-section { background: var(--lad-white-pure); }
+    details { background: var(--lad-white); border: 1px solid var(--lad-gray-300); border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; }
+    details summary { font-weight: 700; font-size: 0.98rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "+"; color: var(--lad-orange-500); font-size: 1.3rem; font-weight: 700; flex-shrink: 0; }
+    details[open] summary::after { content: "–"; }
+    details p { margin-top: 12px; font-size: 0.92rem; color: var(--lad-gray-600); }
+
+    .final-cta { text-align: center; padding: 72px 0 80px; }
+    .final-cta h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.6px; margin-bottom: 10px; }
+    .final-cta p { color: var(--lad-gray-600); margin-bottom: 28px; }
+    footer { border-top: 1px solid var(--lad-gray-300); padding: 28px 24px; text-align: center; font-size: 0.78rem; color: var(--lad-gray-600); }
+    @media (max-width: 640px) { section { padding: 48px 0; } }
+  </style>
+</head>
+<body>
+
+  <!-- HERO + MOCKUP -->
+  <header class="hero">
+    <div class="container">
+      <a href="../" class="back-link">← Voltar às apresentações</a>
+      <div class="hero-badge">API + MCP · Agentes de IA</div>
+      <h1>Um agente de IA que <span>atende e monta pedidos</span> no seu Delivery</h1>
+      <p class="lead">A API pública do LAD Delivery foi pensada para ser consumida por ferramentas e LLMs: seu bot consulta a loja, monta o carrinho com os itens certos, cota o frete e cria o pedido — sem nunca inventar preço e sem duplicar em caso de erro. Já existe até um servidor MCP pronto: aponte seu agente para lá e as ferramentas aparecem sozinhas.</p>
+      <div class="hero-ctas">
+        <a href="https://api2.laddelivery.com.br/v1/docs" target="_blank" rel="noopener" class="btn btn-primary">Ver documentação completa</a>
+        <a href="#como-funciona" class="btn btn-ghost">Como funciona</a>
+      </div>
+
+      <!-- mockup ilustrativo -->
+      <div class="mock-window" role="img" aria-label="Ilustração de uma conversa de WhatsApp em que o agente consulta o cardápio, cota o frete e fecha o pedido">
+        <div class="mock-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="url">Agente de IA ↔ LAD Delivery API</span>
+        </div>
+        <div class="mock-chat-body">
+          <div class="msg user">Vocês tão abertos? Quero um X-Salada</div>
+          <div class="msg bot">Abertos até 23h30! X-Salada R$ 29,90 — quer adicionar bacon (+R$ 3,50)? E é entrega ou retirada?</div>
+          <div class="msg user">Com bacon, entrega na Rua Natal 123</div>
+          <div class="msg bot">Frete R$ 7,00. Total: <strong>R$ 40,40</strong>. Confirma o pedido?</div>
+          <div class="msg user">Confirmo, pago na entrega</div>
+          <div class="msg bot">Pedido enviado, aguardando a loja confirmar ✅ Te aviso quando sair para entrega.</div>
+        </div>
+        <div class="mock-note">Ilustração da conversa — os dados variam conforme a loja e o cardápio.</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="container">
+      <p class="kicker">Como funciona</p>
+      <h2 class="section-title">Da loja fechada ao pedido confirmado, em cinco chamadas</h2>
+      <p class="section-sub">O fluxo recomendado para um bot é sempre o mesmo, seja por REST ou por MCP — e o servidor cuida da parte que importa: preço e validação.</p>
+      <div class="steps">
+        <div class="step-card">
+          <div class="num">1</div>
+          <h3>Você pede um token de integração</h3>
+          <p>Solicite à LAD Sistemas. Cada token pertence a <strong>uma loja só</strong> (nunca informada na URL ou no corpo — o token já resolve isso) e pode ser revogado a qualquer momento.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">2</div>
+          <h3>O agente consulta loja e cardápio</h3>
+          <p><code>GET /v1/loja</code> traz horário, formas de pagamento e pedido mínimo; <code>GET /v1/cardapio</code> traz produtos, tamanhos e opcionais com os IDs exatos do pedido.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">3</div>
+          <h3>Cota o frete e monta o carrinho</h3>
+          <p><code>POST /v1/frete</code> calcula o valor da entrega a partir do endereço. O agente nunca calcula preço por conta própria — só informa IDs e quantidades.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">4</div>
+          <h3>Cria o pedido com uma chave de idempotência</h3>
+          <p><code>POST /v1/pedidos</code> com um <code>idempotencyKey</code> (UUID) novo por pedido. Em timeout ou erro 5xx, reenvie a mesma chave: nunca duplica.</p>
+        </div>
+        <div class="step-card">
+          <div class="num">5</div>
+          <h3>Acompanha até a entrega</h3>
+          <p><code>GET /v1/pedidos/{uuid}</code> traz o status atual — não há push, então o agente faz polling (sugestão: a cada 60s ou quando o cliente perguntar).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUAS FORMAS DE INTEGRAR -->
+  <section class="features-alt">
+    <div class="container">
+      <p class="kicker">Duas formas de integrar</p>
+      <h2 class="section-title">API REST tradicional ou servidor MCP — mesmo motor por trás</h2>
+      <p class="section-sub">São as mesmas cinco operações, os mesmos campos e as mesmas regras de negócio. A diferença é só como o seu agente descobre e chama as ferramentas.</p>
+      <div class="integra-grid">
+        <div class="integra-card">
+          <span class="integra-tag">REST + function calling</span>
+          <h3>Você declara as tools</h3>
+          <p class="desc">Chamadas HTTP diretas aos endpoints <code>/v1/*</code>. A documentação já traz os cinco schemas prontos em formato <code>input_schema</code>, compatível com Claude e OpenAI — é colar e usar.</p>
+          <div class="code-block"><pre>curl -s https://api2.laddelivery.com.br/v1/loja \
+  -H "<span class="c-key">Authorization</span>: <span class="c-str">Bearer SEU_TOKEN</span>"
+
+curl -s -X POST .../v1/pedidos \
+  -H "<span class="c-key">Content-Type</span>: <span class="c-str">application/json</span>" \
+  -d '{"<span class="c-key">idempotencyKey</span>":"<span class="c-str">uuid...</span>", "<span class="c-key">tipo</span>":"<span class="c-str">DELIVERY</span>", ...}'</pre></div>
+        </div>
+        <div class="integra-card mcp">
+          <span class="integra-tag">Servidor MCP</span>
+          <h3>O agente descobre sozinho</h3>
+          <p class="desc">Aponte o cliente MCP para o endpoint abaixo com o mesmo token — as cinco tools (<code>consultar_loja</code>, <code>consultar_cardapio</code>, <code>cotar_frete</code>, <code>criar_pedido</code>, <code>consultar_pedido</code>) aparecem via <code>tools/list</code>, sem declarar nada na mão.</p>
+          <div class="code-block"><pre>{
+  "<span class="c-key">mcpServers</span>": {
+    "<span class="c-key">lad-delivery</span>": {
+      "<span class="c-key">type</span>": "<span class="c-str">http</span>",
+      "<span class="c-key">url</span>": "<span class="c-str">https://api2.laddelivery.com.br/mcp</span>",
+      "<span class="c-key">headers</span>": { "<span class="c-key">Authorization</span>": "<span class="c-str">Bearer SEU_TOKEN</span>" }
+    }
+  }
+}
+<span class="c-com">// Streamable HTTP, stateless — sem sessão pra gerenciar</span></pre></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O QUE O AGENTE CONSEGUE FAZER -->
+  <section>
+    <div class="container">
+      <p class="kicker">Cinco ferramentas</p>
+      <h2 class="section-title">Tudo que um agente precisa pra fechar um pedido</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="f-icon">🏪</span>
+          <h3>Consultar a loja</h3>
+          <p>Horário de funcionamento, se está aberta agora, formas de pagamento aceitas, pedido mínimo e se entrega e/ou retira.</p>
+          <p class="quote">"Vocês tão abertos agora?"</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📋</span>
+          <h3>Consultar o cardápio</h3>
+          <p>Categorias, produtos, tamanhos e grupos de opcionais — com os IDs exatos que o pedido vai usar. Item pausado simplesmente não aparece.</p>
+          <p class="quote">"Me manda o cardápio de vocês"</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🛵</span>
+          <h3>Cotar o frete</h3>
+          <p>Valor da entrega a partir de endereço, bairro/cidade ou coordenadas. Fora da área retorna 412 com o motivo.</p>
+          <p class="quote">"Quanto fica o frete pro Setor Central?"</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">🧾</span>
+          <h3>Criar o pedido</h3>
+          <p>O agente só informa IDs, quantidades e opcionais — o servidor calcula item, frete, desconto de cupom e total oficiais.</p>
+          <p class="quote">"Fecha meu pedido: 1 X-Salada sem cebola, retirada"</p>
+        </div>
+        <div class="feature">
+          <span class="f-icon">📦</span>
+          <h3>Consultar o pedido</h3>
+          <p>Status atual pelo <code>uuid</code> retornado na criação — pendente, em preparo, saiu para entrega, entregue.</p>
+          <p class="quote">"Cadê meu pedido?"</p>
+        </div>
+      </div>
+      <div class="status-strip">
+        <span class="status-chip"><span class="code">E</span> Pendente</span>
+        <span class="status-chip"><span class="code">A</span> Autorizado</span>
+        <span class="status-chip"><span class="code">V</span> Em preparo</span>
+        <span class="status-chip"><span class="code">X</span> Saiu para entrega</span>
+        <span class="status-chip"><span class="code">D</span> Entregue</span>
+        <span class="status-chip"><span class="code">P</span> Aguardando pagamento</span>
+        <span class="status-chip"><span class="code">C</span>/<span class="code">R</span> Cancelado / Rejeitado</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIABILIDADE -->
+  <section class="security-band">
+    <div class="container security-grid">
+      <div>
+        <p class="kicker">Confiabilidade</p>
+        <h2 class="section-title">Construído pra um agente errar pouco — e se corrigir sozinho</h2>
+        <p class="section-sub">Preço, validação de item e duplicidade são responsabilidade do servidor, não do prompt do seu agente.</p>
+      </div>
+      <ul class="security-list">
+        <li><span class="check">✓</span> O servidor calcula todo preço a partir do cardápio oficial — o agente nunca envia nem promete valor por conta própria.</li>
+        <li><span class="check">✓</span> Sempre envie um <code style="color:#fff">idempotencyKey</code> novo por pedido: reenviar após timeout/erro 5xx nunca duplica.</li>
+        <li><span class="check">✓</span> Erros voltam em JSON estruturado (código, título, descrição) escritos para o LLM ler e se autocorrigir.</li>
+        <li><span class="check">✓</span> Token por loja, com rate limiting próprio (REST: 5 req/s · MCP: 20 req/s por token, por padrão).</li>
+        <li><span class="check">✓</span> Cardápio com cache de até 30 min, mas o preço cobrado é sempre o vigente no momento do pedido.</li>
+        <li><span class="check">✓</span> Sem cancelamento via API — cancelamentos são feitos pela loja.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <p class="kicker">Dúvidas frequentes</p>
+      <h2 class="section-title">Perguntas de quem vai construir o agente</h2>
+      <div style="margin-top: 32px;">
+        <details>
+          <summary>Preciso declarar as ferramentas na mão?</summary>
+          <p>Só se for usar REST puro com function calling — e mesmo assim a documentação já traz os cinco schemas prontos em formato <code>input_schema</code>. Pelo servidor MCP, nem isso: o agente descobre as tools sozinho via <code>tools/list</code>.</p>
+        </details>
+        <details>
+          <summary>O agente pode cobrar o cliente com um preço errado?</summary>
+          <p>Não. O agente nunca envia preço em <code>criar_pedido</code> — o servidor calcula item, frete e total a partir do cardápio oficial, e a resposta é sempre a fonte da verdade a confirmar com o cliente.</p>
+        </details>
+        <details>
+          <summary>Funciona com Claude, GPT ou qualquer outra IA?</summary>
+          <p>Sim. O servidor MCP usa Streamable HTTP, um transporte padrão do protocolo, compatível com qualquer cliente MCP (Claude, Cursor etc.). Para quem prefere function calling manual, os schemas da documentação já vêm no formato usado por Claude e OpenAI.</p>
+        </details>
+        <details>
+          <summary>Preciso manter sessão com o servidor MCP?</summary>
+          <p>Não. É stateless: cada requisição é autenticada só pelo header <code>Authorization</code>, sem <code>Mcp-Session-Id</code>. <code>GET</code> (stream SSE) e <code>DELETE</code> (encerrar sessão) respondem 405 porque não existe nem stream nem sessão para gerenciar.</p>
+        </details>
+        <details>
+          <summary>O agente pode cancelar um pedido pelo cliente?</summary>
+          <p>Não — hoje não existe endpoint de cancelamento via API; cancelamentos são feitos pela loja. Se o cliente pedir, oriente o agente a instruir que ligue direto para a loja.</p>
+        </details>
+        <details>
+          <summary>Como o agente sabe se o pedido já saiu pra entrega?</summary>
+          <p>Não há push de status: o agente consulta <code>GET /v1/pedidos/{uuid}</code> por polling — sugestão a cada 60 segundos ou quando o cliente perguntar. O status <code>D</code> (Entregue) pode ser marcado automaticamente cerca de 5h após sair para entrega.</p>
+        </details>
+        <details>
+          <summary>Como eu pego um token?</summary>
+          <p>Solicite um token de integração à LAD Sistemas. Cada token é vinculado a uma única loja e pode ser revogado a qualquer momento — não é preciso (nem é possível) informar a loja em cada chamada.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Coloque um agente pra atender seu Delivery</h2>
+      <p>Documentação completa (endpoints, MCP, schemas de function calling) sempre atualizada — ou peça seu token de integração ao seu consultor LAD.</p>
+      <a href="https://api2.laddelivery.com.br/v1/docs" target="_blank" rel="noopener" class="btn btn-primary">Ver documentação completa</a>
+    </div>
+  </section>
+
+  <footer>LAD Sistemas &mdash; Soluções completas para bares e restaurantes</footer>
+</body>
+</html>
