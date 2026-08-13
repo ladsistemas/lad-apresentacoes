@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPED Fiscal — Cadastro fiscal do item e conferência de numeração</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --lad-orange:#f24405; --lad-blue:#190e88; --bg:#f3f4f4; --white:#fff;
+  --gray:#6b6b6b; --dark:#1a1a2e; --line:#e8e9e9;
+  --ok:#0f7b4f; --warn:#b45309; --bad:#b91c1c;
+}
+body{ font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--dark); line-height:1.6; }
+.wrap{ max-width:900px; margin:0 auto; padding:0 24px; }
+code,.mono{ font-family:'JetBrains Mono',monospace; }
+
+header{ background:var(--white); border-bottom:1px solid var(--line); padding:22px 0; position:sticky; top:0; z-index:10; }
+header .wrap{ display:flex; align-items:center; gap:14px; }
+header img{ height:34px; }
+header .tag{ font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--lad-orange); }
+header a.voltar{ margin-left:auto; font-size:.82rem; color:var(--gray); text-decoration:none; }
+header a.voltar:hover{ color:var(--lad-orange); }
+
+.hero{ background:linear-gradient(160deg,var(--lad-blue) 0%,#2d1fa8 100%); color:#fff; padding:72px 0 64px; }
+.hero h1{ font-size:2.4rem; font-weight:700; letter-spacing:-1px; line-height:1.15; margin-bottom:18px; }
+.hero p.sub{ font-size:1.12rem; opacity:.92; max-width:660px; }
+.hero .frase{ margin-top:28px; padding:16px 20px; background:rgba(255,255,255,.1);
+  border-left:3px solid var(--lad-orange); border-radius:0 8px 8px 0; font-size:1rem; max-width:660px; }
+
+section{ padding:56px 0; border-bottom:1px solid var(--line); }
+section h2{ font-size:1.5rem; font-weight:700; letter-spacing:-.4px; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+.num{ background:var(--lad-orange); color:#fff; width:30px; height:30px; border-radius:8px;
+  display:inline-flex; align-items:center; justify-content:center; font-size:.95rem; flex:none; }
+section h3{ font-size:1.05rem; font-weight:700; margin:26px 0 10px; }
+section p{ margin-bottom:14px; }
+
+.grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin:22px 0; }
+.box{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:22px; }
+.box h4{ font-size:.95rem; font-weight:700; margin-bottom:8px; }
+.box p{ font-size:.9rem; color:var(--gray); margin:0; }
+
+.dor{ background:#fff5f2; border:1px solid #ffd9cc; border-left:3px solid var(--lad-orange); border-radius:0 10px 10px 0; padding:18px 20px; margin:18px 0; }
+.dor p{ margin:0; font-size:.95rem; }
+
+ul.lista{ list-style:none; margin:14px 0; }
+ul.lista li{ padding:9px 0 9px 28px; position:relative; font-size:.95rem; border-bottom:1px solid var(--line); }
+ul.lista li:last-child{ border-bottom:0; }
+ul.lista li::before{ content:"→"; position:absolute; left:4px; color:var(--lad-orange); font-weight:700; }
+
+.numerao{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin:24px 0; }
+.big{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:22px; }
+.big .n{ font-size:2.1rem; font-weight:700; letter-spacing:-1px; line-height:1; color:var(--lad-orange); }
+.big .t{ font-size:.85rem; color:var(--gray); margin-top:8px; }
+
+.tela{ background:var(--white); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(26,26,46,.08); margin:24px 0; }
+.tela .chrome{ background:#f7f7f8; border-bottom:1px solid var(--line); padding:9px 14px; display:flex; align-items:center; gap:7px; }
+.tela .dot{ width:10px; height:10px; border-radius:50%; }
+.tela .url{ margin-left:10px; font-size:.72rem; color:var(--gray); font-family:'JetBrains Mono',monospace; }
+.tela .corpo{ padding:20px; overflow-x:auto; }
+.tela .titulo{ font-size:1rem; font-weight:700; margin-bottom:4px; }
+.tela .desc{ font-size:.8rem; color:var(--gray); margin-bottom:16px; }
+.chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.chip{ font-size:.75rem; padding:5px 12px; border-radius:99px; border:1px solid var(--line); background:var(--bg); }
+.chip.sel{ background:var(--lad-blue); color:#fff; border-color:var(--lad-blue); }
+table.t{ width:100%; border-collapse:collapse; font-size:.85rem; min-width:540px; }
+table.t th{ text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:1px;
+  color:var(--gray); padding:8px 10px; border-bottom:1px solid var(--line); font-weight:700; }
+table.t td{ padding:10px; border-bottom:1px solid var(--line); }
+.pill{ display:inline-block; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:99px; }
+.pill.ok{ background:#e6f4ee; color:var(--ok); }
+.pill.warn{ background:#fef3e2; color:var(--warn); }
+.pill.bad{ background:#fdeaea; color:var(--bad); }
+.legenda{ font-size:.76rem; color:var(--gray); font-style:italic; margin-top:-12px; margin-bottom:26px; }
+
+.qa{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:12px; }
+.qa .p{ font-weight:700; font-size:.95rem; margin-bottom:6px; }
+.qa .r{ font-size:.92rem; color:#3d3d52; }
+.destaque{ background:var(--lad-blue); color:#fff; border-radius:14px; padding:32px; margin:26px 0; }
+.destaque p{ margin:0; font-size:1.15rem; font-weight:500; }
+.alerta{ background:#fffbea; border:1px solid #f6e3a1; border-radius:12px; padding:18px 20px; margin:20px 0; }
+.alerta p{ margin:0; font-size:.93rem; }
+footer{ padding:40px 0 60px; font-size:.8rem; color:var(--gray); text-align:center; }
+@media(max-width:640px){ .hero h1{ font-size:1.8rem; } section{ padding:40px 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">SPED Fiscal</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Seu NCM não está errado.<br>Ele é genérico — e ninguém nunca conferiu.</h1>
+    <p class="sub">O cadastro fiscal do item é o que sustenta a nota que você emite todo dia e o arquivo que o contador entrega todo mês. Na prática, ele é preenchido uma vez, por atacado, e nunca mais revisto.</p>
+    <div class="frase">A pergunta que abre a conversa não é "você tem NCM?". É "quantos produtos diferentes do seu cardápio estão com o mesmo NCM?".</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="num">1</span> O problema, com número</h2>
+  <p>Levantamento sobre a base de clientes LadFood, em 194 mil produtos ativos:</p>
+  <div class="numerao">
+    <div class="big"><div class="n">25,8%</div><div class="t">dos produtos não têm NCM por caminho nenhum — nem no produto, nem na tributação vinculada</div></div>
+    <div class="big"><div class="n">107</div><div class="t">códigos NCM distintos cobrem 144 mil produtos</div></div>
+    <div class="big"><div class="n">43%</div><div class="t">dos produtos recebem exatamente o mesmo NCM</div></div>
+    <div class="big"><div class="n">4 em 5</div><div class="t">é a proporção de vezes em que, quando alguém classifica o item de verdade, o NCM difere do genérico herdado</div></div>
+  </div>
+  <div class="dor">
+    <p><strong>De onde vem o genérico:</strong> quando o produto não tem NCM próprio, o sistema usa o da tributação vinculada. Como uma tributação é compartilhada por dezenas ou centenas de produtos, todos herdam o mesmo código. O resultado é um cadastro que <em>parece</em> completo — a nota sai, o cupom imprime — mas que não classifica coisa nenhuma.</p>
+  </div>
+  <p>É por isso que o argumento "você não tem NCM" não funciona: o cliente abre uma nota e mostra o campo preenchido. O argumento que funciona é o de cima.</p>
+</section>
+
+<section>
+  <h2><span class="num">2</span> O que a ferramenta faz</h2>
+
+  <h3>Sugere o NCM a partir de quem já classificou</h3>
+  <p>O fornecedor declara o NCM de cada item na nota que ele emite para você. Essas notas já são lidas pelo sistema. A ferramenta usa o valor <strong>mais frequente</strong> observado para aquele produto — nunca uma média, e nunca aplicado sem clique.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+      <span class="url">app / sped / cadastro fiscal</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Cadastro fiscal do item</div>
+      <div class="desc">Registro 0200 · classificação por item, com sugestão vinda das notas de entrada</div>
+      <div class="chips">
+        <span class="chip sel">Todos 1.284</span><span class="chip">Sem NCM 331</span>
+        <span class="chip">NCM herdado 604</span><span class="chip">Sem tipo 712</span><span class="chip">Completos 349</span>
+      </div>
+      <table class="t">
+        <thead><tr><th>Produto</th><th>NCM</th><th>Origem</th><th>Sugestão</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Refrigerante lata 350 ml</td><td class="mono">22021000</td><td><span class="pill ok">próprio</span></td><td>—</td><td></td></tr>
+          <tr><td>Pão francês</td><td class="mono">19059090</td><td><span class="pill warn">herdado</span></td><td class="mono">19052090</td><td><span class="pill warn">conferir</span></td></tr>
+          <tr><td>Queijo mussarela</td><td class="mono">21069090</td><td><span class="pill warn">herdado</span></td><td class="mono">04061010 <span style="color:var(--gray)">· 12 notas</span></td><td><span class="pill ok">aplicar</span></td></tr>
+          <tr><td>Embalagem 500 ml</td><td>—</td><td><span class="pill bad">ausente</span></td><td class="mono">39241000 <span style="color:var(--gray)">· 8 notas</span></td><td><span class="pill ok">aplicar</span></td></tr>
+          <tr><td>Combo executivo</td><td>—</td><td><span class="pill bad">ausente</span></td><td style="color:var(--gray)">fornecedores divergem</td><td><span class="pill warn">decidir</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+
+  <h3>Três estados, nunca dois</h3>
+  <p><strong>Próprio</strong> (alguém classificou), <strong>herdado</strong> (preenchido, mas compartilhado — precisa de conferência) e <strong>ausente</strong>. Misturar os dois primeiros é o que faz o cadastro parecer pronto quando não está.</p>
+
+  <div class="alerta">
+    <p><strong>Quando os fornecedores divergem, a ferramenta não escolhe.</strong> Se o mesmo produto aparece com NCM diferente em notas de fornecedores diferentes, ele fica fora da aplicação em lote e vai para decisão humana. Aplicar o mais frequente nesse caso seria trocar um chute por outro.</p>
+  </div>
+
+  <h3>Unidades e fatores de conversão</h3>
+  <p>Caixa, saco e fardo viram quilo, litro e unidade — com o fator aprendido das próprias notas: "1 caixa = 12 unidades, visto em 47 notas, todas concordam". Vale para o arquivo fiscal, para o estoque e para o custo.</p>
+</section>
+
+<section>
+  <h2><span class="num">3</span> A conferência de numeração</h2>
+  <p>Esta parte se sustenta sozinha, independentemente de o cliente entregar EFD.</p>
+  <p>Toda NFC-e consome um número em sequência. Quando um número é queimado e não vira documento — falha de comunicação, rejeição, queda de energia — ele precisa ser <strong>inutilizado</strong> junto ao fisco. Hoje isso é feito no olho: alguém percebe, abre a tela e pede a inutilização, um número por vez.</p>
+
+  <div class="numerao">
+    <div class="big"><div class="n">6 de 7</div><div class="t">estabelecimentos analisados tinham buraco de numeração sem inutilização correspondente</div></div>
+    <div class="big"><div class="n">~7%</div><div class="t">é a fatia dos buracos que o processo manual está pegando</div></div>
+    <div class="big"><div class="n">578</div><div class="t">documentos emitidos em contingência num único mês, nos mesmos estabelecimentos</div></div>
+  </div>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+      <span class="url">app / sped / numeração fiscal</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Conferência de numeração</div>
+      <div class="desc">Julho · série 1 · última sincronização há 2 horas</div>
+      <table class="t">
+        <thead><tr><th>Faixa</th><th>Situação</th><th>Leitura do sistema</th><th>Proposta</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1017</td><td><span class="pill warn">buraco</span></td><td>número isolado, junto de uma janela de contingência</td><td><span class="pill ok">inutilizar</span></td></tr>
+          <tr><td class="mono">1041 – 1048</td><td><span class="pill warn">buraco</span></td><td>bloco de 8 números seguidos — assinatura de lote que falhou</td><td><span class="pill ok">inutilizar em faixa</span></td></tr>
+          <tr><td class="mono">1032</td><td><span class="pill ok">resolvido</span></td><td>já inutilizado junto ao fisco</td><td>—</td></tr>
+          <tr><td class="mono">1022</td><td><span class="pill bad">duplicidade</span></td><td>duas chaves distintas para o mesmo número</td><td>tratamento contábil</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+
+  <div class="alerta">
+    <p><strong>O sistema nunca inutiliza sozinho.</strong> Inutilização é irreversível junto ao fisco, e inutilizar um número que na verdade foi usado é um problema que não se desfaz. A ferramenta detecta, classifica, agrupa em faixa e propõe — quem confirma é uma pessoa.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Para quem é — e para quem não é</h2>
+  <div class="grid2">
+    <div class="box">
+      <h4>Cliente certo</h4>
+      <p>Revende mercadoria com variedade: conveniência, adega, mercearia, padaria com industrializados. Quanto mais heterogêneo o mix, mais o NCM genérico dói.</p>
+    </div>
+    <div class="box">
+      <h4>Cliente certo</h4>
+      <p>Está em Regime Normal e já entrega EFD, ou o contador cobra o arquivo todo mês.</p>
+    </div>
+    <div class="box">
+      <h4>Cliente certo</h4>
+      <p>Emite volume de NFC-e. Quanto mais cupom, mais numeração para conferir — e mais buraco passa despercebido.</p>
+    </div>
+    <div class="box">
+      <h4>NÃO é o cliente</h4>
+      <p>Restaurante de preparo próprio que vende só prato pronto. O cardápio inteiro sob um único NCM pode estar tecnicamente correto — vender saneamento aqui é ruído, e o cliente percebe.</p>
+    </div>
+  </div>
+  <p>Essa honestidade é argumento de venda, não perda dela: qualificar cedo evita a conversa que morre na terceira reunião.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span> Objeções e resposta</h2>
+  <div class="qa">
+    <div class="p">"Meu NCM já está preenchido, olha aqui na nota."</div>
+    <div class="r">Está mesmo — e é justamente esse o ponto. Pergunte quantos produtos diferentes dele compartilham esse código. Na base, 43% dos produtos usam o mesmo NCM, e 107 códigos cobrem 144 mil itens.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"Meu contador cuida disso."</div>
+    <div class="r">O contador monta o arquivo com o cadastro que recebe. Se o cadastro chega genérico, o arquivo sai genérico — e a responsabilidade pela classificação do item é de quem vende, não de quem escritura.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"São 3 mil produtos, não vou revisar um por um."</div>
+    <div class="r">Nem precisa. A sugestão vem das notas que os fornecedores já emitiram, e a aplicação é em lote; o que sobra para decisão humana é a minoria em que os fornecedores divergem entre si.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"Não sou obrigado a entregar EFD."</div>
+    <div class="r">Então o SPED não é o argumento. Fique na conferência de numeração e na qualidade do cadastro, que valem independentemente da obrigação — e são o que evita nota rejeitada e buraco de numeração sem inutilizar.</div>
+  </div>
+</section>
+
+<section style="border-bottom:0">
+  <h2><span class="num">6</span> Em uma frase</h2>
+  <div class="destaque">
+    <p>O cadastro fiscal do item é preenchido uma vez e cobrado todo mês. A ferramenta usa o que os seus fornecedores já classificaram para transformar código genérico em classificação de verdade — e avisa quando falta número na sua numeração.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>Lad Sistemas · material de apoio comercial · dados de tela ilustrativos · números agregados da base, sem identificação de cliente</footer>
+</body>
+</html>

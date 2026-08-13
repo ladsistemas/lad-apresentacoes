@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custo Vivo — Custo real de compra, direto da nota fiscal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --lad-orange:#f24405; --lad-blue:#190e88; --bg:#f3f4f4; --white:#fff;
+  --gray:#6b6b6b; --dark:#1a1a2e; --line:#e8e9e9;
+  --ok:#0f7b4f; --warn:#b45309; --bad:#b91c1c;
+}
+body{ font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--dark); line-height:1.6; }
+.wrap{ max-width:900px; margin:0 auto; padding:0 24px; }
+code,.mono{ font-family:'JetBrains Mono',monospace; }
+
+/* ---------- topo ---------- */
+header{ background:var(--white); border-bottom:1px solid var(--line); padding:22px 0; position:sticky; top:0; z-index:10; }
+header .wrap{ display:flex; align-items:center; gap:14px; }
+header img{ height:34px; }
+header .tag{ font-size:.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--lad-orange); }
+header a.voltar{ margin-left:auto; font-size:.82rem; color:var(--gray); text-decoration:none; }
+header a.voltar:hover{ color:var(--lad-orange); }
+
+.hero{ background:linear-gradient(160deg,var(--lad-blue) 0%,#2d1fa8 100%); color:#fff; padding:72px 0 64px; }
+.hero h1{ font-size:2.5rem; font-weight:700; letter-spacing:-1px; line-height:1.15; margin-bottom:18px; }
+.hero p.sub{ font-size:1.12rem; opacity:.92; max-width:640px; }
+.hero .frase{ margin-top:28px; padding:16px 20px; background:rgba(255,255,255,.1);
+  border-left:3px solid var(--lad-orange); border-radius:0 8px 8px 0; font-size:1rem; max-width:640px; }
+
+section{ padding:56px 0; border-bottom:1px solid var(--line); }
+section h2{ font-size:1.5rem; font-weight:700; letter-spacing:-.4px; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+.num{ background:var(--lad-orange); color:#fff; width:30px; height:30px; border-radius:8px;
+  display:inline-flex; align-items:center; justify-content:center; font-size:.95rem; flex:none; }
+section h3{ font-size:1.05rem; font-weight:700; margin:26px 0 10px; }
+section p{ margin-bottom:14px; }
+strong{ font-weight:700; }
+
+.grid2{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin:22px 0; }
+.box{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:22px; }
+.box h4{ font-size:.95rem; font-weight:700; margin-bottom:8px; }
+.box p{ font-size:.9rem; color:var(--gray); margin:0; }
+
+.dor{ background:#fff5f2; border:1px solid #ffd9cc; border-left:3px solid var(--lad-orange); border-radius:0 10px 10px 0; padding:18px 20px; margin:18px 0; }
+.dor p{ margin:0; font-size:.95rem; }
+
+ul.lista{ list-style:none; margin:14px 0; }
+ul.lista li{ padding:9px 0 9px 28px; position:relative; font-size:.95rem; border-bottom:1px solid var(--line); }
+ul.lista li:last-child{ border-bottom:0; }
+ul.lista li::before{ content:"→"; position:absolute; left:4px; color:var(--lad-orange); font-weight:700; }
+
+/* ---------- mockup de tela ---------- */
+.tela{ background:var(--white); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(26,26,46,.08); margin:24px 0; }
+.tela .chrome{ background:#f7f7f8; border-bottom:1px solid var(--line); padding:9px 14px; display:flex; align-items:center; gap:7px; }
+.tela .dot{ width:10px; height:10px; border-radius:50%; }
+.tela .url{ margin-left:10px; font-size:.72rem; color:var(--gray); font-family:'JetBrains Mono',monospace; }
+.tela .corpo{ padding:20px; overflow-x:auto; }
+.tela .titulo{ font-size:1rem; font-weight:700; margin-bottom:4px; }
+.tela .desc{ font-size:.8rem; color:var(--gray); margin-bottom:16px; }
+.kpis{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:18px; }
+.kpi{ background:var(--bg); border-radius:10px; padding:14px; }
+.kpi .rot{ font-size:.68rem; text-transform:uppercase; letter-spacing:1px; color:var(--gray); }
+.kpi .val{ font-size:1.45rem; font-weight:700; letter-spacing:-.5px; margin-top:3px; }
+.kpi .val.sobe{ color:var(--bad); } .kpi .val.desce{ color:var(--ok); }
+table.t{ width:100%; border-collapse:collapse; font-size:.85rem; min-width:520px; }
+table.t th{ text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:1px;
+  color:var(--gray); padding:8px 10px; border-bottom:1px solid var(--line); font-weight:700; }
+table.t td{ padding:10px; border-bottom:1px solid var(--line); }
+table.t td.num-col{ text-align:right; font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; }
+.pill{ display:inline-block; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:99px; }
+.pill.ok{ background:#e6f4ee; color:var(--ok); }
+.pill.warn{ background:#fef3e2; color:var(--warn); }
+.pill.bad{ background:#fdeaea; color:var(--bad); }
+.spark{ display:inline-flex; align-items:flex-end; gap:2px; height:22px; }
+.spark i{ width:5px; background:#c9cbd4; border-radius:1px; display:block; }
+.spark i.up{ background:var(--lad-orange); }
+.legenda{ font-size:.76rem; color:var(--gray); font-style:italic; margin-top:-12px; margin-bottom:26px; }
+
+.qa{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:12px; }
+.qa .p{ font-weight:700; font-size:.95rem; margin-bottom:6px; }
+.qa .r{ font-size:.92rem; color:#3d3d52; }
+.destaque{ background:var(--lad-blue); color:#fff; border-radius:14px; padding:32px; margin:26px 0; }
+.destaque p{ margin:0; font-size:1.15rem; font-weight:500; }
+footer{ padding:40px 0 60px; font-size:.8rem; color:var(--gray); text-align:center; }
+@media(max-width:640px){ .hero h1{ font-size:1.85rem; } section{ padding:40px 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">Custo Vivo</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>O custo real do que você compra,<br>direto da nota fiscal.</h1>
+    <p class="sub">O Custo Vivo lê os XMLs das notas de entrada que já chegam para o restaurante e transforma em custo por quilo, por litro e por unidade — sem digitação, sem planilha, sem depender do fornecedor mandar tabela.</p>
+    <div class="frase">Se o preço da farinha subiu 18% e a ficha técnica continua a mesma, alguém está pagando essa conta. Hoje, na maioria dos restaurantes, ninguém percebe.</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+  <h2><span class="num">1</span> O problema do cliente</h2>
+  <p>Todo restaurante sabe quanto <em>vendeu</em>. Quase nenhum sabe quanto <em>pagou</em> — não com precisão suficiente para agir.</p>
+  <div class="dor">
+    <p><strong>A conta que não fecha:</strong> a nota do fornecedor vem com o nome dele ("FAR TRG SC 25KG"), na embalagem dele (saco, fardo, caixa), com preço que muda toda semana. O cardápio, do outro lado, é em gramas e mililitros. Entre um e outro existe uma conversão que ninguém faz — e quando faz, faz uma vez e nunca mais.</p>
+  </div>
+  <ul class="lista">
+    <li>O preço de compra muda nota a nota, e a ficha técnica fica congelada no dia em que foi cadastrada</li>
+    <li>O mesmo insumo chega com três nomes diferentes de três fornecedores, e vira três itens no controle</li>
+    <li>A embalagem muda sem aviso: o saco que era de 25 kg passa a 20 kg pelo mesmo preço</li>
+    <li>Quando o dono percebe que a margem caiu, já se passaram meses</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">2</span> De onde vem o dado (e por que isso é diferente)</h2>
+  <p>O Custo Vivo <strong>não pede para o cliente digitar nada</strong> e não depende de integração com fornecedor. Ele usa o documento que já existe por obrigação legal: o XML da NF-e de entrada.</p>
+  <div class="grid2">
+    <div class="box">
+      <h4>Busca automática</h4>
+      <p>Com o certificado digital A1 do cliente, o sistema consulta e baixa as notas emitidas contra o CNPJ dele, direto na SEFAZ.</p>
+    </div>
+    <div class="box">
+      <h4>Manifestação direta</h4>
+      <p>A Ciência da Operação é feita pela própria plataforma, sem intermediário e sem custo por documento.</p>
+    </div>
+    <div class="box">
+      <h4>Certificado no cofre</h4>
+      <p>O A1 fica cifrado, com consentimento explícito e registrado do cliente. Só é usado para o que ele autorizou.</p>
+    </div>
+    <div class="box">
+      <h4>Histórico desde o começo</h4>
+      <p>Na ativação, o sistema processa as notas já disponíveis — o cliente vê série histórica no primeiro dia, não daqui a três meses.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span> O que o gestor vê</h2>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+      <span class="url">app / custo-vivo / visão geral</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Visão geral do custo</div>
+      <div class="desc">Últimos 90 dias · 34 notas processadas · 212 insumos com preço</div>
+      <div class="kpis">
+        <div class="kpi"><div class="rot">Compras no período</div><div class="val">R$ 184.320</div></div>
+        <div class="kpi"><div class="rot">Insumos em alta</div><div class="val sobe">23</div></div>
+        <div class="kpi"><div class="rot">Insumos em queda</div><div class="val desce">11</div></div>
+        <div class="kpi"><div class="rot">A confirmar</div><div class="val">7</div></div>
+      </div>
+      <table class="t">
+        <thead><tr><th>Insumo</th><th>Custo atual</th><th>90 dias</th><th class="num-col">Variação</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr><td>Farinha de trigo</td><td class="num-col">R$ 4,06 /kg</td>
+            <td><span class="spark"><i style="height:8px"></i><i style="height:9px"></i><i style="height:11px"></i><i style="height:14px"></i><i style="height:16px"></i><i class="up" style="height:20px"></i></span></td>
+            <td class="num-col" style="color:var(--bad)">+18,2%</td><td><span class="pill bad">alta forte</span></td></tr>
+          <tr><td>Óleo de soja</td><td class="num-col">R$ 8,74 /L</td>
+            <td><span class="spark"><i style="height:16px"></i><i style="height:15px"></i><i style="height:13px"></i><i style="height:14px"></i><i style="height:12px"></i><i class="up" style="height:11px"></i></span></td>
+            <td class="num-col" style="color:var(--ok)">−9,4%</td><td><span class="pill ok">estável</span></td></tr>
+          <tr><td>Queijo mussarela</td><td class="num-col">R$ 32,90 /kg</td>
+            <td><span class="spark"><i style="height:10px"></i><i style="height:12px"></i><i style="height:12px"></i><i style="height:15px"></i><i style="height:17px"></i><i class="up" style="height:18px"></i></span></td>
+            <td class="num-col" style="color:var(--bad)">+7,1%</td><td><span class="pill warn">conferir</span></td></tr>
+          <tr><td>Embalagem 500 ml</td><td class="num-col">R$ 0,41 /un</td>
+            <td><span class="spark"><i style="height:9px"></i><i style="height:9px"></i><i style="height:10px"></i><i style="height:9px"></i><i style="height:10px"></i><i class="up" style="height:10px"></i></span></td>
+            <td class="num-col">+1,3%</td><td><span class="pill ok">estável</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+
+  <h3>E a fila do que precisa de gente</h3>
+  <p>Nem toda nota se resolve sozinha, e o sistema <strong>não chuta</strong>. Quando não tem certeza de que "FAR TRG SC 25KG" é a sua farinha, ele pergunta uma vez — e nunca mais.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+      <span class="url">app / custo-vivo / itens a confirmar</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Itens a confirmar</div>
+      <div class="desc">7 itens · resolver uma vez vale para todas as notas futuras daquele fornecedor</div>
+      <table class="t">
+        <thead><tr><th>Como veio na nota</th><th>Sugestão do sistema</th><th>Por quê</th><th>Ação</th></tr></thead>
+        <tbody>
+          <tr><td class="mono" style="font-size:.8rem">FAR TRG SC 25KG</td><td>Farinha de trigo</td><td style="font-size:.82rem;color:var(--gray)">1 saco = 25 kg, visto em 12 notas</td><td><span class="pill ok">confirmar</span></td></tr>
+          <tr><td class="mono" style="font-size:.8rem">OLEO SOJA CX 20X900ML</td><td>Óleo de soja</td><td style="font-size:.82rem;color:var(--gray)">1 caixa = 18 L, visto em 9 notas</td><td><span class="pill ok">confirmar</span></td></tr>
+          <tr><td class="mono" style="font-size:.8rem">MUSSARELA PC</td><td>—</td><td style="font-size:.82rem;color:var(--warn)">peso da peça varia entre fornecedores</td><td><span class="pill warn">informar</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+</section>
+
+<section>
+  <h2><span class="num">4</span> Por que o número é confiável</h2>
+  <p>Custo errado é pior que custo nenhum: leva a decisão errada com confiança. Três mecanismos existem só para isso.</p>
+  <div class="grid2">
+    <div class="box">
+      <h4>Um insumo, não cinco</h4>
+      <p>Descrições diferentes do mesmo produto são reconhecidas e agrupadas — por código de barras, por código do fornecedor e por semelhança de descrição, nessa ordem de confiança.</p>
+    </div>
+    <div class="box">
+      <h4>Conversão que aprende</h4>
+      <p>Saco, caixa, fardo e bandeja viram quilo e litro. O fator aprendido de uma nota vale para as próximas do mesmo fornecedor, e o sistema avisa quando a embalagem muda.</p>
+    </div>
+    <div class="box">
+      <h4>Quarentena de absurdo</h4>
+      <p>Preço muito fora da faixa histórica não entra na média: fica separado para conferência. Erro de digitação do fornecedor não contamina o seu custo.</p>
+    </div>
+    <div class="box">
+      <h4>Rastro até a nota</h4>
+      <p>Todo custo exibido tem origem: qual nota, qual fornecedor, qual data. Não é estimativa, é documento.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">5</span> Falar certo sobre o certificado</h2>
+  <p>O tema aparece cedo na conversa e é onde se ganha ou se perde confiança. A resposta é sempre a mesma:</p>
+  <ul class="lista">
+    <li>O certificado A1 é <strong>do cliente</strong> e fica cifrado — a equipe Lad não tem acesso ao arquivo</li>
+    <li>O uso exige <strong>consentimento explícito</strong>, registrado com data e responsável, e pode ser revogado</li>
+    <li>É usado para <strong>duas coisas</strong>: baixar as notas emitidas contra o CNPJ e manifestar a Ciência da Operação</li>
+    <li>A manifestação é obrigação que o cliente <strong>já tem</strong>; hoje a maioria simplesmente não cumpre</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="num">6</span> Contra o que estamos competindo</h2>
+  <div class="qa">
+    <div class="p">A planilha do gerente</div>
+    <div class="r">Sempre existe, sempre está desatualizada e sempre depende de uma pessoa. Não é concorrente de funcionalidade — é concorrente de hábito. O argumento é o custo dessa pessoa digitando, e o fato de que ela para quando entra de férias.</div>
+  </div>
+  <div class="qa">
+    <div class="p">O ERP genérico</div>
+    <div class="r">Tem cadastro de compra, mas espera que alguém lance nota a nota e converta unidade na mão. O diferencial é a leitura automática do XML e a conversão aprendida, não a existência do módulo.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"Meu contador já manda os XMLs"</div>
+    <div class="r">Manda o arquivo, não a informação. Entre o XML e "meu quilo de farinha custa R$ 4,06" existe canonização, conversão de unidade e rateio de frete e desconto. É exatamente esse pedaço que o produto faz.</div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">7</span> Para o time comercial</h2>
+
+  <h3>Quem é o cliente certo</h3>
+  <ul class="lista">
+    <li>Compra por XML com regularidade — pizzaria, hamburgueria, padaria, cozinha industrial</li>
+    <li>Tem ficha técnica cadastrada, ou quer ter: o custo por insumo só vira margem quando encontra a receita</li>
+    <li>Sente a variação: quem compra commodity (farinha, óleo, queijo, carne) sofre mais e percebe mais rápido</li>
+  </ul>
+
+  <h3>Perguntas que abrem a conversa</h3>
+  <ul class="lista">
+    <li>"Quanto custa o quilo da sua farinha hoje?" — a hesitação é o pitch</li>
+    <li>"Quando o fornecedor sobe o preço, em quantos dias você fica sabendo?"</li>
+    <li>"Quem confere se o saco que chegou tem o peso que está na nota?"</li>
+  </ul>
+
+  <h3>Objeções e resposta</h3>
+  <div class="qa">
+    <div class="p">"Vai dar trabalho para cadastrar tudo."</div>
+    <div class="r">O cadastro é o que o sistema faz sozinho a partir das notas. O que sobra para o cliente é confirmar o que ficou ambíguo — e cada confirmação vale para sempre.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"Não quero dar meu certificado para ninguém."</div>
+    <div class="r">Resposta correta e honesta: ele não é entregue a ninguém, fica cifrado, e o consentimento é revogável. Se ainda assim houver desconforto, vale mostrar a tela de consentimento na hora.</div>
+  </div>
+  <div class="qa">
+    <div class="p">"Meu preço eu já negocio direto, sei de cabeça."</div>
+    <div class="r">O preço negociado é um. O preço praticado, depois de frete, desconto e mudança de embalagem, costuma ser outro. O produto mostra os dois.</div>
+  </div>
+</section>
+
+<section style="border-bottom:0">
+  <h2><span class="num">8</span> Em uma frase</h2>
+  <div class="destaque">
+    <p>O XML da nota de entrada já chega para o cliente todo dia. O Custo Vivo é o que transforma esse arquivo em preço por quilo — e avisa quando ele muda.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>Lad Sistemas · material de apoio comercial · dados de tela ilustrativos</footer>
+</body>
+</html>
