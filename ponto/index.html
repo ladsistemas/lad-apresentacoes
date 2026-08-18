@@ -1,329 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LAD Ponto — Controle de Jornada</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --lad-orange-500: #f24405;
-      --lad-orange-100: #fff1eb;
-      --lad-blue-900: #190e88;
-      --lad-blue-100: #e8e6ff;
-      --lad-white: #f3f4f4;
-      --lad-white-pure: #ffffff;
-      --lad-gray-600: #6b6b6b;
-      --lad-gray-300: #d1d3d4;
-      --lad-gray-100: #f0f1f2;
-      --lad-dark: #1a1a2e;
-      --lad-green: #0a8754;
-      --lad-red: #c0392b;
-      --lad-yellow-bg: #fff7e0;
-      --lad-yellow-border: #e8a838;
-    }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--lad-white);
-      color: var(--lad-dark);
-      line-height: 1.55;
-    }
-    .container { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
-
-    .back-link {
-      display: inline-block; color: var(--lad-gray-600); text-decoration: none;
-      font-size: 0.85rem; margin-bottom: 28px;
-    }
-    .back-link:hover { color: var(--lad-orange-500); }
-    .kicker {
-      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.8px; color: var(--lad-orange-500); margin-bottom: 12px;
-    }
-    h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.8px; margin-bottom: 12px; }
-    .lead { font-size: 1.05rem; color: var(--lad-gray-600); max-width: 660px; }
-    .hr { border: none; border-top: 1px solid var(--lad-gray-300); margin: 40px 0; }
-
-    h2 {
-      font-size: 1.35rem; font-weight: 700; letter-spacing: -0.3px;
-      margin-bottom: 16px; display: flex; align-items: center; gap: 12px;
-    }
-    h2 .num {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 30px; height: 30px; border-radius: 8px;
-      background: var(--lad-orange-100); color: var(--lad-orange-500);
-      font-size: 0.9rem; font-weight: 700; flex-shrink: 0;
-    }
-    h3 { font-size: 1.02rem; font-weight: 700; margin-top: 20px; margin-bottom: 8px; }
-    p { margin-bottom: 12px; }
-    p, li { font-size: 0.96rem; }
-    ul, ol { padding-left: 22px; margin-bottom: 14px; }
-    li { margin-bottom: 6px; }
-    code {
-      background: var(--lad-gray-100); padding: 2px 6px; border-radius: 4px;
-      font-family: 'Consolas', 'Monaco', monospace; font-size: 0.88em; color: var(--lad-blue-900);
-    }
-
-    /* Destaque de abertura */
-    .hero-note {
-      background: var(--lad-blue-900); color: var(--lad-white-pure);
-      border-radius: 14px; padding: 26px 28px; margin: 28px 0 0;
-    }
-    .hero-note .big {
-      font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px;
-    }
-    .hero-note p { color: rgba(255,255,255,0.86); margin-bottom: 0; font-size: 0.95rem; }
-
-    /* Fluxo */
-    .flow {
-      background: var(--lad-white-pure); border: 1px solid var(--lad-gray-300);
-      border-radius: 12px; padding: 22px; margin: 14px 0;
-    }
-    .flow-title {
-      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.5px; color: var(--lad-blue-900); margin-bottom: 12px;
-    }
-    .flow-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-    .step {
-      background: var(--lad-blue-100); color: var(--lad-blue-900);
-      padding: 8px 14px; border-radius: 8px; font-size: 0.88rem; font-weight: 600;
-    }
-    .step.highlight { background: var(--lad-orange-500); color: var(--lad-white-pure); }
-    .arrow { color: var(--lad-gray-600); font-weight: 700; }
-
-    /* Grid de recursos */
-    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0 20px; }
-    @media (max-width: 620px) { .features { grid-template-columns: 1fr; } }
-    .feat {
-      background: var(--lad-white-pure); border-radius: 12px; padding: 22px;
-      border: 1px solid var(--lad-gray-300);
-    }
-    .feat .tag {
-      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 1.4px; color: var(--lad-orange-500); display: block; margin-bottom: 8px;
-    }
-    .feat h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
-    .feat p { font-size: 0.9rem; color: var(--lad-gray-600); margin-bottom: 0; }
-
-    /* Comparativo */
-    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0 20px; }
-    @media (max-width: 620px) { .compare { grid-template-columns: 1fr; } }
-    .col {
-      background: var(--lad-white-pure); border-radius: 12px; padding: 20px;
-      border: 1px solid var(--lad-gray-300);
-    }
-    .col h4 {
-      font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .col.ok h4 { color: var(--lad-green); }
-    .col.gap h4 { color: var(--lad-red); }
-    .col ul { margin-bottom: 0; }
-    .col li { font-size: 0.92rem; }
-
-    /* Tabela */
-    .table-wrap { overflow-x: auto; margin: 14px 0 20px; }
-    table {
-      width: 100%; border-collapse: collapse; background: var(--lad-white-pure);
-      border: 1px solid var(--lad-gray-300); border-radius: 12px; overflow: hidden;
-      font-size: 0.92rem; min-width: 540px;
-    }
-    th {
-      background: var(--lad-gray-100); text-align: left; padding: 11px 14px;
-      font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.6px;
-      color: var(--lad-gray-600); border-bottom: 1px solid var(--lad-gray-300);
-    }
-    td { padding: 11px 14px; border-bottom: 1px solid var(--lad-gray-100); vertical-align: top; }
-    tr:last-child td { border-bottom: none; }
-
-    /* Callouts */
-    .callout {
-      background: var(--lad-yellow-bg); border-left: 4px solid var(--lad-yellow-border);
-      padding: 16px 18px; border-radius: 6px; margin: 16px 0; font-size: 0.93rem;
-    }
-    .callout p:last-child { margin-bottom: 0; }
-    .callout strong { color: #6b4900; }
-    .callout-info { background: #e8f4fb; border-left-color: #2196c9; }
-    .callout-info strong { color: #0a3d5c; }
-    .callout-ok { background: #e6f6ee; border-left-color: var(--lad-green); }
-    .callout-ok strong { color: #064d30; }
-
-    /* Bloco interno */
-    .internal {
-      background: var(--lad-white-pure); border: 2px dashed var(--lad-gray-300);
-      border-radius: 12px; padding: 24px; margin: 18px 0;
-    }
-    .internal .tag-int {
-      display: inline-block; font-size: 0.68rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.4px;
-      background: var(--lad-blue-100); color: var(--lad-blue-900);
-      padding: 3px 10px; border-radius: 4px; margin-bottom: 14px;
-    }
-    .internal h3:first-of-type { margin-top: 0; }
-
-    .qa { margin-bottom: 16px; }
-    .qa .q { font-weight: 700; font-size: 0.96rem; margin-bottom: 4px; }
-    .qa .a { font-size: 0.93rem; color: var(--lad-gray-600); }
-
-    footer {
-      margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--lad-gray-300);
-      font-size: 0.82rem; color: var(--lad-gray-600);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAD Ponto — Controle de Jornada</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/apresentacao.css">
 </head>
 <body>
-<div class="container">
 
-  <a href="../" class="back-link">&larr; Apresentações Lad Sistemas</a>
-
-  <div class="kicker">Novo módulo &middot; Gestão de equipe</div>
-  <h1>LAD Ponto — Controle de Jornada</h1>
-  <p class="lead">
-    O funcionário bate ponto na tela que já existe no balcão. O gestor acompanha o turno em tempo
-    real, corrige o que ficou pendente e entrega o mês fechado ao contador — dentro do LadFood,
-    sem outro sistema para contratar e sem equipamento novo para comprar.
-  </p>
-
-  <div class="hero-note">
-    <div class="big">Nenhum PDV de restaurante no Brasil traz ponto embutido.</div>
-    <p>
-      Quem precisa controlar jornada contrata um sistema avulso, cobrado por funcionário, que não
-      conversa com o resto da operação. O LadFood já tem a tela ligada no salão e o funcionário
-      já está cadastrado — o ponto é o módulo que aproveita as duas coisas.
-    </p>
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">LAD Ponto</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
   </div>
+</header>
 
-  <hr class="hr">
+<div class="hero">
+  <div class="wrap">
+    <h1>O ponto bate na tela<br>que já está no balcão.</h1>
+    <p class="sub">O gestor acompanha o turno em tempo real, corrige o que ficou pendente e entrega o mês fechado ao contador — dentro do LadFood, sem outro sistema para contratar e sem equipamento novo para comprar.</p>
 
-  <h2><span class="num">1</span> O problema do cliente</h2>
+    <div class="essencial">
+      <div class="rot">O essencial</div>
+      <ul>
+        <li><strong>Sem equipamento novo:</strong> roda no tablet, no totem ou no PC do caixa.</li>
+        <li><strong>Sem outro cadastro e sem outra fatura</strong> — o funcionário já está no sistema.</li>
+        <li><strong>Registro que se sustenta:</strong> a batida não é editável, nem pelo administrador.</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-  <p>
-    Restaurante é o setor de escala complicada: 6x1, dois turnos com intervalo longo, 12x36 na
-    cozinha, folga que gira, hora extra em fim de semana e feriado. Na prática, o controle vira
-    caderno na gaveta ou planilha que alguém preenche de memória no fim do mês.
-  </p>
+<nav class="indice">
+  <div class="wrap">
+    <a href="#problema">O problema</a>
+    <a href="#balcao">No balcão</a>
+    <a href="#gestor">O que o gestor recebe</a>
+    <a href="#registro">Por que se sustenta</a>
+    <a href="#legal">Posicionamento legal</a>
+    <a href="#vender">Para vender</a>
+  </div>
+</nav>
 
-  <div class="compare">
-    <div class="col gap">
+<div class="wrap">
+
+<section id="problema">
+  <h2><span class="num">1</span> O problema</h2>
+  <p class="lead">Restaurante é o setor de escala complicada: 6x1, dois turnos com intervalo longo, 12x36 na cozinha, folga que gira, hora extra em fim de semana e feriado.</p>
+  <p>Na prática, o controle vira caderno na gaveta ou planilha que alguém preenche de memória no fim do mês.</p>
+
+  <div class="cartoes">
+    <div class="cartao nao">
       <h4>Caderno e planilha</h4>
-      <ul>
-        <li>Preenchido depois, de memória</li>
-        <li>Letra do próprio gerente em todas as linhas</li>
-        <li>Some, molha, rasga</li>
-        <li>Não vale como prova: se o empregador pode reescrever, o registro é frágil numa reclamação trabalhista</li>
-        <li>Ninguém sabe quem está no salão agora</li>
-      </ul>
+      <p>Preenchido depois, de memória, com a letra do próprio gerente em todas as linhas. Some, molha, rasga. Ninguém sabe quem está no salão agora. E, se o empregador pode reescrever, o registro é frágil numa reclamação trabalhista.</p>
     </div>
-    <div class="col ok">
+    <div class="cartao bom">
       <h4>Com o LAD Ponto</h4>
-      <ul>
-        <li>Registrado no momento em que acontece</li>
-        <li>Cada batida com número sequencial próprio</li>
-        <li>Correção do gestor é visível e assinada, sem apagar o original</li>
-        <li>Horário previsto contra realizado, calculado sozinho</li>
-        <li>Painel do turno em tempo real</li>
-      </ul>
+      <p>Registrado no momento em que acontece, com número sequencial próprio. A correção do gestor é assinada e visível, sem apagar o original. Previsto contra realizado calculado sozinho, e painel do turno em tempo real.</p>
     </div>
   </div>
 
-  <div class="callout">
-    <p>
-      <strong>O risco que o dono não enxerga.</strong> Sem controle de jornada confiável, numa discussão
-      trabalhista a jornada alegada pelo funcionário tende a prevalecer. E um controle que o
-      empregador pode editar livremente costuma ser desconsiderado. O valor do módulo não é
-      "marcar hora" — é ter registro que se sustenta.
-    </p>
+  <div class="aviso atencao">
+    <p><strong>O risco que o dono não enxerga.</strong> Sem controle confiável, numa discussão trabalhista a jornada alegada pelo funcionário tende a prevalecer — e um controle que o empregador edita livremente costuma ser desconsiderado. O valor do módulo não é "marcar hora": é ter registro que se sustenta.</p>
   </div>
+</section>
 
-  <hr class="hr">
-
+<section id="balcao">
   <h2><span class="num">2</span> Como funciona no balcão</h2>
 
-  <div class="flow">
-    <div class="flow-title">A batida leva menos de dez segundos</div>
-    <div class="flow-steps">
-      <span class="step">Digita o código</span>
-      <span class="arrow">&rarr;</span>
-      <span class="step">Confirma o nome</span>
-      <span class="arrow">&rarr;</span>
-      <span class="step">Digita o PIN</span>
-      <span class="arrow">&rarr;</span>
-      <span class="step highlight">Comprovante na tela</span>
+  <div class="fluxo">
+    <div class="rot">A batida leva menos de dez segundos</div>
+    <div class="itens">
+      <span class="item">Digita o código</span>
+      <span class="seta">→</span>
+      <span class="item">Confirma o nome</span>
+      <span class="seta">→</span>
+      <span class="item">Digita o PIN</span>
+      <span class="seta">→</span>
+      <span class="item fim">Comprovante na tela</span>
     </div>
   </div>
 
-  <p>
-    Teclado numérico grande, sem login, sem teclado físico. A tela mostra o primeiro nome, o
-    horário previsto do dia e o que se espera agora — entrada ou saída — para o funcionário não
-    errar o tipo da batida. Foto pela câmera é opcional, ligada por parâmetro da empresa.
-  </p>
+  <p>Teclado numérico grande, sem login e sem teclado físico. A tela mostra o primeiro nome, o horário previsto do dia e o que se espera agora — entrada ou saída — para o funcionário não errar o tipo da batida. Foto pela câmera é opcional, ligada por parâmetro da empresa.</p>
 
-  <h3>Roda no que o restaurante já tem</h3>
-  <ul>
-    <li>Tablet ou totem do salão</li>
-    <li>PC do caixa, no navegador</li>
-    <li>Celular fixo no balcão</li>
-  </ul>
-  <p>
-    Cada aparelho é liberado uma vez pelo gestor, por um link. A liberação fica no aparelho e
-    sobrevive a desligar e ligar. Aparelho perdido: o gestor revoga todos de uma vez e libera de
-    novo só os que continuam em uso.
-  </p>
-
-  <div class="callout callout-ok">
-    <p>
-      <strong>Internet caiu, o ponto continua.</strong> A batida fica guardada no aparelho e é reenviada
-      sozinha quando a conexão volta — com a hora em que foi batida, não a do reenvio. Numa
-      operação de restaurante, isso é a diferença entre um módulo que funciona e um que o gerente
-      abandona na primeira sexta cheia.
-    </p>
+  <div class="cartoes">
+    <div class="cartao">
+      <h4>Roda no que já existe</h4>
+      <p>Tablet ou totem do salão, PC do caixa no navegador, ou celular fixo no balcão.</p>
+    </div>
+    <div class="cartao">
+      <h4>Libera uma vez</h4>
+      <p>Cada aparelho é liberado pelo gestor por um link. A liberação sobrevive a desligar e ligar; aparelho perdido se revoga em bloco.</p>
+    </div>
   </div>
 
-  <hr class="hr">
+  <div class="aviso ok">
+    <p><strong>Internet caiu, o ponto continua.</strong> A batida fica guardada no aparelho e é reenviada sozinha quando a conexão volta — com a hora em que foi batida, não a do reenvio. Num restaurante, essa é a diferença entre um módulo que funciona e um que o gerente abandona na primeira sexta cheia.</p>
+  </div>
+</section>
 
+<section id="gestor">
   <h2><span class="num">3</span> O que o gestor recebe</h2>
 
-  <div class="features">
-    <div class="feat">
-      <span class="tag">Tempo real</span>
+  <div class="cartoes">
+    <div class="cartao">
+      <span class="marca">Tempo real</span>
       <h4>Painel do dia</h4>
-      <p>
-        Quem está trabalhando agora, quem atrasou além da tolerância, quem tinha turno e não
-        apareceu, e o que ficou pendente de resolver.
-      </p>
+      <p>Quem está trabalhando agora, quem atrasou além da tolerância, quem tinha turno e não apareceu, e o que ficou pendente.</p>
     </div>
-    <div class="feat">
-      <span class="tag">Mês fechado</span>
+    <div class="cartao">
+      <span class="marca">Mês fechado</span>
       <h4>Espelho de ponto</h4>
-      <p>
-        Dia por dia: previsto contra realizado, atraso, extras, adicional noturno, faltas e saldo
-        do período por funcionário.
-      </p>
+      <p>Dia por dia: previsto contra realizado, atraso, extras, adicional noturno, faltas e saldo do período.</p>
     </div>
-    <div class="feat">
-      <span class="tag">Escalas do setor</span>
+    <div class="cartao">
+      <span class="marca">Escalas do setor</span>
       <h4>Jornadas prontas</h4>
-      <p>
-        6x1, 5x2, dois turnos com intervalo longo e 12x36, com calendário de feriados por empresa.
-        Configura em minutos, não em consultoria.
-      </p>
+      <p>6x1, 5x2, dois turnos com intervalo longo e 12x36, com feriados por empresa. Configura em minutos, não em consultoria.</p>
     </div>
-    <div class="feat">
-      <span class="tag">Contador</span>
+    <div class="cartao">
+      <span class="marca">Contador</span>
       <h4>Exportação</h4>
-      <p>
-        Arquivo que abre direto no Excel, em português, com o resumo do período por funcionário —
-        pronto para quem faz a folha.
-      </p>
+      <p>Arquivo que abre direto no Excel, em português, com o resumo do período por funcionário.</p>
     </div>
   </div>
 
   <h3>O que entra no cálculo</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Item</th><th>Tratamento</th></tr>
-      </thead>
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Item</th><th>Tratamento</th></tr></thead>
       <tbody>
         <tr><td>Atraso</td><td>Só o que passar da tolerância configurada pela empresa</td></tr>
         <tr><td>Horas extras</td><td>O que passar da jornada prevista do dia</td></tr>
@@ -335,128 +142,64 @@
     </table>
   </div>
 
-  <div class="callout callout-info">
-    <p>
-      <strong>Onde termina o escopo.</strong> O módulo entrega horas apuradas e arquivo de exportação. Não
-      calcula DSR sobre extras, médias de férias e 13º, rubricas de folha nem envia eSocial — isso
-      fica com quem faz a folha, porque depende de convenção coletiva por sindicato e município.
-      Dizer isso na visita evita a pior expectativa possível: "então substitui meu contador".
-    </p>
+  <div class="aviso info">
+    <p><strong>Onde termina o escopo.</strong> O módulo entrega horas apuradas e arquivo de exportação. Não calcula DSR sobre extras, médias de férias e 13º, rubricas de folha nem envia eSocial — isso fica com quem faz a folha, porque depende de convenção coletiva por sindicato e município. Dizer isso na visita evita a pior expectativa possível: "então substitui meu contador".</p>
   </div>
+</section>
 
-  <hr class="hr">
-
+<section id="registro">
   <h2><span class="num">4</span> Por que o registro se sustenta</h2>
-
-  <p>Quatro decisões de projeto que o concorrente avulso raramente explica:</p>
-
-  <ul>
-    <li>
-      <strong>A batida é imutável.</strong> Nenhuma tela do sistema altera o horário de uma marcação —
-      nem para o administrador. Correção entra como registro novo, assinado, ao lado do original.
-    </li>
-    <li>
-      <strong>A correção fica visível.</strong> No espelho, a marcação original aparece riscada ao lado da
-      correção, com autor, data e motivo. É o oposto de reescrever a linha.
-    </li>
-    <li>
-      <strong>O sistema não inventa batida.</strong> Esqueceu a saída? O dia fica pendente esperando o
-      gestor. Nada é completado automaticamente.
-    </li>
-    <li>
-      <strong>Numeração sequencial e encadeada.</strong> Cada batida recebe um número que não repete e
-      não pula, e carrega uma assinatura ligada à anterior. Alteração feita direto no banco fica
-      detectável.
-    </li>
+  <p class="lead">Quatro decisões de projeto que o concorrente avulso raramente explica.</p>
+  <ul class="lista">
+    <li><strong>A batida é imutável.</strong> Nenhuma tela altera o horário de uma marcação, nem para o administrador. Correção entra como registro novo, assinado, ao lado do original.</li>
+    <li><strong>A correção fica visível.</strong> No espelho, a marcação original aparece riscada ao lado da correção, com autor, data e motivo. É o oposto de reescrever a linha.</li>
+    <li><strong>O sistema não inventa batida.</strong> Esqueceu a saída? O dia fica pendente esperando o gestor. Nada é completado automaticamente.</li>
+    <li><strong>Numeração sequencial e encadeada.</strong> Cada batida recebe um número que não repete e não pula, com assinatura ligada à anterior. Alteração feita direto no banco fica detectável.</li>
   </ul>
+  <p>A hora que vale é sempre a do servidor. O relógio do tablet é só guardado para comparação, porque o relógio do balcão qualquer um ajusta.</p>
+</section>
 
-  <p>
-    A hora que vale é sempre a do servidor. O relógio do tablet é apenas guardado para comparação,
-    porque o relógio do balcão é ajustável por qualquer um.
-  </p>
+<section id="legal">
+  <h2><span class="num">5</span> Posicionamento legal</h2>
+  <p class="lead">Falar certo desde a primeira visita.</p>
+  <p>O módulo é <strong>controle de jornada</strong>: registro fiel, marcação original preservada, correção rastreável. Serve como prova e como gestão.</p>
+  <p>Ele <strong>não é um REP-P</strong>, o registrador eletrônico de ponto por programa da Portaria MTP 671/2021. Não há registro no INPI nem assinatura ICP-Brasil, e nenhuma tela do produto declara conformidade com essa portaria.</p>
 
-  <hr class="hr">
-
-  <h2><span class="num">5</span> Posicionamento legal — falar certo desde a primeira visita</h2>
-
-  <p>
-    O módulo é <strong>controle de jornada</strong>: registro fiel, marcação original preservada, correção
-    rastreável. Serve como prova e como gestão.
-  </p>
-
-  <p>
-    Ele <strong>não é um REP-P</strong>, o registrador eletrônico de ponto por programa da Portaria MTP
-    671/2021. Não há registro no INPI nem assinatura ICP-Brasil, e nenhuma tela do produto declara
-    conformidade com essa portaria.
-  </p>
-
-  <div class="callout">
-    <p>
-      <strong>Como isso se traduz na venda.</strong> Até 20 funcionários a CLT não obriga registro de
-      jornada (art. 74, §2º) — o módulo atende integralmente e é o argumento mais confortável.
-      Acima de 20 existe obrigação legal de registro, e a fiscalização pode exigir solução
-      homologada: aí o módulo entra como controle de gestão e blindagem probatória, e o cliente
-      confirma com o contador o que a fiscalização exige no caso dele.
-      <strong>Nunca prometer conformidade com a Portaria 671.</strong>
-    </p>
+  <div class="aviso atencao">
+    <p><strong>Como isso se traduz na venda.</strong> Até 20 funcionários a CLT não obriga registro de jornada (art. 74, §2º) — o módulo atende integralmente e é o argumento mais confortável. Acima de 20 existe obrigação legal, e a fiscalização pode exigir solução homologada: aí o módulo entra como controle de gestão e blindagem probatória, e o cliente confirma com o contador o que vale no caso dele. <strong>Nunca prometer conformidade com a Portaria 671.</strong></p>
   </div>
+</section>
 
-  <hr class="hr">
+<section id="vender">
+  <h2><span class="num">6</span> Para o time comercial</h2>
 
-  <h2><span class="num">6</span> Contra o que estamos competindo</h2>
+  <div class="interno">
+    <span class="marca-int">Uso interno</span>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th></th><th>SaaS de ponto avulso</th><th>LAD Ponto</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Equipamento</strong></td>
-          <td>Relógio biométrico ou app próprio</td>
-          <td>A tela que já está no salão</td>
-        </tr>
-        <tr>
-          <td><strong>Cadastro</strong></td>
-          <td>Refazer o quadro de funcionários</td>
-          <td>Funcionário já cadastrado no LadFood</td>
-        </tr>
-        <tr>
-          <td><strong>Cobrança</strong></td>
-          <td>Por funcionário, fatura separada</td>
-          <td>Na mensalidade que o cliente já paga</td>
-        </tr>
-        <tr>
-          <td><strong>Escalas de restaurante</strong></td>
-          <td>Genéricas, configuração trabalhosa</td>
-          <td>6x1, dois turnos e 12x36 como modelo pronto</td>
-        </tr>
-        <tr>
-          <td><strong>Suporte</strong></td>
-          <td>Outro fornecedor, outro canal</td>
-          <td>Mesmo suporte do sistema</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <h3>Contra o que estamos competindo</h3>
+    <div class="rolagem">
+      <table class="t">
+        <thead><tr><th></th><th>SaaS de ponto avulso</th><th>LAD Ponto</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Equipamento</strong></td><td>Relógio biométrico ou app próprio</td><td>A tela que já está no salão</td></tr>
+          <tr><td><strong>Cadastro</strong></td><td>Refazer o quadro de funcionários</td><td>Funcionário já cadastrado no LadFood</td></tr>
+          <tr><td><strong>Cobrança</strong></td><td>Por funcionário, fatura separada</td><td>Na mensalidade que o cliente já paga</td></tr>
+          <tr><td><strong>Escalas de restaurante</strong></td><td>Genéricas, configuração trabalhosa</td><td>6x1, dois turnos e 12x36 como modelo pronto</td></tr>
+          <tr><td><strong>Suporte</strong></td><td>Outro fornecedor, outro canal</td><td>Mesmo suporte do sistema</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-  <hr class="hr">
-
-  <h2><span class="num">7</span> Para o time comercial</h2>
-
-  <div class="internal">
-    <span class="tag-int">Uso interno</span>
-
-    <h3>Quem é o cliente certo para a primeira conversa</h3>
-    <ul>
-      <li>Quadro acima de 15 funcionários — abaixo disso a dor é pequena e a objeção é preço.</li>
-      <li>Quem já reclamou de controle de horário, escala ou hora extra no suporte.</li>
-      <li>Quem tem tablet ou totem no salão: a demonstração é imediata, sem instalar nada.</li>
-      <li>Quem já passou por reclamação trabalhista — esse cliente entende o argumento em um minuto.</li>
+    <h3>Quem é o cliente certo</h3>
+    <ul class="lista">
+      <li>Quadro acima de 15 funcionários — abaixo disso a dor é pequena e a objeção é preço</li>
+      <li>Quem já reclamou de controle de horário, escala ou hora extra no suporte</li>
+      <li>Quem tem tablet ou totem no salão: a demonstração é imediata, sem instalar nada</li>
+      <li>Quem já passou por reclamação trabalhista — entende o argumento em um minuto</li>
     </ul>
 
     <h3>Perguntas para qualificar</h3>
-    <ul>
+    <ul class="lista">
       <li>Como vocês controlam horário de entrada e saída hoje?</li>
       <li>Quem monta a escala, e quanto tempo isso leva por mês?</li>
       <li>Já teve discussão de hora extra com funcionário?</li>
@@ -465,67 +208,47 @@
 
     <h3>Objeções e resposta</h3>
     <div class="qa">
-      <div class="q">"Isso é homologado no Ministério do Trabalho?"</div>
-      <div class="a">
-        Não, e não vendemos como tal. É controle de jornada e blindagem probatória. Até 20
-        funcionários a CLT não exige registro; acima disso vale como gestão e o contador confirma
-        o que a fiscalização pede. Prometer homologação é o único jeito de transformar essa venda
-        em problema.
-      </div>
+      <div class="p">"Isso é homologado no Ministério do Trabalho?"</div>
+      <div class="r">Não, e não vendemos como tal. É controle de jornada e blindagem probatória. Até 20 funcionários a CLT não exige registro; acima disso vale como gestão, e o contador confirma o que a fiscalização pede. Prometer homologação é o único jeito de transformar essa venda em problema.</div>
     </div>
     <div class="qa">
-      <div class="q">"Meu funcionário vai bater ponto para o colega."</div>
-      <div class="a">
-        O PIN é pessoal e entregue direto ao funcionário — o gestor troca, mas não vê o PIN atual.
-        Para quem quiser um passo além, a foto na batida é ligada por parâmetro e fica junto do
-        registro.
-      </div>
+      <div class="p">"Meu funcionário vai bater ponto para o colega."</div>
+      <div class="r">O PIN é pessoal e entregue direto ao funcionário — o gestor troca, mas não vê o PIN atual. Para quem quiser um passo além, a foto na batida é ligada por parâmetro e fica junto do registro.</div>
     </div>
     <div class="qa">
-      <div class="q">"E se cair a internet no meio do turno?"</div>
-      <div class="a">
-        A batida fica no aparelho e sobe sozinha depois, com a hora original. O funcionário vê na
-        tela que a batida está na fila.
-      </div>
+      <div class="p">"E se cair a internet no meio do turno?"</div>
+      <div class="r">A batida fica no aparelho e sobe sozinha depois, com a hora original. O funcionário vê na tela que a batida está na fila.</div>
     </div>
     <div class="qa">
-      <div class="q">"Substitui meu contador?"</div>
-      <div class="a">
-        Não. Entrega as horas apuradas e o arquivo de exportação. Folha, DSR, férias e eSocial
-        seguem com o contador.
-      </div>
+      <div class="p">"Substitui meu contador?"</div>
+      <div class="r">Não. Entrega as horas apuradas e o arquivo de exportação. Folha, DSR, férias e eSocial seguem com o contador.</div>
     </div>
     <div class="qa">
-      <div class="q">"Consigo ajustar o ponto de quem esqueceu?"</div>
-      <div class="a">
-        Sim, com motivo, e o original continua visível riscado ao lado. Vale explicar que isso é
-        proteção do cliente, não limitação: registro que o empregador apaga não sustenta defesa.
-      </div>
+      <div class="p">"Consigo ajustar o ponto de quem esqueceu?"</div>
+      <div class="r">Sim, com motivo, e o original continua visível riscado ao lado. Vale explicar que isso é proteção do cliente, não limitação: registro que o empregador apaga não sustenta defesa.</div>
     </div>
 
     <h3>Antes de fechar</h3>
-    <ul>
-      <li>Confirmar disponibilidade e prazo com o time de produto — o módulo está em validação.</li>
-      <li>Alinhar o valor na mensalidade com a diretoria antes de citar número ao cliente.</li>
-      <li>Perguntar o sistema de folha do contador; isso direciona a evolução da exportação.</li>
+    <ul class="lista">
+      <li>Confirmar disponibilidade e prazo com o time de produto — o módulo está em validação</li>
+      <li>Alinhar o valor na mensalidade com a diretoria antes de citar número ao cliente</li>
+      <li>Perguntar o sistema de folha do contador; isso direciona a evolução da exportação</li>
     </ul>
   </div>
+</section>
 
-  <hr class="hr">
-
-  <h2><span class="num">8</span> Resumo em uma frase</h2>
-
-  <p style="font-size: 1.08rem;">
-    O restaurante já tem a tela, já tem o funcionário cadastrado e já paga a mensalidade — o LAD
-    Ponto transforma isso em controle de jornada que se sustenta, sem contratar outro sistema e
-    sem comprar equipamento.
-  </p>
-
-  <footer>
-    Lad Sistemas &mdash; LAD Ponto &middot; Material de apoio comercial<br>
-    Módulo em validação. Confirmar disponibilidade com o time de produto antes de assumir prazo com o cliente.
-  </footer>
+<section>
+  <h2><span class="num">7</span> Em uma frase</h2>
+  <div class="fecho">
+    <p>O restaurante já tem a tela, já tem o funcionário cadastrado e já paga a mensalidade — o LAD Ponto transforma isso em controle de jornada que se sustenta, sem contratar outro sistema e sem comprar equipamento.</p>
+  </div>
+</section>
 
 </div>
+
+<footer>
+  Lad Sistemas · LAD Ponto · material de apoio comercial<br>
+  Módulo em validação. Confirmar disponibilidade com o time de produto antes de assumir prazo com o cliente.
+</footer>
 </body>
 </html>
