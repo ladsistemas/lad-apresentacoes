@@ -83,7 +83,44 @@
     </div>
   </div>
 
+  <div class="quiosque">
+    <div class="tablet">
+      <span class="rot-passo">1 · o funcionário chega</span>
+      <div class="tela-int">
+        <span class="marca-tela">Ponto</span>
+        <div class="pergunta">Digite seu código</div>
+        <div class="campo">4 8 • •</div>
+        <div class="teclado">
+          <div class="tecla">1</div><div class="tecla">2</div><div class="tecla">3</div>
+          <div class="tecla">4</div><div class="tecla">5</div><div class="tecla">6</div>
+          <div class="tecla">7</div><div class="tecla">8</div><div class="tecla">9</div>
+          <div class="tecla apaga">apagar</div><div class="tecla">0</div><div class="tecla ok">OK</div>
+        </div>
+      </div>
+    </div>
+    <div class="tablet">
+      <span class="rot-passo">2 · menos de dez segundos depois</span>
+      <div class="tela-int">
+        <div class="comprov">
+          <div class="certo">✓</div>
+          <div class="titulo-c">Entrada registrada</div>
+          <div class="nome">Ana Paula</div>
+          <div class="hora">08:02</div>
+          <div class="hoje">Suas batidas de hoje<br><span class="marc entrada">08:02</span></div>
+          <div class="rodape">
+            NSR 1042<br>
+            a7f3c91e40b8d215<br>
+            RESTAURANTE MODELO
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+
   <p>Teclado numérico grande, sem login e sem teclado físico. A tela mostra o primeiro nome, o horário previsto do dia e o que se espera agora — entrada ou saída — para o funcionário não errar o tipo da batida. Foto pela câmera é opcional, ligada por parâmetro da empresa.</p>
+
+  <p>O comprovante traz o <strong>NSR</strong> — o número sequencial daquela batida — e o começo da assinatura que a liga à anterior. É o que o funcionário leva como recibo e o que sustenta o registro depois.</p>
 
   <div class="cartoes">
     <div class="cartao">
@@ -103,6 +140,44 @@
 
 <section id="gestor">
   <h2><span class="num">3</span> O que o gestor recebe</h2>
+  <p class="lead">A pergunta das 11h da manhã: quem está no salão agora, e quem faltou.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">app / ponto / painel</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Painel do dia</div>
+      <div class="desc">Situação de cada funcionário escalado · quinta-feira, 11:04</div>
+      <div class="chips">
+        <span class="chip sel">Todos 14</span><span class="chip">Trabalhando 9</span>
+        <span class="chip">Atrasados 2</span><span class="chip">Pendentes 1</span>
+        <span class="chip">Faltas 1</span><span class="chip">Folga 3</span>
+      </div>
+      <table class="t">
+        <thead><tr><th>Funcionário</th><th>Jornada</th><th>Previsto</th><th>Marcações</th><th class="n">Trabalhado</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr><td>Ana Paula</td><td>6x1 manhã</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">08:02</span></td>
+            <td class="n">3h02</td><td><span class="selo ok">trabalhando</span></td></tr>
+          <tr><td>Carlos Eduardo</td><td>6x1 manhã</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">08:37</span></td>
+            <td class="n">2h27</td><td><span class="selo ok">trabalhando</span> <span class="selo atencao">atraso 0h37</span></td></tr>
+          <tr><td>Juliana Reis</td><td>12x36 cozinha</td><td>07:00 – 19:00</td>
+            <td><span class="marc entrada">06:58</span> <span class="marc">11:30</span></td>
+            <td class="n">4h32</td><td><span class="selo atencao">em intervalo</span></td></tr>
+          <tr><td>Marcos Vinícius</td><td>6x1 tarde</td><td>10:00 – 18:20</td>
+            <td>—</td>
+            <td class="n">—</td><td><span class="selo ruim">não apareceu</span></td></tr>
+          <tr><td>Rafael Nunes</td><td>5x2 noite</td><td>folga</td>
+            <td>—</td>
+            <td class="n">—</td><td><span class="selo neutro">folga</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
 
   <div class="cartoes">
     <div class="cartao">
@@ -157,6 +232,39 @@
     <li><strong>Numeração sequencial e encadeada.</strong> Cada batida recebe um número que não repete e não pula, com assinatura ligada à anterior. Alteração feita direto no banco fica detectável.</li>
   </ul>
   <p>A hora que vale é sempre a do servidor. O relógio do tablet é só guardado para comparação, porque o relógio do balcão qualquer um ajusta.</p>
+
+  <h3>Como isso aparece no espelho</h3>
+  <p>No dia 14 o funcionário esqueceu a saída e o gestor incluiu a marcação. A original não some, a incluída fica marcada com <span class="mono">*</span>, e a desconsiderada continua visível riscada.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">app / ponto / espelho</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Espelho de ponto — Ana Paula</div>
+      <div class="desc">Julho · 6x1 manhã · saldo do período +4h18</div>
+      <table class="t">
+        <thead><tr><th>Dia</th><th>Previsto</th><th>Marcações</th><th class="n">Trabalhado</th><th class="n">Extra</th><th>Situação</th></tr></thead>
+        <tbody>
+          <tr><td>12/07 qua</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">08:02</span><span class="marc">12:05</span><span class="marc entrada">13:01</span><span class="marc">16:22</span></td>
+            <td class="n">7h24</td><td class="n">—</td><td><span class="selo ok">normal</span></td></tr>
+          <tr><td>13/07 qui</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">08:31</span><span class="marc">12:00</span><span class="marc entrada">12:58</span><span class="marc">16:20</span></td>
+            <td class="n">6h51</td><td class="n">—</td><td><span class="selo atencao">atraso 0h31</span></td></tr>
+          <tr><td>14/07 sex</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">07:58</span><span class="marc">12:03</span><span class="marc entrada">12:59</span><span class="marc manual">16:20*</span></td>
+            <td class="n">7h26</td><td class="n">—</td><td><span class="selo atencao">marcação incluída</span></td></tr>
+          <tr><td>15/07 sáb</td><td>08:00 – 16:20</td>
+            <td><span class="marc entrada">08:00</span><span class="marc riscada">11:58</span><span class="marc">12:31</span><span class="marc entrada">13:29</span><span class="marc">18:44</span></td>
+            <td class="n">8h46</td><td class="n">2h24</td><td><span class="selo ok">extra</span></td></tr>
+          <tr><td>16/07 dom</td><td>folga</td><td>—</td><td class="n">—</td><td class="n">—</td><td><span class="selo neutro">folga</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos. <span class="mono">*</span> marcação incluída pelo gestor · riscada = desconsiderada, com autor e motivo no histórico.</p>
 </section>
 
 <section id="legal">

@@ -202,6 +202,50 @@ ul.lista strong { font-weight: 700; }
 .chip { font-size: .75rem; padding: 5px 12px; border-radius: 99px; border: 1px solid var(--linha); background: var(--fundo); }
 .chip.sel { background: var(--azul); color: #fff; border-color: var(--azul); }
 
+/* ---------- mockup de tablet (quiosque do ponto) ---------- */
+
+.quiosque { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 22px 0 8px; }
+.tablet { background: #1d1d2b; border-radius: 18px; padding: 14px; box-shadow: var(--sombra); }
+.tablet .tela-int { background: var(--branco); border-radius: 10px; padding: 20px 18px; min-height: 300px; display: flex; flex-direction: column; }
+.tablet .rot-passo {
+  font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px;
+  color: #9b9bb0; margin: 0 4px 10px; display: block;
+}
+.tablet .marca-tela { font-size: .7rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--laranja); }
+.tablet .pergunta { font-size: 1.15rem; font-weight: 700; margin: 6px 0 14px; }
+.tablet .campo {
+  border: 2px solid var(--linha); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 1.5rem; letter-spacing: 6px; color: var(--texto);
+}
+.teclado { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: auto; }
+.tecla {
+  background: var(--fundo); border: 1px solid var(--linha); border-radius: 10px;
+  padding: 12px 0; text-align: center; font-size: 1.15rem; font-weight: 600;
+}
+.tecla.ok { background: var(--laranja); border-color: var(--laranja); color: #fff; }
+.tecla.apaga { color: var(--texto-fraco); font-size: .95rem; }
+
+.comprov { text-align: center; margin: auto 0; }
+.comprov .certo {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--ok-fundo); color: var(--ok);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700;
+}
+.comprov .titulo-c { font-size: 1.2rem; font-weight: 700; margin: 12px 0 2px; }
+.comprov .nome { font-size: .95rem; color: var(--texto-fraco); }
+.comprov .hora { font-size: 2.6rem; font-weight: 700; letter-spacing: -1.5px; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+.comprov .rodape { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--linha); font-size: .7rem; color: var(--texto-fraco); font-family: 'JetBrains Mono', ui-monospace, monospace; line-height: 1.7; }
+.comprov .hoje { margin-top: 14px; font-size: .78rem; color: var(--texto-fraco); }
+
+/* marcacoes do espelho: a original riscada ao lado da correcao */
+.marc {
+  display: inline-block; font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: .74rem; font-weight: 600; padding: 3px 8px; border-radius: 6px; margin-right: 4px;
+  background: var(--fundo); color: var(--texto);
+}
+.marc.entrada { background: var(--ok-fundo); color: var(--ok); }
+.marc.manual { background: var(--laranja-claro); color: var(--laranja); }
+.marc.riscada { text-decoration: line-through; opacity: .55; }
+
 /* ---------- tabelas ---------- */
 
 .rolagem { overflow-x: auto; margin: 18px 0; }
@@ -216,6 +260,7 @@ table.t td.n { text-align: right; font-family: 'JetBrains Mono', ui-monospace, m
 .rolagem table.t { border: 1px solid var(--linha); border-radius: 12px; }
 
 .selo { display: inline-block; font-size: .68rem; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.selo.neutro { background: var(--fundo); color: var(--texto-fraco); }
 .selo.ok { background: var(--ok-fundo); color: var(--ok); }
 .selo.atencao { background: var(--atencao-fundo); color: var(--atencao); }
 .selo.ruim { background: var(--ruim-fundo); color: var(--ruim); }
