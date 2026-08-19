@@ -53,7 +53,7 @@
   <p class="lead">O módulo prepara o que o arquivo do seu contador exige: a classificação de cada produto, as conversões de embalagem e a conferência da sua numeração fiscal.</p>
 
   <ul class="lista">
-    <li>O módulo precisa estar <strong>ativo para a sua empresa</strong>. Se o menu <strong>SPED</strong> não aparece, fale com o suporte da LAD.</li>
+    <li>O módulo precisa estar <strong>ativo para a sua empresa</strong>. Se o grupo <strong>Fiscal</strong> não aparece no menu, fale com o suporte da LAD.</li>
     <li><strong>Permissão "spedFiscal"</strong> — abre e consulta as quatro telas.</li>
     <li><strong>Permissão "spedFiscalGerenciar"</strong> — permite alterar, aceitar sugestão e aplicar em lote. Sem ela, as telas ficam só de leitura.</li>
     <li>As sugestões nascem das <strong>notas de entrada que o sistema já lê</strong>. Quanto mais notas de compra recebidas, menos trabalho manual.</li>
@@ -62,6 +62,23 @@
   <div class="aviso info">
     <p><strong>O que o módulo nunca faz sozinho:</strong> gravar uma sugestão sem clique, inutilizar número junto ao fisco (isso continua na tela <em>Fiscal &gt; Inutilizar Notas</em>) ou transmitir qualquer coisa para a Receita.</p>
   </div>
+
+  <h3>Onde fica: endereço e menu</h3>
+  <p>O módulo vive no <strong>LadFood pelo navegador</strong>, em <span class="mono">www.ladfood.com.br/app</span> — mesmo endereço e mesmo login do dia a dia. Se a sua loja acessa por um endereço próprio, troque só o domínio: o caminho depois de <span class="mono">/app</span> é igual.</p>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Tela</th><th>Caminho no menu</th><th>Endereço direto</th></tr></thead>
+      <tbody>
+        <tr><td>Cadastro fiscal</td><td>Fiscal &gt; Cadastro fiscal</td><td class="mono">/app/sped/itens</td></tr>
+        <tr><td>Unidades e conversões</td><td>Fiscal &gt; Unidades e conversões</td><td class="mono">/app/sped/unidades</td></tr>
+        <tr><td>Numeração fiscal</td><td>Fiscal &gt; Numeração fiscal</td><td class="mono">/app/sped/numeracao</td></tr>
+        <tr><td>Pré-validação</td><td>Fiscal &gt; Pré-validação</td><td class="mono">/app/sped/pre-validacao</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="legenda">Os endereços diretos funcionam com a sessão já aberta e servem para salvar como favorito: <span class="mono">https://www.ladfood.com.br/app/sped/itens</span>.</p>
 
   <h3>Já está disponível para mim?</h3>
   <p>Entre no LadFood pelo navegador e olhe o menu lateral.</p>
@@ -90,7 +107,7 @@
     <div class="passo">
       <div class="n">1</div>
       <h4>Aceite o que as notas já responderam <span class="legenda">5 min</span></h4>
-      <p><em>SPED &gt; Cadastro fiscal</em>, filtro <strong>Sem NCM</strong>. No aviso azul, clique em <strong>Selecionar todas</strong> e depois em <strong>Aceitar a sugestão dos N</strong>. A contagem cai na hora.</p>
+      <p><em>Fiscal &gt; Cadastro fiscal</em>, filtro <strong>Sem NCM</strong>. No aviso azul, clique em <strong>Selecionar todas</strong> e depois em <strong>Aceitar a sugestão dos N</strong>. A contagem cai na hora.</p>
     </div>
     <div class="passo">
       <div class="n">2</div>
@@ -105,17 +122,17 @@
     <div class="passo">
       <div class="n">4</div>
       <h4>Conversões de embalagem <span class="legenda">5 min</span></h4>
-      <p><em>SPED &gt; Unidades e conversões</em>: comece pelo <strong>Confirmar as N que batem ✓</strong>, depois resolva os cartões amarelos e as unidades marcadas com "⚠ sem equivalente".</p>
+      <p><em>Fiscal &gt; Unidades e conversões</em>: comece pelo <strong>Confirmar as N que batem ✓</strong>, depois resolva os cartões amarelos e as unidades marcadas com "⚠ sem equivalente".</p>
     </div>
     <div class="passo">
       <div class="n">5</div>
       <h4>Numeração do mês passado <span class="legenda">5 min</span></h4>
-      <p><em>SPED &gt; Numeração fiscal</em>: escolha a competência, <strong>Verificar agora</strong>, trate os <strong>Pendentes</strong> pelo link <em>decidir</em>. Sobrou buraco? <strong>Gerar proposta</strong> e leve os números para <em>Fiscal &gt; Inutilizar Notas</em>.</p>
+      <p><em>Fiscal &gt; Numeração fiscal</em>: escolha a competência, <strong>Verificar agora</strong>, trate os <strong>Pendentes</strong> pelo link <em>decidir</em>. Sobrou buraco? <strong>Gerar proposta</strong> e leve os números para <em>Fiscal &gt; Inutilizar Notas</em>.</p>
     </div>
     <div class="passo fim">
       <div class="n">6</div>
       <h4>Pré-validação <span class="legenda">2 min</span></h4>
-      <p><em>SPED &gt; Pré-validação</em>, mesma competência, <strong>Verificar</strong>. Enquanto der <strong>Bloqueia</strong>, abra <em>ver amostra</em> e resolva. Em <strong>OK</strong>, a competência está fechada do seu lado.</p>
+      <p><em>Fiscal &gt; Pré-validação</em>, mesma competência, <strong>Verificar</strong>. Enquanto der <strong>Bloqueia</strong>, abra <em>ver amostra</em> e resolva. Em <strong>OK</strong>, a competência está fechada do seu lado.</p>
     </div>
   </div>
 
@@ -154,7 +171,7 @@
 
 <section id="cadastro">
   <h2><span class="num">3</span> Cadastro fiscal dos produtos</h2>
-  <p class="lead">Menu <strong>SPED &gt; Cadastro fiscal</strong>. É o que o governo precisa saber sobre cada produto: a começar pelo NCM, o código de 8 dígitos que a Receita usa para classificar o item.</p>
+  <p class="lead">Menu <strong>Fiscal &gt; Cadastro fiscal</strong>. É o que o governo precisa saber sobre cada produto: a começar pelo NCM, o código de 8 dígitos que a Receita usa para classificar o item.</p>
 
   <div class="tela">
     <div class="chrome">
@@ -317,7 +334,7 @@
 
 <section id="unidades">
   <h2><span class="num">4</span> Unidades e conversões</h2>
-  <p class="lead">Menu <strong>SPED &gt; Unidades e conversões</strong>. Quando a caixa que você compra vira a unidade que você controla no estoque, o governo quer saber quantas cabem dentro — e o sistema já descobriu isso nas suas notas.</p>
+  <p class="lead">Menu <strong>Fiscal &gt; Unidades e conversões</strong>. Quando a caixa que você compra vira a unidade que você controla no estoque, o governo quer saber quantas cabem dentro — e o sistema já descobriu isso nas suas notas.</p>
 
   <div class="cartoes">
     <div class="cartao bom">
@@ -341,7 +358,7 @@
 
 <section id="numeracao">
   <h2><span class="num">5</span> Conferência de numeração</h2>
-  <p class="lead">Menu <strong>SPED &gt; Numeração fiscal</strong>. Toda NFC-e consome um número em sequência. Quando um número é queimado e não vira documento — falha de comunicação, rejeição, queda de energia — ele precisa ser inutilizado junto ao fisco.</p>
+  <p class="lead">Menu <strong>Fiscal &gt; Numeração fiscal</strong>. Toda NFC-e consome um número em sequência. Quando um número é queimado e não vira documento — falha de comunicação, rejeição, queda de energia — ele precisa ser inutilizado junto ao fisco.</p>
 
   <p>Escolha a competência e clique em <strong>Verificar agora</strong>. O sistema compara os números emitidos com o que deveria existir no período.</p>
 
@@ -385,7 +402,7 @@
 
 <section id="validacao">
   <h2><span class="num">6</span> Pré-validação</h2>
-  <p class="lead">Menu <strong>SPED &gt; Pré-validação</strong>. A última parada antes de falar com o contador. Escolha a competência, clique em <strong>Verificar</strong> e leia o veredito.</p>
+  <p class="lead">Menu <strong>Fiscal &gt; Pré-validação</strong>. A última parada antes de falar com o contador. Escolha a competência, clique em <strong>Verificar</strong> e leia o veredito.</p>
 
   <div class="cartoes">
     <div class="cartao bom">
