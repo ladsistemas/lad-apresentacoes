@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual do SPED Fiscal — para o contador</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/apresentacao.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">Manual · SPED Fiscal · Contador</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>O que o LadFood prepara —<br>e o que continua sendo seu.</h1>
+    <p class="sub">Documento curto para quem escritura. De onde sai cada registro, o que exigir do cliente antes de fechar a competência e os pontos em que o cadastro engana quem confia no campo preenchido.</p>
+
+    <div class="essencial">
+      <div class="rot">O essencial</div>
+      <ul>
+        <li><strong>NCM preenchido não é NCM classificado.</strong> O sistema separa o próprio do herdado da tributação — e mostra qual é qual.</li>
+        <li><strong>A NFC-e do LadFood não carrega grupo de PIS/COFINS.</strong> Essa informação só existe no cadastro, e a natureza da receita quem informa é você.</li>
+        <li><strong>Peça a pré-validação da competência antes de fechar:</strong> ela lista, com amostra, o que impediria o arquivo de fechar certo.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<nav class="indice">
+  <div class="wrap">
+    <a href="#papeis">Quem faz o quê</a>
+    <a href="#registros">De onde sai cada registro</a>
+    <a href="#fechar">Antes de fechar</a>
+    <a href="#regras">Pré-validação</a>
+    <a href="#atencao">Pontos de atenção</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="papeis">
+  <h2><span class="num">1</span> Quem faz o quê</h2>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Quem</th><th>O quê</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Restaurante</strong><br>(nas telas do LadFood)</td><td>Classifica o item (NCM, tipo, unidade, CEST, CST de PIS/COFINS), confirma os fatores de conversão de embalagem e trata a numeração fiscal</td></tr>
+        <tr><td><strong>LadFood</strong></td><td>Lê os XMLs de entrada, propõe classificação a partir do que os fornecedores declararam, detecta buraco e duplicidade de numeração e roda a pré-validação da competência</td></tr>
+        <tr><td><strong>LAD</strong><br>(serviço fiscal)</td><td>Monta o arquivo a partir do cadastro e dos documentos da competência</td></tr>
+        <tr><td><strong>Contador</strong></td><td>Informa o que só existe do seu lado (natureza da receita, tratamento de duplicidade), valida e entrega</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="aviso info">
+    <p>O arquivo que o módulo alimenta hoje é a <strong>EFD ICMS/IPI</strong>. Os dados de PIS/COFINS já são coletados no cadastro, mas para a EFD Contribuições — por isso a pré-validação trata a falta deles como aviso, não como bloqueio.</p>
+  </div>
+
+  <div class="aviso atencao">
+    <p><strong>Simples Nacional:</strong> confirme com a LAD antes de contar com o arquivo — a geração é recusada para esse regime.</p>
+  </div>
+</section>
+
+<section id="registros">
+  <h2><span class="num">2</span> De onde sai cada registro</h2>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Registro</th><th>Origem no LadFood</th></tr></thead>
+      <tbody>
+        <tr><td class="mono"><strong>0190</strong></td><td>Tela <em>Unidades e conversões</em>, seção "Suas unidades": de-para entre a unidade usada no sistema e a sigla do arquivo</td></tr>
+        <tr><td class="mono"><strong>0200</strong></td><td>Tela <em>Cadastro fiscal</em>: NCM, tipo do item (00 a 10), unidade e CEST, por produto</td></tr>
+        <tr><td class="mono"><strong>0220</strong></td><td>Tela <em>Unidades e conversões</em>: fator da unidade de compra para a de estoque, aprendido das notas de entrada e confirmado pelo cliente</td></tr>
+        <tr><td class="mono"><strong>C100 / C170</strong></td><td>Notas de entrada (NF-e 55) recebidas e lidas pelo sistema, com o item vinculado ao produto do cadastro</td></tr>
+        <tr><td class="mono"><strong>Saídas</strong></td><td>NFC-e/NF-e emitidas na competência: chave, modelo, série, número, situação e indicador de contingência</td></tr>
+        <tr><td class="mono"><strong>C175, M410/M810</strong></td><td>Dependem do CST de PIS/COFINS e da natureza da receita <strong>do cadastro</strong> — a NFC-e emitida pelo LadFood não carrega esses grupos</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="fechar">
+  <h2><span class="num">3</span> Antes de fechar a competência</h2>
+  <p class="lead">Peça ao cliente que rode, no mês de referência:</p>
+
+  <div class="passos">
+    <div class="passo">
+      <div class="n">1</div>
+      <h4>Pré-validação em OK</h4>
+      <p>Ou, no máximo, "Avisa" — com os avisos já conversados com você.</p>
+    </div>
+    <div class="passo">
+      <div class="n">2</div>
+      <h4>Numeração sem pendente</h4>
+      <p>Nenhuma ocorrência em situação "Pendente" no período.</p>
+    </div>
+    <div class="passo">
+      <div class="n">3</div>
+      <h4>Conversões confirmadas</h4>
+      <p>Sem sugestão de fator de embalagem esperando confirmação.</p>
+    </div>
+  </div>
+
+  <div class="aviso info">
+    <p><strong>Como o arquivo chega:</strong> a geração não acontece nas telas do restaurante. O LadFood envia o cadastro e a relação dos documentos da competência para o serviço fiscal da LAD, que monta o arquivo lendo os XMLs já armazenados. <strong>Combine a entrega do arquivo com o suporte da LAD</strong> — não há, hoje, botão de download na tela.</p>
+  </div>
+</section>
+
+<section id="regras">
+  <h2><span class="num">4</span> As regras da pré-validação</h2>
+  <p class="lead">Cada regra abre uma amostra de até 20 ocorrências com item, fornecedor, chave de acesso e data de emissão — o suficiente para apontar ao cliente o que corrigir.</p>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Regra</th><th>Veredito</th><th>Leitura contábil</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Item sem produto</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>Item de nota de entrada sem produto vinculado: geraria C170 sem o 0200 correspondente</td>
+        </tr>
+        <tr>
+          <td><strong>Item sem NCM</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>Item vinculado, mas sem NCM resolvido nem no produto nem na tributação</td>
+        </tr>
+        <tr>
+          <td><strong>Nota não ingerida</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>Nota de compra da empresa que não terminou de entrar (XML incompleto ou sem itens). É o caso mais perigoso: a nota inteira sumiria do bloco C sem aparecer em contagem nenhuma — arquivo consistente e errado</td>
+        </tr>
+        <tr>
+          <td><strong>Nota com tratamento especial</strong></td>
+          <td><span class="selo atencao">Avisa</span></td>
+          <td>Nota cancelada, denegada ou de devolução: código de situação próprio no C100, ou CFOP de devolução. O sistema não decide sozinho — é a conferência que cabe a você</td>
+        </tr>
+        <tr>
+          <td><strong>Produto sem PIS/COFINS</strong></td>
+          <td><span class="selo atencao">Avisa</span></td>
+          <td>Produto ativo sem CST de saída, ou com CST de receita não tributada sem a natureza da receita. Afeta a EFD Contribuições, não o ICMS/IPI</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Nota que não é compra da empresa — nota própria, destinatário divergente, modelo fora de 55/65 — não entra em regra nenhuma, por não haver o que corrigir.</p>
+</section>
+
+<section id="atencao">
+  <h2><span class="num">5</span> Pontos de atenção</h2>
+
+  <div class="aviso dor">
+    <p><strong>NCM preenchido não é NCM classificado.</strong> Sem NCM próprio, o produto usa o da tributação vinculada, que atende dezenas ou centenas de outros produtos. O LadFood separa os dois casos e marca o herdado como "a conferir". Ao receber o cadastro, olhe a proporção de itens nesse estado antes de considerar a classificação pronta.</p>
+  </div>
+
+  <ul class="lista">
+    <li><strong>A sugestão de NCM vem das notas dos fornecedores</strong> — o valor mais frequente declarado para aquele item, com a contagem de notas. Quando fornecedores divergem, o sistema não escolhe: fica para decisão humana.</li>
+    <li><strong>Natureza da receita é informação sua.</strong> Para os CST 04, 06, 07, 08 e 09 o sistema exige o código de 4 dígitos das tabelas 4.3.10/4.3.11 e não grava o CST sem ele. Passar ao cliente a lista aplicável ao mix dele é o que destrava a coluna de PIS/COFINS.</li>
+    <li><strong>A competência usa o fuso de São Paulo.</strong> Documento emitido nas últimas horas do último dia do mês entra na competência civil correta, não na do horário UTC.</li>
+    <li><strong>O sistema nunca inutiliza.</strong> Ele detecta o buraco, classifica, agrupa os pendentes em faixas e sugere a justificativa; a inutilização continua na tela manual, com confirmação humana.</li>
+    <li><strong>Duplicidade não é caso de inutilização.</strong> Mesmo número ou chave usado duas vezes: o sistema recusa essa marcação e devolve para tratamento contábil — cancelamento ou denúncia espontânea, conforme sua orientação.</li>
+    <li><strong>A conferência ignora os últimos dias do período</strong> analisado, para que PDV ainda não sincronizado não gere falso positivo. A tela informa até que data a análise foi feita.</li>
+  </ul>
+
+  <div class="fecho">
+    <p>O cadastro genérico entra e o arquivo genérico sai. O que o módulo muda é a origem da classificação: em vez do código herdado que ninguém conferiu, o que os fornecedores do cliente já declararam — item a item, com a contagem de notas ao lado.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>Lad Sistemas · manual do módulo SPED Fiscal para o contador · <a href="../manual-sped/" style="color:var(--laranja)">versão para o restaurante</a></footer>
+
+</body>
+</html>

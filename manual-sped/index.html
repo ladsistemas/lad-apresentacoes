@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual do SPED Fiscal — rotina do restaurante</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/apresentacao.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">Manual · SPED Fiscal</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>SPED Fiscal no LadFood.<br>A rotina do mês, em quatro telas.</h1>
+    <p class="sub">Manual de uso para o restaurante. Cada tela é usada uma vez por mês — e a última delas é o semáforo que diz se a competência pode ir para o contador.</p>
+
+    <div class="essencial">
+      <div class="rot">O essencial</div>
+      <ul>
+        <li><strong>O sistema propõe, você confirma.</strong> Nada é gravado, inutilizado ou transmitido sozinho.</li>
+        <li><strong>A sugestão vem das suas notas:</strong> o NCM que os seus fornecedores já declararam, com a contagem de notas ao lado.</li>
+        <li><strong>Termine sempre pela Pré-validação.</strong> Enquanto ela mostrar "Bloqueia", o arquivo do mês não fecha certo.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<nav class="indice">
+  <div class="wrap">
+    <a href="#comecar">Antes de começar</a>
+    <a href="#rotina">A rotina do mês</a>
+    <a href="#cadastro">1. Cadastro fiscal</a>
+    <a href="#unidades">2. Unidades</a>
+    <a href="#numeracao">3. Numeração</a>
+    <a href="#validacao">4. Pré-validação</a>
+    <a href="#duvidas">Dúvidas</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="comecar">
+  <h2><span class="num">0</span> Antes de começar</h2>
+  <p class="lead">O módulo prepara o que o arquivo do seu contador exige: a classificação de cada produto, as conversões de embalagem e a conferência da sua numeração fiscal.</p>
+
+  <ul class="lista">
+    <li>O módulo precisa estar <strong>ativo para a sua empresa</strong>. Se o menu <strong>SPED</strong> não aparece, fale com o suporte da LAD.</li>
+    <li><strong>Permissão "spedFiscal"</strong> — abre e consulta as quatro telas.</li>
+    <li><strong>Permissão "spedFiscalGerenciar"</strong> — permite alterar, aceitar sugestão e aplicar em lote. Sem ela, as telas ficam só de leitura.</li>
+    <li>As sugestões nascem das <strong>notas de entrada que o sistema já lê</strong>. Quanto mais notas de compra recebidas, menos trabalho manual.</li>
+  </ul>
+
+  <div class="aviso info">
+    <p><strong>O que o módulo nunca faz sozinho:</strong> gravar uma sugestão sem clique, inutilizar número junto ao fisco (isso continua na tela <em>Fiscal &gt; Inutilizar Notas</em>) ou transmitir qualquer coisa para a Receita.</p>
+  </div>
+</section>
+
+<section id="rotina">
+  <h2><span class="num">1</span> A rotina do mês</h2>
+
+  <div class="passos">
+    <div class="passo">
+      <div class="n">1</div>
+      <h4>Cadastro fiscal</h4>
+      <p>Uma vez, no começo. Depois, só quando entrar produto novo.</p>
+    </div>
+    <div class="passo">
+      <div class="n">2</div>
+      <h4>Unidades e conversões</h4>
+      <p>Quando aparecer sugestão nova — embalagem nova nas notas.</p>
+    </div>
+    <div class="passo">
+      <div class="n">3</div>
+      <h4>Numeração fiscal</h4>
+      <p>Todo mês, depois de fechado o movimento.</p>
+    </div>
+    <div class="passo fim">
+      <div class="n">4</div>
+      <h4>Pré-validação</h4>
+      <p>Por último. É o semáforo antes de falar com o contador.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cadastro">
+  <h2><span class="num">2</span> Cadastro fiscal dos produtos</h2>
+  <p class="lead">Menu <strong>SPED &gt; Cadastro fiscal</strong>. É o que o governo precisa saber sobre cada produto: a começar pelo NCM, o código de 8 dígitos que a Receita usa para classificar o item.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span>
+      <span class="ponto" style="background:#ffbd2e"></span>
+      <span class="ponto" style="background:#28c840"></span>
+      <span class="url">app / sped / cadastro fiscal</span>
+    </div>
+    <div class="corpo">
+      <div class="titulo">Cadastro fiscal dos produtos</div>
+      <div class="desc">Filtre pela pendência, aceite a sugestão das notas e o produto sai da lista</div>
+
+      <div class="chips">
+        <span class="chip">Todos <strong>1.284</strong></span>
+        <span class="chip sel">Sem NCM <strong>331</strong></span>
+        <span class="chip">Sem tipo <strong>712</strong></span>
+        <span class="chip">A conferir <strong>604</strong></span>
+        <span class="chip">Sem PIS/COFINS <strong>489</strong></span>
+        <span class="chip">Completos <strong>349</strong></span>
+      </div>
+
+      <div class="rolagem">
+        <table class="t">
+          <thead>
+            <tr><th>Produto</th><th>NCM</th><th>Estado</th><th>Sugestão da nota</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Refrigerante lata 350 ml</td>
+              <td class="mono">22021000</td>
+              <td><span class="selo ok">próprio</span></td>
+              <td>—</td>
+              <td><span class="selo ok">✓ pronto</span></td>
+            </tr>
+            <tr>
+              <td>Queijo mussarela</td>
+              <td class="mono">21069090</td>
+              <td><span class="selo atencao">a conferir</span></td>
+              <td>💡 04061010 · 12 notas — <strong>aceitar</strong></td>
+              <td><span class="selo atencao">falta tipo</span></td>
+            </tr>
+            <tr>
+              <td>Embalagem 500 ml</td>
+              <td class="mono">—</td>
+              <td><span class="selo ruim">ausente</span></td>
+              <td>💡 39241000 · 8 notas — <strong>aceitar</strong></td>
+              <td><span class="selo atencao">falta NCM</span></td>
+            </tr>
+            <tr>
+              <td>Combo executivo</td>
+              <td class="mono">—</td>
+              <td><span class="selo ruim">ausente</span></td>
+              <td>fornecedores divergem — <strong>decidir</strong></td>
+              <td><span class="selo atencao">falta NCM, tipo</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p class="legenda">Tela do produto com dados ilustrativos.</p>
+
+  <h3>Os três estados do NCM</h3>
+  <p>Esta é a parte que mais confunde — e é onde está o ganho real.</p>
+
+  <div class="cartoes">
+    <div class="cartao bom">
+      <span class="marca">Estado 1</span>
+      <h4>Próprio</h4>
+      <p>Alguém classificou aquele item específico. É o único estado que se pode chamar de pronto.</p>
+    </div>
+    <div class="cartao">
+      <span class="marca">Estado 2</span>
+      <h4>Herdado — "a conferir"</h4>
+      <p>O campo está preenchido, mas o código veio da tributação do produto, que também vale para dezenas de outros. Precisa de conferência.</p>
+    </div>
+    <div class="cartao nao">
+      <span class="marca">Estado 3</span>
+      <h4>Ausente</h4>
+      <p>Não tem NCM por caminho nenhum. É o que realmente falta.</p>
+    </div>
+  </div>
+
+  <div class="aviso dor">
+    <p><strong>Por que isso importa:</strong> o estado do meio faz o cadastro <em>parecer</em> pronto quando não está. A nota sai, o cupom imprime — e o produto continua sem classificação própria.</p>
+  </div>
+
+  <h3>Aceitar a sugestão das notas</h3>
+  <p>Quando o sistema já viu aquele produto em notas de fornecedor, ele mostra o NCM mais frequente com a contagem de notas ao lado — nunca uma média. Você pode aceitar linha a linha, ou marcar as caixinhas e usar <strong>"Aceitar a sugestão dos N"</strong> na barra que aparece embaixo. O aviso do topo tem o atalho <strong>Selecionar todas</strong>.</p>
+
+  <div class="aviso atencao">
+    <p><strong>Quando fornecedores divergem, o sistema não escolhe.</strong> Se o mesmo produto aparece com NCM diferente em notas de fornecedores diferentes, ele fica fora da aplicação em lote e vai para decisão sua. Aplicar o mais frequente aí seria trocar um chute por outro.</p>
+  </div>
+
+  <h3>Aplicar o tipo em massa por categoria</h3>
+  <p>Produtos da mesma categoria quase sempre têm o mesmo tipo fiscal. O painel acima da lista sugere por categoria, e o fluxo tem três etapas de propósito:</p>
+
+  <div class="fluxo">
+    <div class="rot">Nunca aplica no filtro inteiro às cegas</div>
+    <div class="itens">
+      <span class="item">Cartão da categoria com a sugestão</span>
+      <span class="seta">→</span>
+      <span class="item">Revisar a lista nominal, desmarcando o que não vale</span>
+      <span class="seta">→</span>
+      <span class="item fim">Aplicar só nos que ficaram marcados</span>
+    </div>
+  </div>
+
+  <p>Quando a categoria já tem classificações diferentes, o cartão avisa e não sugere nada — o tipo é escolhido manualmente.</p>
+
+  <h3>A tabela de tipos</h3>
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Código</th><th>Tipo</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">00</td><td>Revenda — compra pronto e vende sem alterar</td></tr>
+        <tr><td class="mono">01</td><td>Matéria-prima — insumo que vira outro produto na cozinha</td></tr>
+        <tr><td class="mono">02</td><td>Embalagem</td></tr>
+        <tr><td class="mono">03</td><td>Produto em processo — está sendo preparado, ainda não terminou</td></tr>
+        <tr><td class="mono">04</td><td>Produto acabado — pronto, fabricado por você</td></tr>
+        <tr><td class="mono">05</td><td>Subproduto</td></tr>
+        <tr><td class="mono">06</td><td>Produto intermediário</td></tr>
+        <tr><td class="mono">07</td><td>Material de uso e consumo — não é vendido (papel, limpeza)</td></tr>
+        <tr><td class="mono">08</td><td>Ativo imobilizado — equipamento, móvel</td></tr>
+        <tr><td class="mono">09</td><td>Serviço</td></tr>
+        <tr><td class="mono">10</td><td>Outros insumos</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>PIS/COFINS e a natureza da receita</h3>
+  <p>Essa coluna decide se a receita do produto sai tributada, com alíquota zero ou monofásica. <strong>A informação não vem na nota</strong> — a NFC-e emitida pelo LadFood não carrega grupo de PIS nem de COFINS —, então ela só pode existir no cadastro. Um único campo grava os dois CST, porque na prática eles andam iguais.</p>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>CST</th><th>Significado</th><th>Exige natureza da receita?</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">01</td><td>Tributado (alíquota normal)</td><td><span class="selo neutro">não</span></td></tr>
+        <tr><td class="mono">02</td><td>Tributado (alíquota diferenciada)</td><td><span class="selo neutro">não</span></td></tr>
+        <tr><td class="mono">03</td><td>Tributado por unidade de medida</td><td><span class="selo neutro">não</span></td></tr>
+        <tr><td class="mono">04</td><td>Revenda monofásica (bebida fria, combustível)</td><td><span class="selo atencao">sim</span></td></tr>
+        <tr><td class="mono">05</td><td>Substituição tributária</td><td><span class="selo neutro">não</span></td></tr>
+        <tr><td class="mono">06</td><td>Alíquota zero</td><td><span class="selo atencao">sim</span></td></tr>
+        <tr><td class="mono">07</td><td>Isento</td><td><span class="selo atencao">sim</span></td></tr>
+        <tr><td class="mono">08</td><td>Sem incidência</td><td><span class="selo atencao">sim</span></td></tr>
+        <tr><td class="mono">09</td><td>Suspensão</td><td><span class="selo atencao">sim</span></td></tr>
+        <tr><td class="mono">49</td><td>Outras saídas</td><td><span class="selo neutro">não</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="aviso atencao">
+    <p><strong>A natureza da receita é o código de 4 dígitos que o seu contador informa</strong> (tabelas 4.3.10/4.3.11). Enquanto ela não for preenchida nos CST que a exigem, o campo fica com a borda vermelha e <strong>o CST não é gravado</strong>.</p>
+  </div>
+
+  <div class="aviso info">
+    <p><strong>"Completos" não inclui PIS/COFINS.</strong> Esse filtro significa "pronto para o cadastro do item", que alimenta o arquivo de ICMS/IPI. Um produto pode estar em "Completos" e ainda aparecer em "Sem PIS/COFINS" — são arquivos diferentes.</p>
+  </div>
+</section>
+
+<section id="unidades">
+  <h2><span class="num">3</span> Unidades e conversões</h2>
+  <p class="lead">Menu <strong>SPED &gt; Unidades e conversões</strong>. Quando a caixa que você compra vira a unidade que você controla no estoque, o governo quer saber quantas cabem dentro — e o sistema já descobriu isso nas suas notas.</p>
+
+  <div class="cartoes">
+    <div class="cartao bom">
+      <span class="marca">Cartão verde</span>
+      <h4>Todos concordam</h4>
+      <p>Todos os fornecedores usam o mesmo fator: "1 CX = 12 UN, visto em 47 notas". Já vêm pré-marcados — o botão "Confirmar as N que batem" resolve tudo de uma vez.</p>
+    </div>
+    <div class="cartao">
+      <span class="marca">Cartão amarelo</span>
+      <h4>Fornecedores divergem</h4>
+      <p>Provavelmente são embalagens de tamanhos diferentes. O cartão lista cada fornecedor com o seu fator e o número de notas, e pede que você escolha. Nunca entra no lote.</p>
+    </div>
+  </div>
+
+  <ul class="lista">
+    <li>O número é <strong>sempre editável antes de confirmar</strong> — corrigir e confirmar é o mesmo gesto.</li>
+    <li>A tabela <strong>"Já confirmadas"</strong> mostra a origem de cada fator (das notas ou digitado à mão) e o lápis reabre para correção.</li>
+    <li>No fim da tela, <strong>"Suas unidades"</strong>: o de-para entre a unidade do LadFood e a sigla que aparece no arquivo do fisco. Unidade marcada com "⚠ sem equivalente" precisa da sua decisão.</li>
+  </ul>
+</section>
+
+<section id="numeracao">
+  <h2><span class="num">4</span> Conferência de numeração</h2>
+  <p class="lead">Menu <strong>SPED &gt; Numeração fiscal</strong>. Toda NFC-e consome um número em sequência. Quando um número é queimado e não vira documento — falha de comunicação, rejeição, queda de energia — ele precisa ser inutilizado junto ao fisco.</p>
+
+  <p>Escolha a competência e clique em <strong>Verificar agora</strong>. O sistema compara os números emitidos com o que deveria existir no período.</p>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>O que aparece</th><th>Leitura</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="selo atencao">Buraco</span></td>
+          <td>Número que nunca virou documento. Vários seguidos viram "bloco de 8" — assinatura de lote que falhou. A etiqueta "contingência por perto" indica emissão em contingência ao redor.</td>
+          <td>Gerar a proposta e inutilizar na tela manual</td>
+        </tr>
+        <tr>
+          <td><span class="selo ruim">Duplicidade</span></td>
+          <td>O mesmo número/chave usado mais de uma vez — o documento saiu duas vezes. Não é buraco, é o oposto.</td>
+          <td>Tratamento contábil com o contador. O sistema não aceita marcar como "Inutilizada"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>As quatro situações</h3>
+  <ul class="lista">
+    <li><strong>Pendente</strong> — ainda não tratado. É o filtro que abre por padrão.</li>
+    <li><strong>Inutilizada</strong> — já inutilizada junto ao fisco.</li>
+    <li><strong>Justificada</strong> — tem explicação registrada no campo de observação.</li>
+    <li><strong>Ignorada</strong> — você decidiu deixar como está.</li>
+  </ul>
+
+  <h3>Proposta de inutilização</h3>
+  <p>O botão <strong>Gerar proposta</strong> agrupa os buracos pendentes em faixas (número inicial e final por série), com a justificativa sugerida, no mesmo formato da tela manual.</p>
+
+  <div class="aviso atencao">
+    <p><strong>A proposta não transmite nada.</strong> Copie os números na tela <em>Fiscal &gt; Inutilizar Notas</em> e confirme por lá. Inutilização é irreversível junto ao fisco: inutilizar um número que na verdade foi usado é um problema que não se desfaz.</p>
+  </div>
+
+  <div class="aviso info">
+    <p><strong>Os últimos dias ficam de fora de propósito.</strong> A tela informa até que data a análise foi feita — PDV que ainda não sincronizou viraria falso positivo.</p>
+  </div>
+</section>
+
+<section id="validacao">
+  <h2><span class="num">5</span> Pré-validação</h2>
+  <p class="lead">Menu <strong>SPED &gt; Pré-validação</strong>. A última parada antes de falar com o contador. Escolha a competência, clique em <strong>Verificar</strong> e leia o veredito.</p>
+
+  <div class="cartoes">
+    <div class="cartao bom">
+      <h4>OK</h4>
+      <p>Nenhuma regra encontrou pendência. Pode avisar o contador.</p>
+    </div>
+    <div class="cartao">
+      <h4>Avisa</h4>
+      <p>Há algo para conferir com o contador, mas não impede o arquivo.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Bloqueia</h4>
+      <p>Alguma pendência impediria o arquivo de fechar certo. Resolva antes.</p>
+    </div>
+  </div>
+
+  <p>Cada regra vira um cartão com a quantidade e o link <strong>ver amostra</strong>, que abre até 20 exemplos com item, fornecedor, chave de acesso e data.</p>
+
+  <div class="rolagem">
+    <table class="t">
+      <thead><tr><th>Regra</th><th>Veredito</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Item sem produto</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>Item de nota de entrada que não está vinculado a nenhum produto seu. Resolva na fila de vínculos do Custo Vivo.</td>
+        </tr>
+        <tr>
+          <td><strong>Item sem NCM</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>O item já está vinculado, mas o produto ainda não tem NCM. Volte ao Cadastro fiscal, filtro "Sem NCM".</td>
+        </tr>
+        <tr>
+          <td><strong>Nota não ingerida</strong></td>
+          <td><span class="selo ruim">Bloqueia</span></td>
+          <td>Uma nota de compra do período não terminou de entrar. Chame o suporte — a nota inteira ficaria de fora do arquivo.</td>
+        </tr>
+        <tr>
+          <td><strong>Nota com tratamento especial</strong></td>
+          <td><span class="selo atencao">Avisa</span></td>
+          <td>Nota cancelada, denegada ou de devolução. Não é defeito: é conferência com o contador.</td>
+        </tr>
+        <tr>
+          <td><strong>Produto sem PIS/COFINS</strong></td>
+          <td><span class="selo atencao">Avisa</span></td>
+          <td>Falta o CST de saída (ou a natureza da receita). Resolva no Cadastro fiscal, filtro "Sem PIS/COFINS".</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Nota que não é uma compra sua — nota própria, destinatário divergente, modelo não suportado — não entra em regra nenhuma e não aparece aqui.</p>
+</section>
+
+<section id="duvidas">
+  <h2><span class="num">6</span> Dúvidas frequentes</h2>
+
+  <div class="qa">
+    <div class="p">O sistema pode aplicar tudo sozinho, já que ele sabe a resposta?</div>
+    <div class="r">Não, e é de propósito. NCM, tipo e inutilização têm consequência fiscal com o seu nome. A ferramenta propõe com a evidência ao lado — quantas notas, quais fornecedores — e a decisão é sempre de uma pessoa.</div>
+  </div>
+
+  <div class="qa">
+    <div class="p">Preenchi o NCM e o produto continua em "A conferir".</div>
+    <div class="r">A etiqueta some quando o NCM passa a ser do próprio produto. Se salvou e continua, recarregue a tela; se persistir, o valor pode ter sido recusado — o NCM tem exatamente 8 dígitos.</div>
+  </div>
+
+  <div class="qa">
+    <div class="p">Tenho 3 mil produtos. Vou revisar um por um?</div>
+    <div class="r">Não. Comece pelo filtro "Sem NCM" aceitando as sugestões das notas em lote, depois use o painel de tipo por categoria. Sobra para decisão manual a minoria em que os fornecedores divergem.</div>
+  </div>
+
+  <div class="qa">
+    <div class="p">A pré-validação está OK. E agora?</div>
+    <div class="r">Avise o contador que a competência está fechada do seu lado. A geração do arquivo não acontece nestas telas: o LadFood envia o cadastro e a relação de documentos do período para o serviço fiscal da LAD, que monta o arquivo. Combine a entrega com o suporte.</div>
+  </div>
+
+  <div class="fecho">
+    <p>O cadastro fiscal é preenchido uma vez e cobrado todo mês. As quatro telas existem para que a resposta venha das suas próprias notas — e para que a última palavra continue sendo sua.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>Lad Sistemas · manual de uso do módulo SPED Fiscal · dados de tela ilustrativos · <a href="../manual-sped-contador/" style="color:var(--laranja)">versão para o contador</a></footer>
+
+</body>
+</html>
