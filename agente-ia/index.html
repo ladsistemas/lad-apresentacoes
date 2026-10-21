@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LadZap — Agente de IA no WhatsApp</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/apresentacao.css">
+<script src="conversas.js"></script>
+<script src="whatsapp-chat.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">LadZap · Agente de IA</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>O cliente pede pelo WhatsApp.<br>O agente fecha o pedido.</h1>
+    <p class="sub">O agente de IA do LadZap atende o WhatsApp da loja e faz o pedido de delivery inteiro na conversa, com o cardápio, a taxa e as formas de pagamento do LAD Delivery. Sem mandar link de cardápio.</p>
+
+    <div class="essencial">
+      <div class="rot">O essencial</div>
+      <ul>
+        <li><strong>Sem link:</strong> o cliente pede conversando e o pedido entra no LAD Delivery da loja.</li>
+        <li><strong>Nada inventado:</strong> preço, taxa e total vêm sempre do sistema, e o pedido só é criado depois do "sim".</li>
+        <li><strong>Gente quando precisa:</strong> reclamação ou "quero falar com alguém" vai para a equipe, com aviso no WhatsApp.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<nav class="indice">
+  <div class="wrap">
+    <a href="#problema">O problema</a>
+    <a href="#conversa">A conversa</a>
+    <a href="#sempre">Cliente de sempre</a>
+    <a href="#equipe">Passa para a equipe</a>
+    <a href="#painel">No LadZap</a>
+    <a href="#regras">Por que confiar</a>
+    <a href="#limites">O que não prometer</a>
+    <a href="#vender">Para vender</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="problema">
+  <h2><span class="num">1</span> O problema</h2>
+  <p class="lead">Sexta, 20h. O WhatsApp da loja não para: "tá aberto?", "quanto é a entrega?", "tem pizza de quatro queijos?".</p>
+  <p>Alguém da equipe larga o que está fazendo para responder, ou manda o link do cardápio e torce para o cliente terminar o pedido lá. Na hora de mais movimento, é justamente quando ninguém consegue responder a tempo.</p>
+
+  <div class="cartoes">
+    <div class="cartao nao">
+      <h4>Hoje</h4>
+      <p>Resposta quando sobra tempo, link do cardápio que o cliente não abre, pedido anotado à mão a partir da conversa e digitado de novo no sistema.</p>
+    </div>
+    <div class="cartao bom">
+      <h4>Com o agente de IA</h4>
+      <p>Resposta em segundos, pedido montado na própria conversa com o cardápio da loja, total conferido com o cliente e o pedido já dentro do LAD Delivery.</p>
+    </div>
+  </div>
+</section>
+
+<section id="conversa">
+  <h2><span class="num">2</span> A conversa, do "oi" ao pedido feito</h2>
+  <p class="lead">Conversa real com o agente de produção, na loja de demonstração LadFood Modelo, com cliente fictícia. O texto abaixo é o que o agente respondeu, sem edição.</p>
+
+  <div class="numeros">
+    <div class="numero"><div class="n">2 min</div><div class="t">do "oi" ao pedido feito, nesta conversa</div></div>
+    <div class="numero"><div class="n">2 a 4 s</div><div class="t">para o agente responder cada mensagem</div></div>
+    <div class="numero"><div class="n">0</div><div class="t">links de cardápio enviados</div></div>
+  </div>
+
+  <div class="lado">
+    <div class="celular"><span class="rot-passo">1 · confere e calcula a entrega</span><div class="wa"><div class="wa-topo"><span class="av">LF</span><div>LadFood Modelo<small>online</small></div></div><div class="wa-corpo" data-chat="pedido:0:4"></div></div></div>
+    <div>
+      <h3>Confere a loja e calcula a entrega</h3>
+      <p>Antes de qualquer coisa, o agente consulta a loja no LAD Delivery: se está aberta, os horários, o pedido mínimo, se faz entrega ou retirada e as formas de pagamento.</p>
+      <ul class="lista">
+        <li><strong>Cliente novo:</strong> pede nome e endereço e calcula a taxa por ele.</li>
+        <li><strong>Fora da área:</strong> avisa e oferece retirada.</li>
+        <li><strong>Loja fechada:</strong> informa os horários e não monta pedido.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lado">
+    <div class="celular"><span class="rot-passo">2 · monta o pedido</span><div class="wa"><div class="wa-topo"><span class="av">LF</span><div>LadFood Modelo<small>online</small></div></div><div class="wa-corpo" data-chat="pedido:4:9"></div></div></div>
+    <div>
+      <h3>Monta o pedido com o cardápio da loja</h3>
+      <p>Não despeja o cardápio inteiro: mostra as categorias ou vai direto ao que o cliente pediu. Pergunta o tamanho quando o produto tem tamanhos e as escolhas obrigatórias dos adicionais.</p>
+      <ul class="lista">
+        <li><strong>Produto fora do cardápio</strong> está indisponível, e ele oferece outra opção do próprio cardápio.</li>
+        <li><strong>Formas de pagamento:</strong> só as que a loja aceita. Em dinheiro, pergunta o troco.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lado">
+    <div class="celular"><span class="rot-passo">3 · só fecha com o sim</span><div class="wa"><div class="wa-topo"><span class="av">LF</span><div>LadFood Modelo<small>online</small></div></div><div class="wa-corpo" data-chat="pedido:9:12"></div></div></div>
+    <div>
+      <h3>Repete tudo e só fecha com o "sim"</h3>
+      <p>Antes de criar, o agente simula o pedido no sistema e repete os itens, a entrega, o pagamento e o total calculado pelo LAD Delivery. O pedido só é criado depois da confirmação do cliente.</p>
+      <p>O pedido entra no LAD Delivery da loja, como os do cardápio digital. Depois, se o cliente perguntar "como está meu pedido?", o agente consulta o status no sistema.</p>
+    </div>
+  </div>
+  <p class="legenda">Conversa real com o agente de IA do LadZap, 21/10/2026. Loja e cliente de demonstração; horário exibido deslocado para a noite.</p>
+</section>
+
+<section id="sempre">
+  <h2><span class="num">3</span> Cliente de sempre</h2>
+  <p class="lead">"Quero repetir meu último pedido." Ele acha e confere.</p>
+  <div class="lado">
+    <div class="celular"><span class="rot-passo">mesma cliente, outra conversa</span><div class="wa"><div class="wa-topo"><span class="av">LF</span><div>LadFood Modelo<small>online</small></div></div><div class="wa-corpo" data-chat="repetir"></div></div></div>
+    <div>
+      <p>O agente reconhece o cliente pelo telefone do WhatsApp: nome, endereços e últimos pedidos naquela loja. Quem pede sempre a mesma coisa resolve em poucas mensagens.</p>
+      <p>Mesmo no pedido repetido, ele recalcula a entrega, repete o total e espera o "sim" antes de criar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="equipe">
+  <h2><span class="num">4</span> Quando o cliente precisa de gente</h2>
+  <p class="lead">O agente passa o cliente para um atendente da loja e avisa no WhatsApp.</p>
+
+  <div class="lado">
+    <div>
+      <div class="celular"><span class="rot-passo">no WhatsApp do cliente</span><div class="wa"><div class="wa-corpo" data-chat="atendente"></div></div></div>
+      <div class="celular" style="margin-top:14px;"><span class="rot-passo">no WhatsApp do atendente da loja</span><div class="wa"><div class="wa-corpo">
+        <div class="msg entra"><div class="txt">LadZap: Rafael (62999990002) pediu atendimento humano.
+Motivo: Cliente Rafael (62999990002) diz que o pedido de ontem chegou frio e quer falar com alguém da loja.
+
+Responda pelo WhatsApp da loja. O agente volta a atender esse cliente depois de 2 horas sem mensagem dele, ou antes, em LadZap &gt; Conexões &gt; Agente IA.</div><span class="hora">19:42</span></div>
+      </div></div></div>
+    </div>
+    <div>
+      <h3>Ele passa quando</h3>
+      <ul class="lista">
+        <li>o cliente pede para falar com uma pessoa;</li>
+        <li>é reclamação ou pedido de reembolso;</li>
+        <li>o cliente quer alterar ou cancelar um pedido já feito;</li>
+        <li>ele não conseguiu resolver depois de duas tentativas.</li>
+      </ul>
+      <p>O atendente recebe no WhatsApp o nome, o telefone e o motivo, escrito pelo próprio agente, e responde pelo WhatsApp da loja.</p>
+    </div>
+  </div>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">ladzap / Conexões / Agente IA</span>
+    </div>
+    <div class="corpo print"><img src="img/ladzap-atendimentos.jpg" alt="Clientes com atendente agora, com o botão Devolver ao agente"></div>
+  </div>
+  <p class="legenda">Painel do LadZap 2.8.0 com dados de demonstração.</p>
+
+  <div class="aviso ok">
+    <p><strong>Ninguém responde por cima do atendente.</strong> Enquanto a equipe cuida da conversa, nem o agente nem o fluxo automático respondem aquele cliente. Ele volta para o agente depois de 2 horas sem mensagem dele, ou antes, pelo botão <strong>Devolver ao agente</strong>.</p>
+  </div>
+</section>
+
+<section id="painel">
+  <h2><span class="num">5</span> O que a loja configura no LadZap</h2>
+  <p class="lead">Fica em Conexões, no botão Agente IA, no mesmo WhatsApp que a loja já conectou.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">ladzap.ladfood.com.br / Conexões</span>
+    </div>
+    <div class="corpo print"><img src="img/ladzap-conexoes.jpg" alt="Página Conexões do LadZap com o botão Agente IA"></div>
+  </div>
+
+  <div class="lado">
+    <div class="tela" style="margin:0;">
+      <div class="corpo print"><img src="img/ladzap-agente.jpg" alt="Configuração do agente: modo, números de teste, instruções da loja e WhatsApp do atendente"></div>
+    </div>
+    <div>
+      <ul class="lista" style="margin-top:0;">
+        <li><strong>Modo:</strong> Desligado, Teste (o agente responde só os números de teste; os outros clientes continuam no fluxo de sempre) ou Ligado (todos os clientes).</li>
+        <li><strong>Instruções da loja:</strong> até 1.000 caracteres com o tom e as regras da casa, como "borda recheada só nas pizzas grandes". Valem para conversas novas.</li>
+        <li><strong>WhatsApp do atendente:</strong> quem recebe o aviso quando o agente passa um cliente para a equipe.</li>
+      </ul>
+      <p>A contratação é feita no próprio painel, que mostra as condições antes do aceite.</p>
+    </div>
+  </div>
+  <p class="legenda">Painel do LadZap 2.8.0 com dados de demonstração.</p>
+</section>
+
+<section id="regras">
+  <h2><span class="num">6</span> Por que dá para confiar</h2>
+  <p class="lead">As regras que o agente segue em toda conversa.</p>
+  <ul class="lista">
+    <li><strong>Nada sem consultar o sistema.</strong> Cardápio, preço, tamanho, adicional, horário, taxa, forma de pagamento e status vêm sempre do LAD Delivery da loja. Ele é proibido de calcular preço ou total por conta própria.</li>
+    <li><strong>Só cria depois do "sim".</strong> Antes, simula o pedido no sistema e repete itens, entrega e total para o cliente confirmar.</li>
+    <li><strong>Não duplica pedido.</strong> Se a rede falha na hora de criar, a nova tentativa usa a mesma chave, e o sistema não cria um segundo pedido.</li>
+    <li><strong>Usa só o telefone da conversa.</strong> O telefone do cliente vem do WhatsApp, e o agente não consulta o cadastro de outra pessoa.</li>
+    <li><strong>Não inventa promoção.</strong> Cupom só se o cliente informar, com o desconto que o sistema calcular.</li>
+    <li><strong>Só atende pedidos daquela loja</strong>, e o que estiver fora do delivery vai para a equipe.</li>
+  </ul>
+</section>
+
+<section id="limites">
+  <h2><span class="num">7</span> O que não prometer</h2>
+  <div class="cartoes">
+    <div class="cartao nao">
+      <h4>Áudio e foto</h4>
+      <p>O agente lê só texto. Para áudio, ele pede para o cliente escrever.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Pagamento online pelo chat</h4>
+      <p>O agente está preparado para PIX e link de cartão gerados pelo sistema, mas o pagamento online do LAD Delivery ainda está desligado. Hoje vale o que a loja aceita na entrega.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Alterar ou cancelar pedido</h4>
+      <p>Pedido já feito não é alterado pelo agente: ele passa para o atendente.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Botão para assumir a conversa</h4>
+      <p>Quem passa o cliente para a equipe é o agente. Se alguém da loja responder pelo celular sem essa passagem, o agente continua respondendo junto.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Cardápio certo sem cadastro em dia</h4>
+      <p>O agente sabe o que o LAD Delivery sabe. Produto, preço ou horário errado no cadastro sai errado na conversa.</p>
+    </div>
+  </div>
+</section>
+
+<section id="vender">
+  <h2><span class="num">8</span> Para o time comercial e o suporte</h2>
+
+  <div class="interno">
+    <span class="marca-int">Uso interno</span>
+
+    <h3>Quem é o cliente certo</h3>
+    <ul class="lista">
+      <li>Loja com LAD Delivery ativo que recebe muito pedido pelo WhatsApp: pizzaria, hamburgueria, marmitaria</li>
+      <li>Quem já usa o LadZap para mandar o link do cardápio</li>
+      <li>Quem reclama de perder pedido na hora do pico porque ninguém respondeu a tempo</li>
+    </ul>
+
+    <h3>Ativação em 10 minutos</h3>
+    <div class="passos">
+      <div class="passo"><span class="n">1</span><h4>Pré-requisitos</h4><p>WhatsApp conectado no LadZap (bolinha verde) e LAD Delivery em dia: produtos, preços, horários, taxa e pagamentos.</p></div>
+      <div class="passo"><span class="n">2</span><h4>Contratar</h4><p>Conexões &gt; Agente IA: o cliente lê as condições e aceita no próprio painel.</p></div>
+      <div class="passo"><span class="n">3</span><h4>Testar</h4><p>Modo Teste com o número do dono e de alguém da equipe, WhatsApp do atendente preenchido e 2 ou 3 pedidos de teste.</p></div>
+      <div class="passo fim"><span class="n">4</span><h4>Ligar</h4><p>Ajustar as instruções da loja e passar para Ligado. Combinar quem responde quando chegar o aviso.</p></div>
+    </div>
+
+    <h3>Demonstração em 3 minutos</h3>
+    <ul class="lista">
+      <li>Mostrar a conversa da seção 2 (ou o reels de 48 s da campanha) do "oi" ao pedido feito</li>
+      <li>Destacar que o total é o do sistema e que o pedido só sai depois do "sim"</li>
+      <li>Mostrar a passagem para o atendente e o botão Devolver ao agente</li>
+      <li>Fechar no painel: modo Teste, instruções da loja e WhatsApp do atendente</li>
+    </ul>
+
+    <h3>Objeções e resposta</h3>
+    <div class="qa">
+      <div class="p">"E se ele errar o preço?"</div>
+      <div class="r">Ele não calcula: preço, taxa e total vêm do LAD Delivery, e o cliente confirma o total antes de o pedido ser criado. Se o preço estiver errado, está errado no cadastro, e o cardápio digital também mostraria errado.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"E se o cliente mandar áudio?"</div>
+      <div class="r">O agente pede para escrever. Áudio ainda não.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"Meu cliente vai achar estranho falar com robô?"</div>
+      <div class="r">Comece no modo Teste e use as instruções da loja para dar o tom da casa. E, quando o cliente pede uma pessoa, o agente passa na hora.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"Funciona no meu número de sempre?"</div>
+      <div class="r">Funciona no WhatsApp conectado no LadZap. A equipe continua respondendo pelo mesmo número quando o agente passa a conversa.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"Precisa do LAD Delivery?"</div>
+      <div class="r">Sim. É de lá que o agente tira o cardápio, a taxa e as formas de pagamento, e é para lá que o pedido vai.</div>
+    </div>
+
+    <h3>Antes de fechar</h3>
+    <ul class="lista">
+      <li>O valor aparece no painel na hora de contratar. Condição fora do padrão: alinhar com o Daniel antes de citar número.</li>
+      <li>Existe um crédito de IA por mês. Quando acaba, o agente pausa e o fluxo do LadZap volta a responder até o mês virar; a LAD pode aumentar o limite.</li>
+      <li>Não citar pagamento online pelo chat enquanto o do LAD Delivery estiver desligado.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">9</span> Em uma frase</h2>
+  <div class="fecho">
+    <p>O WhatsApp da loja vende enquanto a equipe cozinha: o agente atende na hora, monta o pedido com o cardápio da loja, confere o total com o cliente e chama a equipe quando o cliente precisa de gente.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Lad Sistemas · LadZap · Agente de IA no WhatsApp · material de apoio comercial<br>
+  Conversas reais com o agente de produção na loja LadFood Modelo (clientes fictícios) e painel do LadZap 2.8.0 com dados de demonstração, outubro de 2026.
+</footer>
+</body>
+</html>

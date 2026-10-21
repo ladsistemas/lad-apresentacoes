@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rota de entrega + App LadFood Entregador</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/apresentacao.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img src="../assets/logo_transparente.png" alt="Lad Sistemas">
+    <span class="tag">Rota de entrega</span>
+    <a href="../" class="voltar">← todas as apresentações</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Do balcão até a porta,<br>sem o motoboy decidir de cabeça.</h1>
+    <p class="sub">O LadFood monta a rota de entrega no PDV, manda a rota pronta para o WhatsApp do entregador e, com o app LadFood Entregador, mostra na loja onde ele está durante a rota.</p>
+
+    <div class="essencial">
+      <div class="rot">O essencial</div>
+      <ul>
+        <li><strong>Já vem no PDV:</strong> não é módulo à parte. Aparece para quem tem permissão de vender delivery.</li>
+        <li><strong>Motoboy sem cadastro e sem senha:</strong> a rota chega no WhatsApp e abre no celular dele.</li>
+        <li><strong>App Android grátis na Play Store:</strong> a loja vê o entregador no mapa, só com o aceite dele.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<nav class="indice">
+  <div class="wrap">
+    <a href="#problema">O problema</a>
+    <a href="#montar">Montar a rota</a>
+    <a href="#whatsapp">No WhatsApp</a>
+    <a href="#app">App Entregador</a>
+    <a href="#loja">Na loja</a>
+    <a href="#limites">O que não prometer</a>
+    <a href="#vender">Para vender</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="problema">
+  <h2><span class="num">1</span> O problema</h2>
+  <p class="lead">Sexta, 20h. Seis pedidos prontos no balcão, um motoboy saindo. Quem entrega primeiro?</p>
+  <p>Na maioria das lojas com entrega própria, quem decide é o motoboy, de cabeça, olhando os cupons. A loja não sabe a ordem, não sabe quanto a volta deve levar e não sabe onde ele está quando o cliente liga perguntando pelo pedido.</p>
+
+  <div class="cartoes">
+    <div class="cartao nao">
+      <h4>Hoje</h4>
+      <p>Cupons na mão do motoboy, ordem no improviso, endereço ditado ou fotografado, e o "cadê meu pedido?" respondido com uma ligação para o entregador no meio do trânsito.</p>
+    </div>
+    <div class="cartao bom">
+      <h4>Com a rota do LadFood</h4>
+      <p>Ordem calculada a partir da loja, rota escrita no WhatsApp com endereço, telefone e pagamento de cada parada, romaneio na ordem, entregas marcadas pelo celular e o entregador no mapa do PDV.</p>
+    </div>
+  </div>
+</section>
+
+<section id="montar">
+  <h2><span class="num">2</span> Montar a rota no PDV</h2>
+
+  <div class="fluxo">
+    <div class="rot">Na tela de Delivery</div>
+    <div class="itens">
+      <span class="item">Marca os pedidos</span>
+      <span class="seta">→</span>
+      <span class="item">Detalhar</span>
+      <span class="seta">→</span>
+      <span class="item">Rota</span>
+      <span class="seta">→</span>
+      <span class="item fim">Expedir</span>
+    </div>
+  </div>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">PDV / Delivery / Rota de entrega</span>
+    </div>
+    <div class="corpo print"><img src="img/pdv-rota.jpg" alt="Janela da rota de entrega com 5 paradas, 15,6 km e 52 minutos estimados"></div>
+  </div>
+  <p class="legenda">Tela real do PDV 12.16.34, com pedidos e clientes de demonstração.</p>
+
+  <p>A janela mostra as paradas na ordem calculada a partir da loja, a distância de cada trecho, a distância total e o tempo estimado. No mapa, a loja (L) e cada parada numerada. Ali mesmo o operador:</p>
+  <ul class="lista">
+    <li><strong>muda a ordem</strong> de uma parada com as setas, ou pede para o sistema recalcular;</li>
+    <li>marca <strong>Retornar à loja</strong>, para a distância e o tempo já incluírem a volta;</li>
+    <li>escolhe o <strong>entregador</strong> e a <strong>impressora do romaneio</strong>.</li>
+  </ul>
+  <p><strong>Expedir</strong> faz o mesmo que o Expedir de sempre (pedidos expedidos com o nome do entregador) e grava a rota.</p>
+
+  <div class="aviso info">
+    <p><strong>Como a ordem é calculada.</strong> Pela distância entre os endereços, não pelo trânsito do momento. Até 8 paradas o sistema testa todas as ordens possíveis; acima disso usa uma heurística e depois melhora o resultado. O caminho rua a rua continua sendo o Google Maps ou o Waze no celular do entregador.</p>
+  </div>
+</section>
+
+<section id="whatsapp">
+  <h2><span class="num">3</span> A rota no WhatsApp do entregador</h2>
+  <p class="lead">Expediu, um botão abre o WhatsApp do entregador com a rota escrita.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">PDV / Delivery / Rota expedida</span>
+    </div>
+    <div class="corpo print"><img src="img/pdv-rota-expedida.jpg" alt="Rota expedida com os botões Enviar rota pelo WhatsApp, Abrir rota no Google Maps e Imprimir romaneio"></div>
+  </div>
+  <p class="legenda">Tela real do PDV, com dados de demonstração.</p>
+
+  <div class="lado">
+    <div class="celular"><span class="rot-passo">o que o entregador recebe</span><img src="img/whatsapp-rota.jpg" alt="Mensagem da rota no WhatsApp com as paradas"></div>
+    <div>
+      <ul class="lista" style="margin-top:0;">
+        <li><strong>Cada parada:</strong> pedido, cliente, endereço com complemento, telefone, valor, forma de pagamento (com troco) e a distância do trecho.</li>
+        <li><strong>Link da rota inteira no Google Maps.</strong></li>
+        <li><strong>Link da página do entregador:</strong> abre sem login, para navegar, ligar para o cliente e marcar as entregas.</li>
+        <li><strong>Romaneio impresso na ordem,</strong> com o QR Code da rota: o entregador aponta a câmera e abre a mesma página.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="app">
+  <h2><span class="num">4</span> App LadFood Entregador</h2>
+  <p class="lead">Android, grátis na Play Store. O entregador segue a rota no celular e a loja vê onde ele está.</p>
+
+  <div class="celulares">
+    <div class="celular"><span class="rot-passo">a rota no app</span><img src="img/app-1-rota.jpg" alt="Rota no app com 1 de 4 entregas feitas"></div>
+    <div class="celular"><span class="rot-passo">cada parada</span><img src="img/app-2-paradas.jpg" alt="Paradas com Maps, Waze, Ligar, Entregue e Não entregue"></div>
+    <div class="celular"><span class="rot-passo">o aceite</span><img src="img/app-3-aceite.jpg" alt="Tela de aceite da localização durante a rota"></div>
+    <div class="celular"><span class="rot-passo">primeira vez</span><img src="img/app-4-inicio.jpg" alt="Tela inicial do app pedindo o link da rota"></div>
+  </div>
+  <p class="legenda">Capturas da ficha do app na Play Store (versão 1.0.1).</p>
+
+  <div class="cartoes">
+    <div class="cartao">
+      <span class="marca">Na rua</span>
+      <h4>Maps, Waze e Ligar</h4>
+      <p>Cada parada abre no Google Maps ou no Waze, e o botão Ligar chama o cliente. Entregue ou Não entregue (com motivo), e Desfazer se marcar errado.</p>
+    </div>
+    <div class="cartao">
+      <span class="marca">Na loja</span>
+      <h4>Posição no mapa do PDV</h4>
+      <p>Com o aceite, a posição vai para o PDV mesmo com o Waze ou o Maps aberto. Sem sinal, o app guarda as posições e envia depois.</p>
+    </div>
+    <div class="cartao">
+      <span class="marca">Próximas rotas</span>
+      <h4>Notificação</h4>
+      <p>Depois da primeira rota aberta no app, a rota nova chega por notificação.</p>
+    </div>
+  </div>
+
+  <div class="aviso ok">
+    <p><strong>Localização só com aceite e só durante a rota.</strong> Para quando o entregador finaliza, quando a loja encerra ou quando o link expira (72 h depois da saída). O histórico de posições é apagado depois de 30 dias. Sem aceitar, ele continua vendo a rota e marcando as entregas, só não aparece no mapa. É o argumento para o dono que tem medo de o motoboy recusar.</p>
+  </div>
+</section>
+
+<section id="loja">
+  <h2><span class="num">5</span> O que a loja acompanha</h2>
+  <p class="lead">"Cadê meu pedido?" respondido olhando a tela, sem ligar para o entregador.</p>
+
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">PDV / Vendas / Rotas de Entrega</span>
+    </div>
+    <div class="corpo print"><img src="img/pdv-rotas-do-dia.jpg" alt="Rotas do dia com entregas feitas, distância, tempo e posição do entregador"></div>
+  </div>
+  <div class="tela">
+    <div class="chrome">
+      <span class="ponto" style="background:#ff5f57"></span><span class="ponto" style="background:#febc2e"></span><span class="ponto" style="background:#28c840"></span>
+      <span class="url">PDV / Vendas / Rotas de Entrega / Detalhes da rota</span>
+    </div>
+    <div class="corpo print"><img src="img/pdv-entregador-no-mapa.jpg" alt="Detalhes da rota com 2 entregas feitas e o entregador no mapa"></div>
+  </div>
+  <p class="legenda">Telas reais do PDV com dados de demonstração. A posição do entregador simula o app.</p>
+
+  <ul class="lista">
+    <li><strong>Vendas &gt; Rotas de Entrega:</strong> as rotas do dia, entregas feitas (ex.: 2/5), km, tempo e situação. A tela se atualiza a cada 30 segundos.</li>
+    <li><strong>Detalhes da rota:</strong> cada parada com a hora da entrega, as entregues em verde e o entregador no mapa.</li>
+    <li><strong>Ações:</strong> reimprimir o romaneio, reenviar o WhatsApp, concluir ou cancelar a rota.</li>
+  </ul>
+</section>
+
+<section id="limites">
+  <h2><span class="num">6</span> O que não prometer</h2>
+  <div class="cartoes">
+    <div class="cartao nao">
+      <h4>Link para o cliente final</h4>
+      <p>Quem vê o entregador no mapa é a loja. O cliente final não recebe link de acompanhamento da entrega.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Rota pelo trânsito</h4>
+      <p>A ordem e o tempo são estimativa pela distância. O caminho rua a rua é o Maps ou o Waze do entregador.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>App para iPhone</h4>
+      <p>Só Android. No iPhone, o link abre a página no navegador (paradas, navegação e marcação), sem enviar a localização.</p>
+    </div>
+    <div class="cartao nao">
+      <h4>Despacho automático</h4>
+      <p>O sistema não monta sozinho os lotes por região. Quem escolhe os pedidos de cada rota é o operador.</p>
+    </div>
+  </div>
+</section>
+
+<section id="vender">
+  <h2><span class="num">7</span> Para o time comercial e o suporte</h2>
+
+  <div class="interno">
+    <span class="marca-int">Uso interno</span>
+
+    <h3>Quem é o cliente certo</h3>
+    <ul class="lista">
+      <li>Loja com entrega própria (motoboy da casa), não só entregador do iFood ou da 99</li>
+      <li>Mais de um entregador, ou saídas com vários pedidos juntos</li>
+      <li>Quem reclama de "cliente ligando para saber do pedido" ou de motoboy que demora na volta</li>
+    </ul>
+
+    <h3>Ativação em 5 minutos</h3>
+    <div class="passos">
+      <div class="passo"><span class="n">1</span><h4>PDV atualizado</h4><p>Botão Rota no Detalhar e menu Vendas &gt; Rotas de Entrega. Não aparece? Atualizar ou ligar "vender pedido delivery" no perfil.</p></div>
+      <div class="passo"><span class="n">2</span><h4>Loja no mapa</h4><p>Latitude e longitude da loja cadastradas. Sem isso, a ordem é calculada só entre os pedidos.</p></div>
+      <div class="passo"><span class="n">3</span><h4>Entregadores</h4><p>Cadastrados como funcionário entregador, com o celular certo: é para ele que vai o WhatsApp.</p></div>
+      <div class="passo fim"><span class="n">4</span><h4>Rota de teste</h4><p>2 ou 3 pedidos reais, Expedir, WhatsApp e a tela Rotas de Entrega aberta.</p></div>
+    </div>
+
+    <h3>Demonstração em 3 minutos</h3>
+    <ul class="lista">
+      <li>Tela de Delivery com pedidos abertos: marcar 4 ou 5, Detalhar, Rota</li>
+      <li>Mostrar o mapa, os km e o tempo; subir uma parada com a seta para mostrar que o operador manda</li>
+      <li>Expedir e mostrar o botão do WhatsApp com a mensagem pronta</li>
+      <li>Abrir Vendas &gt; Rotas de Entrega e o detalhe com o mapa; mostrar o app no celular</li>
+    </ul>
+
+    <h3>Objeções e resposta</h3>
+    <div class="qa">
+      <div class="p">"O cliente recebe um link para acompanhar?"</div>
+      <div class="r">Ainda não. A loja acompanha e responde quando o cliente liga, sem precisar ligar para o motoboy.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"Funciona com o motoboy do iFood?"</div>
+      <div class="r">A rota é para o entregador da loja. Entrega feita pelo entregador do iFood ou da 99 não passa pela rota do LadFood.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"O motoboy precisa de cadastro ou senha?"</div>
+      <div class="r">Não. Ele abre o link que chega no WhatsApp, ou o QR Code do romaneio.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"E se ele não quiser ser rastreado?"</div>
+      <div class="r">Ele não aceita e a rota funciona igual; só não aparece no mapa. A localização vale só durante a rota e o histórico some em 30 dias.</div>
+    </div>
+    <div class="qa">
+      <div class="p">"Precisa de internet?"</div>
+      <div class="r">O PDV calcula a rota na loja. O WhatsApp e a página do entregador usam a internet do celular dele; sem sinal, o app guarda as posições e envia depois.</div>
+    </div>
+
+    <h3>Antes de fechar</h3>
+    <ul class="lista">
+      <li>Hoje o link do WhatsApp abre no navegador. Para usar o app, o entregador copia o link da rota e cola no app (a tela inicial do app explica). A abertura direta pelo link depende de uma configuração da LAD.</li>
+      <li>Preço ou "grátis" da funcionalidade do PDV: confirmar a condição comercial com o Daniel.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">8</span> Em uma frase</h2>
+  <div class="fecho">
+    <p>O pedido sai do balcão na ordem certa, a rota chega pronta no WhatsApp do motoboy e a loja sabe onde ele está, sem cadastro novo, sem senha e sem outro sistema.</p>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Lad Sistemas · Rota de entrega + App LadFood Entregador · material de apoio comercial<br>
+  Telas reais do PDV 12.16.34 com dados de demonstração e do app 1.0.1 (Play Store), outubro de 2026.
+</footer>
+</body>
+</html>

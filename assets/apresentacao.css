@@ -1,7 +1,7 @@
 /* ==========================================================================
    Design das apresentacoes comerciais — Lad Sistemas
-   Usado por: custo-vivo, sped-fiscal, ponto.
-   Um arquivo so para as tres abrirem iguais na mesma reuniao.
+   Usado por: custo-vivo, sped-fiscal, ponto, rota-entrega, agente-ia.
+   Um arquivo so para todas abrirem iguais na mesma reuniao.
    ========================================================================== */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -191,6 +191,37 @@ ul.lista strong { font-weight: 700; }
 .tela .desc { font-size: .8rem; color: var(--texto-fraco); margin-bottom: 16px; }
 .legenda { font-size: .76rem; color: var(--texto-fraco); font-style: italic; margin: 0 0 24px; }
 
+/* print real do produto dentro da moldura .tela (rota-entrega, agente-ia) */
+.tela .corpo.print { padding: 0; }
+.tela .corpo.print img { display: block; width: 100%; height: auto; }
+
+/* prints de celular lado a lado (app, WhatsApp) */
+.celulares { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 22px 0 8px; align-items: start; }
+.celular { background: #1d1d2b; border-radius: 22px; padding: 9px; box-shadow: var(--sombra); }
+.celular img { display: block; width: 100%; height: auto; border-radius: 14px; }
+.celular .rot-passo {
+  font-size: .64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.3px;
+  color: #9b9bb0; margin: 2px 6px 8px; display: block;
+}
+
+/* imagem (ou celular) de um lado e texto do outro; empilha no celular */
+.lado { display: grid; grid-template-columns: minmax(0, 380px) 1fr; gap: 24px; align-items: start; margin: 22px 0 8px; }
+.lado > div > h3:first-child { margin-top: 4px; }
+
+/* conversa de WhatsApp desenhada em HTML (agente-ia/whatsapp-chat.js) */
+.wa { background: #efeae2; border-radius: 14px; overflow: hidden; }
+.wa .wa-topo { background: #008069; color: #fff; padding: 10px 14px; display: flex; align-items: center; gap: 10px; font-size: .85rem; }
+.wa .wa-topo .av { width: 30px; height: 30px; border-radius: 50%; background: var(--laranja); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: .72rem; }
+.wa .wa-topo small { display: block; font-size: .68rem; opacity: .85; }
+.wa .wa-corpo { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.wa .msg { max-width: 88%; padding: 6px 9px 3px; border-radius: 8px; font-size: .8rem; line-height: 1.38; color: #111b21; box-shadow: 0 1px 1px rgba(0,0,0,.12); }
+.wa .msg.sai { align-self: flex-end; background: #d9fdd3; border-top-right-radius: 2px; }
+.wa .msg.entra { align-self: flex-start; background: #fff; border-top-left-radius: 2px; }
+.wa .msg .txt { white-space: pre-wrap; word-break: break-word; }
+.wa .msg .lnk { color: #027eb5; }
+.wa .msg .hora { display: block; text-align: right; font-size: .62rem; color: #667781; }
+.wa .msg .check { color: #53bdeb; letter-spacing: -2px; }
+
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; margin-bottom: 18px; }
 .kpi { background: var(--fundo); border-radius: 10px; padding: 13px 14px; }
 .kpi .rot { font-size: .66rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-fraco); }
@@ -294,6 +325,7 @@ footer { padding: 40px 0 56px; font-size: .8rem; color: var(--texto-fraco); text
 /* ---------- telas pequenas ---------- */
 
 @media (max-width: 640px) {
+  .lado { grid-template-columns: 1fr; }
   .hero { padding: 44px 0 40px; }
   .hero h1 { font-size: 1.75rem; }
   .hero .sub { font-size: 1rem; }
