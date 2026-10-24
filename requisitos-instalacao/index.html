@@ -405,6 +405,11 @@
       <div><strong>Importante:</strong> O servidor deve usar obrigatoriamente SSD. Nunca utilize HD convencional &mdash; o desempenho do sistema e do banco de dados fica severamente comprometido.</div>
     </div>
 
+    <div class="alert alert-warning">
+      <span class="alert-icon">&#9888;</span>
+      <div><strong>Servidor sempre no cabo de rede, nunca no Wi-Fi.</strong> Caixas, totem, impressoras e celulares do gar&ccedil;om apontam para o servidor: se o Wi-Fi dele cai ou o IP muda, a loja inteira para.</div>
+    </div>
+
     <div class="card-grid">
       <div class="card">
         <div class="card-header">
@@ -470,6 +475,31 @@
           <div class="spec-row">
             <span class="spec-label">IP</span>
             <span class="spec-value">Fixo na rede local</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Liga&ccedil;&atilde;o</span>
+            <span class="spec-value"><span class="badge badge-red">Somente cabo</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="icon amber">&#128267;</div>
+          <div><h3>Energia</h3><small>Nobreak e Windows</small></div>
+        </div>
+        <div class="card-body">
+          <div class="spec-row">
+            <span class="spec-label">Nobreak</span>
+            <span class="spec-value">Obrigat&oacute;rio (queda de luz pode corromper o banco)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Suspens&atilde;o</span>
+            <span class="spec-value">Desligada (o instalador ajusta)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Windows Update</span>
+            <span class="spec-value">Sem rein&iacute;cio das 9h &agrave;s 3h (o instalador ajusta)</span>
           </div>
         </div>
       </div>
@@ -590,7 +620,7 @@
         <div class="card-body">
           <div class="spec-row">
             <span class="spec-label">Tipo</span>
-            <span class="spec-value">Ethernet 100 Mbps ou Wi-Fi</span>
+            <span class="spec-value">Ethernet (recomendado) ou Wi-Fi com sinal forte</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Acesso</span>
@@ -689,7 +719,7 @@
         <div class="card-body">
           <div class="spec-row">
             <span class="spec-label">Tipo</span>
-            <span class="spec-value">Ethernet ou Wi-Fi</span>
+            <span class="spec-value"><span class="badge badge-red">Somente cabo</span></span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Acesso</span>
@@ -749,6 +779,11 @@
     <h2 class="section-title">Infraestrutura de Rede</h2>
     <p class="section-subtitle">Requisitos de rede para o funcionamento completo do sistema.</p>
 
+    <div class="alert alert-warning">
+      <span class="alert-icon">&#9888;</span>
+      <div><strong>O modem da operadora n&atilde;o pode ser o roteador da loja.</strong> Quando a operadora troca ou reseta o modem, o DHCP recome&ccedil;a, os IPs mudam e caixas, totem e celulares param de achar o servidor. Use um roteador pr&oacute;prio do estabelecimento e deixe o modem em modo <em>bridge</em> (ou s&oacute; como sa&iacute;da de internet do roteador).</div>
+    </div>
+
     <div class="card-grid">
       <div class="card">
         <div class="card-header">
@@ -758,7 +793,11 @@
         <div class="card-body">
           <div class="spec-row">
             <span class="spec-label">IP</span>
-            <span class="spec-value">Fixo (ex: 192.168.1.100)</span>
+            <span class="spec-value">Fixo (ex: 192.168.1.100) ou reserva no DHCP</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Liga&ccedil;&atilde;o</span>
+            <span class="spec-value">Cabo (nunca Wi-Fi)</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Porta</span>
@@ -779,15 +818,19 @@
         <div class="card-body">
           <div class="spec-row">
             <span class="spec-label">Tablets / Smartphones</span>
-            <span class="spec-value">Wi-Fi 2.4 GHz ou 5 GHz</span>
+            <span class="spec-value">Wi-Fi 5 GHz (2.4 GHz se n&atilde;o houver)</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">PDVs</span>
-            <span class="spec-value">Ethernet 100 Mbps ou Wi-Fi</span>
+            <span class="spec-value">Ethernet (recomendado) ou Wi-Fi</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Totem</span>
+            <span class="spec-value">Ethernet</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Impressoras</span>
-            <span class="spec-value">Ethernet ou Wi-Fi</span>
+            <span class="spec-value">Ethernet ou USB (Wi-Fi n&atilde;o recomendado)</span>
           </div>
         </div>
       </div>
@@ -799,12 +842,20 @@
         </div>
         <div class="card-body">
           <div class="spec-row">
-            <span class="spec-label">Roteador/Switch</span>
+            <span class="spec-label">Roteador</span>
+            <span class="spec-value">Pr&oacute;prio da loja (modem da operadora em bridge)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Switch</span>
             <span class="spec-value">Gerenci&aacute;vel (recomendado)</span>
           </div>
           <div class="spec-row">
+            <span class="spec-label">Wi-Fi</span>
+            <span class="spec-value">Access point pr&oacute;prio para gar&ccedil;om; rede separada da dos clientes</span>
+          </div>
+          <div class="spec-row">
             <span class="spec-label">DHCP</span>
-            <span class="spec-value">Configurado</span>
+            <span class="spec-value">Configurado, fora das faixas fixas abaixo</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Firewall</span>
@@ -912,6 +963,11 @@
     <div class="alert alert-info">
       <span class="alert-icon">&#8505;</span>
       <div>As impressoras de rede devem receber <strong>IP fixo</strong> dentro da faixa 192.168.1.200&ndash;250. A porta padr&atilde;o de comunica&ccedil;&atilde;o &eacute; <strong>9100</strong>.</div>
+    </div>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">&#10004;</span>
+      <div>O LAD Food confere a cada minuto as impressoras configuradas (setores, conta e comprovante do cart&atilde;o): impressora que sumiu do Windows, ficou offline, com a fila parada ou sem responder na rede vai para o diagn&oacute;stico e o suporte LAD &eacute; avisado. Na USB, o instalador impede o Windows de desligar a porta para economizar energia.</div>
     </div>
   </div>
 
